@@ -25,12 +25,6 @@
         .era-btn.active { color: #3b82f6; border-color: #3b82f6; }
         .filter-btn.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
         
-        /* Marble Look for Patrons */
-        .patron-marble {
-            background: linear-gradient(to bottom, #080808 0%, #0c0c0c 100%);
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; overflow-y: auto; align-items: flex-start; justify-content: center; }
         .related-card { background: #0a0a0a; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; }
         .coa-card { background: linear-gradient(145deg, #111, #080808); border: 1px solid #c5a059; position: relative; overflow: hidden; }
@@ -78,7 +72,14 @@
                     <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase font-bold text-zinc-500">All</button>
                     <button onclick="filterByEsport('cod')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">CoD</button>
                     <button onclick="filterByEsport('halo')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Halo</button>
-                    <button onclick="filterByEsport('creator')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Creator</button>
+                    <button onclick="filterByEsport('cs')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Counter Strike</button>
+                    <button onclick="filterByEsport('valorant')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Valorant</button>
+                    <button onclick="filterByEsport('lol')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">League of Legends</button>
+                    <button onclick="filterByEsport('rl')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Rocket League</button>
+                    <button onclick="filterByEsport('br')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Battle Royale</button>
+                    <button onclick="filterByEsport('sports')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Sports/Racing</button>
+                    <button onclick="filterByEsport('fighting')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Fighting</button>
+                    <button onclick="filterByEsport('creator')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Creator/Other</button>
                 </div>
             </div>
             <div class="flex gap-6 justify-center items-center text-[8px] uppercase tracking-[0.3em] font-bold text-zinc-600 border-t border-white/5 pt-4">
@@ -111,13 +112,12 @@
             </div>
         </section>
 
-        <section class="patron-marble pt-40 pb-32 text-center">
-            <div class="max-w-4xl mx-auto px-6">
+        <section class="pt-40 pb-20 text-center border-t border-white/5">
+            <div class="max-w-4xl mx-auto">
                 <h2 class="serif text-4xl text-white italic mb-8">The Mission</h2>
-                <p class="text-zinc-400 font-light text-lg italic mb-32 max-w-2xl mx-auto">"In an era defined by digital ephemerality, the physical relics of competition serve as the anchor for our shared history."</p>
+                <p class="text-zinc-400 font-light text-lg italic mb-32">"In an era defined by digital ephemerality, the physical relics of competition serve as the anchor for our shared history."</p>
                 <h3 class="serif text-3xl text-white italic mb-4">Patrons of the Archive</h3>
-                <p class="text-zinc-500 text-[9px] uppercase tracking-[0.4em] mb-16 italic font-bold">Verified Registry Contributors</p>
-                <div id="donor-wall" class="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 mt-16"></div>
+                <div id="donor-wall" class="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 mt-16 px-4"></div>
             </div>
         </section>
     </main>
@@ -136,7 +136,7 @@
                 <div class="coa-card p-6 flex flex-col justify-between min-h-[200px] text-left">
                     <div class="text-[9px] uppercase tracking-[0.3em] text-zinc-500 font-bold">Registry Record</div>
                     <div><div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic">Steward</div><div id="modalSteward" class="text-white font-bold text-xl italic"></div></div>
-                    <div class="text-[8px] uppercase text-zinc-600 font-bold italic">Official Archive Record</div>
+                    <div class="text-[8px] uppercase text-zinc-600 font-bold">Official Archive Record</div>
                 </div>
             </div>
             <div id="relatedExhibits" class="mt-20 border-t border-white/5 pt-10 text-left"></div>
@@ -148,7 +148,8 @@
 
         async function initMuseum() {
             try {
-                const response = await fetch('/assets/museum-data.json');
+                const cacheBuster = `?v=${new Date().getTime()}`;
+                const response = await fetch('museum-data.json' + cacheBuster);
                 window.museumData = await response.json();
                 renderItems(window.museumData);
                 renderPatrons(window.museumData);
