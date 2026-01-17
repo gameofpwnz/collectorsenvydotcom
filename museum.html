@@ -27,83 +27,27 @@
             transform: translateY(-8px);
         }
 
-        /* Era Filter Styling */
+        .curator-choice { border-color: #c5a059 !important; box-shadow: 0 0 40px rgba(197, 160, 89, 0.15); }
+        .curator-badge { background: #c5a059; color: black; font-size: 7px; padding: 2px 8px; letter-spacing: 0.2em; font-weight: 900; }
+        .verified-badge { background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; color: #3b82f6; font-size: 8px; padding: 2px 8px; letter-spacing: 0.1em; font-weight: 800; }
+        
         .era-btn.active { color: #3b82f6; border-color: #3b82f6; }
+        .filter-btn.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
 
-        /* Curator's Choice Glow */
-        .curator-choice {
-            border-color: #c5a059 !important;
-            box-shadow: 0 0 40px rgba(197, 160, 89, 0.15);
-        }
-        .curator-badge {
-            background: #c5a059;
-            color: black;
-            font-size: 7px;
-            padding: 2px 8px;
-            letter-spacing: 0.2em;
-            font-weight: 900;
-        }
-
-        .hall-label {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            transform: rotate(180deg);
-            font-size: 0.65rem;
-            letter-spacing: 0.5em;
-        }
-
+        .hall-label { writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); font-size: 0.65rem; letter-spacing: 0.5em; }
         @media (max-width: 768px) { .hall-label { display: none; } }
 
-        /* Fixed Elements */
-        .modal-close-trigger {
-            position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
-            z-index: 150;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        #backToTop {
-            display: none;
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 60;
-            background: rgba(59, 130, 246, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(59, 130, 246, 0.5);
-        }
-
-        .coa-card {
-            background: linear-gradient(145deg, #111, #080808);
-            border: 1px solid #c5a059;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .coa-card::after {
-            content: "VERIFIED";
-            position: absolute;
-            top: 10px;
-            right: -30px;
-            background: #c5a059;
-            color: black;
-            font-size: 8px;
-            font-weight: 900;
-            padding: 5px 40px;
-            transform: rotate(45deg);
-        }
-
-        .placeholder-shimmer {
-            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(59, 130, 246, 0.05) 50%, rgba(255,255,255,0) 100%);
-            background-size: 200% 100%;
-            animation: shimmer 3s infinite;
-        }
+        .modal-close-trigger { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 150; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .coa-card { background: linear-gradient(145deg, #111, #080808); border: 1px solid #c5a059; position: relative; overflow: hidden; }
+        .coa-card::after { content: "VERIFIED"; position: absolute; top: 10px; right: -30px; background: #c5a059; color: black; font-size: 8px; font-weight: 900; padding: 5px 40px; transform: rotate(45deg); }
+        
+        #backToTop { display: none; position: fixed; bottom: 2rem; right: 2rem; z-index: 60; background: rgba(59, 130, 246, 0.2); backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.5); }
+        .placeholder-shimmer { background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(59, 130, 246, 0.05) 50%, rgba(255,255,255,0) 100%); background-size: 200% 100%; animation: shimmer 3s infinite; }
         @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; overflow-y: auto; align-items: flex-start; justify-content: center; }
+        .related-card { background: #0a0a0a; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; }
+        .related-card:hover { border-color: #3b82f6; }
     </style>
 </head>
 <body class="antialiased museum-bg">
@@ -113,16 +57,12 @@
             <span class="text-[8px] md:text-[9px] tracking-[0.3em] font-bold text-zinc-500 uppercase italic">Museum of</span>
             <span class="text-xl font-black uppercase italic tracking-tighter text-white">ESPORTS COLLECTORS</span>
         </div>
-        <div class="flex gap-4 md:gap-10 items-center">
-            <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="px-4 py-2 border border-blue-500/50 text-blue-500 text-[9px] uppercase tracking-widest font-bold hover:bg-blue-500 hover:text-white transition-all">Submit Artifact</a>
-        </div>
+        <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="px-4 py-2 border border-blue-500/50 text-blue-500 text-[9px] uppercase tracking-widest font-bold hover:bg-blue-500 hover:text-white transition-all">Submit Artifact</a>
     </nav>
 
     <header class="relative min-h-screen flex flex-col justify-center items-center text-center px-6 pb-20 overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <img src="https://lh3.googleusercontent.com/d/1YUsyR_rYlyOA7HnPvrEHExFwL25cs9DX=w1000-h1000" class="w-full h-full object-cover opacity-20 grayscale">
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/70 to-[#050505]"></div>
-        </div>
+        <div class="absolute inset-0 z-0 opacity-20 grayscale bg-[url('https://lh3.googleusercontent.com/d/1YUsyR_rYlyOA7HnPvrEHExFwL25cs9DX=w1000-h1000')] bg-cover bg-center"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/70 to-[#050505]"></div>
         <div class="relative z-10 mt-20">
             <div class="w-px h-20 bg-gradient-to-b from-blue-500 to-transparent mx-auto mb-8"></div>
             <h2 class="text-zinc-500 uppercase tracking-[0.4em] text-[10px] mb-4 font-bold italic">Permanent Installation</h2>
@@ -130,100 +70,73 @@
         </div>
     </header>
 
-    <div class="sticky top-[70px] md:top-[80px] z-40 bg-black/90 backdrop-blur-md border-y border-white/5 py-4">
+    <div class="sticky top-[70px] md:top-[80px] z-40 bg-black/95 backdrop-blur-md border-y border-white/5 py-4">
         <div class="max-w-7xl mx-auto px-6 flex flex-col gap-4">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="relative w-full md:w-96">
-                    <input type="text" id="museumSearch" onkeyup="handleSearch()" placeholder="Search archives..." 
-                           class="w-full bg-zinc-900 border border-zinc-800 px-6 py-3 text-xs text-zinc-300 focus:outline-none focus:border-blue-500 transition uppercase tracking-widest">
+                    <input type="text" id="museumSearch" onkeyup="handleSearch()" placeholder="Search archives..." class="w-full bg-zinc-900 border border-zinc-800 px-6 py-3 text-xs text-zinc-300 focus:outline-none focus:border-blue-500 transition uppercase tracking-widest">
                     <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-bold text-zinc-600 uppercase">
                         <span id="artifactCount" class="text-blue-500">0</span> Records
                     </div>
                 </div>
                 <div id="esportFilters" class="flex gap-6 overflow-x-auto w-full md:w-auto scrollbar-hide">
-                    <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase tracking-widest font-bold text-blue-500 border-b border-blue-500">All</button>
-                    <button onclick="filterByEsport('cod')" class="filter-btn text-[10px] uppercase tracking-widest font-bold text-zinc-500 transition">CoD</button>
-                    <button onclick="filterByEsport('halo')" class="filter-btn text-[10px] uppercase tracking-widest font-bold text-zinc-500 transition">Halo</button>
-                    <button onclick="filterByEsport('creator')" class="filter-btn text-[10px] uppercase tracking-widest font-bold text-zinc-500 transition">Creator</button>
+                    <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase tracking-widest font-bold text-zinc-500">All</button>
+                    <button onclick="filterByEsport('cod')" class="filter-btn text-[10px] uppercase tracking-widest font-bold text-zinc-500">CoD</button>
+                    <button onclick="filterByEsport('halo')" class="filter-btn text-[10px] uppercase tracking-widest font-bold text-zinc-500">Halo</button>
+                    <button onclick="filterByEsport('creator')" class="filter-btn text-[10px] uppercase tracking-widest font-bold text-zinc-500">Creator</button>
                 </div>
             </div>
             <div class="flex gap-6 justify-center items-center text-[8px] uppercase tracking-[0.3em] font-bold text-zinc-600 border-t border-white/5 pt-4">
-                <button onclick="filterByEra('all')" class="era-btn active border-b border-transparent">All Eras</button>
-                <button onclick="filterByEra('golden')" class="era-btn border-b border-transparent">Golden Age (00-15)</button>
-                <button onclick="filterByEra('global')" class="era-btn border-b border-transparent">Global Era (16-20)</button>
-                <button onclick="filterByEra('modern')" class="era-btn border-b border-transparent">Modern (21+)</button>
+                <button onclick="filterByEra('all')" class="era-btn active">All Eras</button>
+                <button onclick="filterByEra('golden')" class="era-btn">Golden Age (10-15)</button>
+                <button onclick="filterByEra('global')" class="era-btn">Global Era (16-20)</button>
+                <button onclick="filterByEra('modern')" class="era-btn">Modern (21+)</button>
             </div>
         </div>
     </div>
 
     <main class="max-w-7xl mx-auto px-6 space-y-40 py-20">
         <div id="globalEmptyState" class="hidden py-40 text-center">
-            <h3 class="serif text-4xl text-zinc-700 italic mb-4">No records match your inquiry.</h3>
-            <p class="text-zinc-500 text-xs uppercase tracking-widest">This wing of the archive is currently vacant.</p>
+            <h3 class="serif text-4xl text-zinc-700 italic mb-4">Exhibit Awaiting Contributions</h3>
+            <p class="text-zinc-500 text-xs uppercase tracking-widest italic">No records match your inquiry.</p>
         </div>
 
-        <section id="hall-jerseys" class="relative px-0 md:pl-20">
-            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic">Hall of Textiles</div>
-            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Jersey Collection</h2>
-            <div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 italic"></div>
-        </section>
+        <section id="hall-jerseys" class="relative px-0 md:pl-20"><div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 border-r border-zinc-900 pr-4 italic font-black uppercase">Hall of Textiles</div><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Jersey Collection</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 italic"></div></section>
+        <section id="hall-hardware" class="relative px-0 md:pl-20"><div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 border-r border-zinc-900 pr-4 italic font-black uppercase">Hardware Wing</div><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware & Memorabilia</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 italic"></div></section>
+        <section id="hall-signatures" class="relative px-0 md:pl-20"><div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 border-r border-zinc-900 pr-4 italic font-black uppercase">Signature Study</div><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Autographs & Inscriptions</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 italic"></div></section>
 
-        <section id="hall-hardware" class="relative px-0 md:pl-20">
-            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic">Hardware Wing</div>
-            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware & Memorabilia</h2>
-            <div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 italic"></div>
-        </section>
-
-        <section id="hall-signatures" class="relative px-0 md:pl-20">
-            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic">Signature Study</div>
-            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Autographs & Inscriptions</h2>
-            <div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 italic"></div>
-        </section>
-
-        <section class="border-t border-white/5 pt-40 pb-20">
-            <div class="max-w-4xl mx-auto text-center">
+        <section class="border-t border-white/5 pt-40 pb-20 text-center">
+            <div class="max-w-4xl mx-auto">
                 <div class="w-px h-16 bg-blue-500/50 mx-auto mb-10"></div>
                 <h2 class="serif text-4xl text-white italic mb-8">The Mission</h2>
-                <p class="text-zinc-400 font-light leading-relaxed text-lg italic mb-32 px-4">
-                    "In an era defined by digital ephemerality, the physical relics of competition serve as the 
-                    anchor for our shared history. We exist to ensure that the textiles, hardware, and signatures 
-                    of the pioneers are never lost to time—preserving the tangible soul of esports for the next generation."
-                </p>
-                
+                <p class="text-zinc-400 font-light leading-relaxed text-lg italic mb-32 px-4">"In an era defined by digital ephemerality, the physical relics of competition serve as the anchor for our shared history. We exist to ensure that the textiles, hardware, and signatures of the pioneers are never lost to time—preserving the tangible soul of esports for the next generation."</p>
                 <h3 class="serif text-3xl text-white italic mb-4">Patrons of the Archive</h3>
-                <p class="text-zinc-600 text-[9px] uppercase tracking-[0.4em] mb-16 italic font-bold">Registry of Verified Stewards</p>
-                <div id="donor-wall" class="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8"></div>
+                <div id="donor-wall" class="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 mt-16 px-4"></div>
             </div>
         </section>
     </main>
 
     <div id="itemModal" class="modal">
-        <button onclick="closeModal()" class="modal-close-trigger flex items-center gap-2 px-4 py-2 rounded-full transition">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-white">Exit Gallery</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
+        <button onclick="closeModal()" class="modal-close-trigger flex items-center gap-2 px-4 py-2 rounded-full transition"><span class="text-[10px] font-bold uppercase tracking-widest text-white italic">Exit Gallery</span></button>
         <div class="w-full max-w-5xl px-6 py-24" onclick="event.stopPropagation()">
             <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12" id="modalDetailsArea">
                 <div class="lg:col-span-2 border-l-2 border-blue-600 pl-8 text-left">
-                    <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4 leading-none"></h2>
+                    <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4 leading-none uppercase tracking-tighter"></h2>
                     <div id="modalAcc" class="text-blue-500 font-mono text-[10px] uppercase tracking-widest mb-6"></div>
                     <p id="modalDesc" class="text-zinc-400 font-light text-base md:text-lg mb-10 italic"></p>
                     <button onclick="shareArtifact()" class="bg-blue-600/10 border border-blue-500/50 px-6 py-3 text-blue-400 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">Copy Exhibit Link</button>
                 </div>
                 <div class="coa-card p-6 flex flex-col justify-between min-h-[200px] text-left">
                     <div class="text-[9px] uppercase tracking-[0.3em] text-zinc-500 font-bold italic">Registry Record</div>
-                    <div>
-                        <div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic">Steward</div>
-                        <div id="modalSteward" class="text-white font-bold text-xl italic tracking-tighter"></div>
-                    </div>
+                    <div><div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic">Steward</div><div id="modalSteward" class="text-white font-bold text-xl italic tracking-tighter"></div></div>
                     <div class="mt-6 pt-4 border-t border-zinc-800 text-[8px] uppercase text-zinc-600 tracking-widest font-bold">Official Archive Record</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <button id="backToTop" onclick="scrollToTop()" class="p-4 rounded-full text-white transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button>
+    <button id="backToTop" onclick="scrollToTop()" class="p-4 rounded-full text-white shadow-2xl transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button>
     <div id="shareToast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none z-[200] transition-all">Link Copied</div>
 
     <script>
@@ -240,13 +153,22 @@
                 renderPatrons(data);
                 const hash = window.location.hash.substring(1);
                 if (hash) setTimeout(() => openModal(hash), 500);
-            } catch (e) { console.error("Archive Error: Ensure JSON path is correct."); }
+            } catch (e) { console.error("Archive Error: museum-data.json not found."); }
         }
 
+        // UPDATED: Multi-field Search logic
         function handleSearch() {
             const query = document.getElementById('museumSearch').value.toLowerCase();
             const filtered = window.museumData.filter(item => {
-                const matchesSearch = item.title.toLowerCase().includes(query) || item.steward.toLowerCase().includes(query) || item.id.toLowerCase().includes(query);
+                const searchableFields = [
+                    item.id,
+                    item.esport,
+                    item.title,
+                    item.steward,
+                    item.description,
+                    ...(item.tags || [])
+                ];
+                const matchesSearch = searchableFields.some(field => String(field).toLowerCase().includes(query));
                 const matchesEsport = activeEsport === 'all' || item.esport === activeEsport;
                 let matchesEra = true;
                 if (activeEra === 'golden') matchesEra = item.year <= 2015;
@@ -259,8 +181,8 @@
 
         function filterByEsport(esport) {
             activeEsport = esport;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('text-blue-500', 'border-b', 'border-blue-500'));
-            event.target.classList.add('text-blue-500', 'border-b', 'border-blue-500');
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('text-blue-500', 'border-b', 'border-blue-500', 'active'));
+            event.target.classList.add('text-blue-500', 'active');
             handleSearch();
         }
 
@@ -274,7 +196,6 @@
         function renderItems(data) {
             document.getElementById('artifactCount').innerText = data.length;
             document.getElementById('globalEmptyState').classList.toggle('hidden', data.length > 0 || document.getElementById('museumSearch').value === "");
-            
             const categories = ['jerseys', 'hardware', 'signatures'];
             categories.forEach(cat => {
                 const grid = document.getElementById(`${cat}-grid`);
@@ -288,31 +209,30 @@
                         <div class="mt-auto text-left">
                             <div class="flex justify-between items-baseline mb-2 italic">
                                 <span class="text-[9px] font-bold ${item.featured ? 'text-[#c5a059]' : 'text-blue-600'} uppercase tracking-widest">${item.id}</span>
-                                <span class="text-[8px] text-zinc-700 font-bold uppercase tracking-widest font-mono">${item.year}</span>
+                                <span class="text-[8px] text-zinc-700 font-bold uppercase font-mono">${item.year}</span>
                             </div>
                             <h4 class="serif text-2xl text-white italic leading-none mb-4 uppercase tracking-tighter">${item.title}</h4>
-                            <div class="flex justify-between items-center pt-4 border-t border-zinc-900 text-[10px] uppercase tracking-widest font-bold">
+                            <div class="flex justify-between items-center pt-4 border-t border-zinc-900 text-[10px] uppercase font-bold tracking-tighter">
                                 <span class="text-zinc-600 italic">Steward</span>
                                 <span class="text-zinc-400 italic">${item.steward}</span>
                             </div>
                         </div>
-                    </div>
-                `).join('') + `
-                <div class="display-case p-8 placeholder-shimmer flex flex-col items-center justify-center text-center group h-full border-dashed border-zinc-800 min-h-[400px]">
-                    <div class="mb-6 opacity-20"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1"><path d="M21 8l-9-4-9 4v8l9 4 9-4V8z"></path></svg></div>
-                    <h4 class="serif text-xl text-zinc-600 italic mb-4 uppercase">Exhibit Awaiting Contributions</h4>
-                    <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold tracking-widest border-b border-blue-500 pb-1">Submit Artifact</a>
-                </div>`;
+                    </div>`).join('') + `
+                    <div class="display-case p-8 placeholder-shimmer flex flex-col items-center justify-center text-center group h-full border-dashed border-zinc-800 min-h-[400px]">
+                        <div class="mb-6 opacity-20"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1"><path d="M21 8l-9-4-9 4v8l9 4 9-4V8z"></path></svg></div>
+                        <h4 class="serif text-xl text-zinc-600 italic mb-4 uppercase tracking-tighter">Exhibit Awaiting Contributions</h4>
+                        <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold tracking-widest border-b border-blue-500 pb-1">Submit Artifact</a>
+                    </div>`;
             });
         }
 
         function renderPatrons(data) {
             const uniqueStewards = [...new Set(data.map(item => item.steward))];
             document.getElementById('donor-wall').innerHTML = uniqueStewards.map(steward => {
-                const info = data.find(item => item.steward === steward);
+                const info = data.find(i => i.steward === steward);
                 return `<div class="group"><a href="${info.stewardLink || '#'}" target="_blank" class="block">
                     <span class="block text-zinc-400 group-hover:text-blue-500 text-[11px] uppercase tracking-widest font-bold mb-1">${steward}</span>
-                    <span class="block text-[7px] text-zinc-700 uppercase tracking-widest font-black">Verified Steward</span>
+                    <span class="block text-[7px] text-zinc-700 uppercase tracking-widest font-black italic">Verified Steward</span>
                 </a></div>`;
             }).join('');
         }
@@ -323,9 +243,27 @@
             if(!item) return;
             document.getElementById('modalTitle').innerText = item.title;
             document.getElementById('modalDesc').innerText = item.description;
-            document.getElementById('modalAcc').innerText = "Accession No. " + item.id;
+            document.getElementById('modalAcc').innerHTML = `Accession No. ${item.id} ${item.verified ? '<span class="verified-badge ml-2 inline-block">REGISTRY CERTIFIED</span>' : ''}`;
             document.getElementById('modalSteward').innerText = item.steward;
-            document.getElementById('modalImages').innerHTML = item.images.slice(0, 4).map(img => `<div class="bg-black p-2 border border-white/5"><img src="${img}" class="w-full h-auto object-contain"></div>`).join('');
+            document.getElementById('modalImages').innerHTML = item.images.slice(0, 4).map(img => `<div class="bg-black p-2 border border-white/5 shadow-2xl"><img src="${img}" class="w-full h-auto object-contain"></div>`).join('');
+            
+            const related = window.museumData.filter(o => o.id !== item.id && (o.esport === item.esport || (o.tags && item.tags && o.tags.some(t => item.tags.includes(t))))).slice(0, 4);
+            const detailCol = document.querySelector('.lg:col-span-2');
+            const existingRel = document.getElementById('relatedExhibits');
+            if(existingRel) existingRel.remove();
+            
+            if(related.length > 0) {
+                const relDiv = document.createElement('div');
+                relDiv.id = "relatedExhibits";
+                relDiv.className = "mt-20 pt-10 border-t border-white/5";
+                relDiv.innerHTML = `<h4 class="serif text-xl text-white italic mb-6">Related Exhibits</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${related.map(r => `
+                    <div onclick="openModal('${r.id}')" class="related-card p-3 cursor-pointer group">
+                        <img src="${r.images[0]}" class="w-full h-24 object-contain opacity-50 group-hover:opacity-100 transition mb-2">
+                        <div class="text-[10px] text-zinc-300 font-bold uppercase truncate">${r.title}</div>
+                    </div>`).join('')}</div>`;
+                detailCol.appendChild(relDiv);
+            }
+
             document.getElementById('itemModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
             window.history.replaceState(null, null, "#" + id);
