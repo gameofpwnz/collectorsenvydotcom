@@ -156,7 +156,7 @@
         // UPDATED: Dynamic Hall Population
         async function initMuseum() {
             try {
-                const response = await fetch('data.json');
+                const response = await fetch('/assets/museum-data.json');
                 const data = await response.json();
                 window.museumData = data;
 
@@ -206,4 +206,5 @@
         initMuseum();
     </script>
 </body>
+
 </html>
