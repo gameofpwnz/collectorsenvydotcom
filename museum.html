@@ -63,6 +63,18 @@
             transform: rotate(45deg);
         }
 
+        /* Fixed Exit Button */
+        .modal-close-trigger {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 150;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
         /* Back to Top */
         #backToTop {
             display: none;
@@ -76,14 +88,6 @@
         }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; align-items: flex-start; justify-content: center; backdrop-filter: blur(10px); overflow-y: auto; }
-        
-        /* Shimmer for Placeholders */
-        .placeholder-shimmer {
-            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(59, 130, 246, 0.05) 50%, rgba(255,255,255,0) 100%);
-            background-size: 200% 100%;
-            animation: shimmer 3s infinite;
-        }
-        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
     </style>
 </head>
 <body class="antialiased museum-bg">
@@ -94,10 +98,11 @@
             <span class="text-lg md:text-xl font-black uppercase italic tracking-tighter text-white">ESPORTS COLLECTORS</span>
         </div>
         <div class="flex gap-4 md:gap-10 items-center text-[9px] uppercase font-bold tracking-widest text-zinc-400">
-            <div class="hidden lg:flex gap-8">
+            <div class="hidden lg:flex gap-8 italic">
                 <a href="#hall-jerseys" class="hover:text-blue-500 transition">Jerseys</a>
                 <a href="#hall-hardware" class="hover:text-blue-500 transition">Hardware</a>
                 <a href="#hall-signatures" class="hover:text-blue-500 transition">Signatures</a>
+                <a href="#hall-posters" class="hover:text-blue-500 transition">Posters</a>
             </div>
             <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="px-4 py-2 border border-blue-500/50 text-blue-500 hover:bg-blue-500 hover:text-white transition-all">Submit Artifact</a>
         </div>
@@ -112,7 +117,7 @@
         <div class="relative z-10 mt-20">
             <div class="w-px h-16 md:h-20 bg-gradient-to-b from-blue-500 to-transparent mx-auto mb-8"></div>
             <h2 class="text-zinc-500 uppercase tracking-[0.4em] md:tracking-[0.6em] text-[8px] md:text-[10px] mb-4 font-bold">Collectors Envy Permanent Installation</h2>
-            <h1 class="serif text-5xl md:text-9xl text-white italic mb-10 leading-tight tracking-tight px-4">Preserving the <br class="hidden md:block text-blue-600">Physical Legacy.</h1>
+            <h1 class="serif text-5xl md:text-9xl text-white italic mb-10 leading-tight tracking-tight px-4 underline decoration-blue-500/20 underline-offset-8">Preserving the <br class="hidden md:block">Physical Legacy.</h1>
             <p class="max-w-xl mx-auto text-zinc-400 font-light leading-relaxed mb-12 text-base md:text-lg italic px-4">
                 "A digital sanctuary for the physical relics of the competitive era."
             </p>
@@ -125,6 +130,7 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-6 space-y-40 pb-40">
+        
         <section id="hall-jerseys" class="relative px-0 md:pl-20 pt-20">
             <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4">Hall of Textiles</div>
             <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Jersey Collection</h2>
@@ -133,8 +139,8 @@
 
         <section id="hall-hardware" class="relative px-0 md:pl-20">
             <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4">Hardware Wing</div>
-            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware & Memorabilia</h2>
-            <div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 italic"></div>
+            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware & Controllers</h2>
+            <div id="controllers-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 italic"></div>
         </section>
 
         <section id="hall-signatures" class="relative px-0 md:pl-20">
@@ -142,19 +148,27 @@
             <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Autographs & Inscriptions</h2>
             <div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 italic"></div>
         </section>
+
+        <section id="hall-posters" class="relative px-0 md:pl-20">
+            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4">Print Gallery</div>
+            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Posters & Memorabilia</h2>
+            <div id="posters-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 italic"></div>
+        </section>
+
     </main>
 
     <div id="itemModal" class="modal">
-        <button onclick="closeModal()" class="fixed top-8 right-8 z-[110] flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-md transition">
+        <button onclick="closeModal()" class="modal-close-trigger flex items-center gap-2 px-4 py-2 rounded-full transition">
             <span class="text-[10px] font-bold uppercase tracking-widest text-white">Exit Gallery</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
 
-        <div class="w-full max-w-5xl px-6 py-20" onclick="event.stopPropagation()">
+        <div class="w-full max-w-5xl px-6 py-24" onclick="event.stopPropagation()">
             <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div class="lg:col-span-2 border-l-2 border-blue-600 pl-8">
-                    <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4 leading-none"></h2>
+                    <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4 tracking-tight leading-none"></h2>
                     <div id="modalAcc" class="text-blue-500 font-mono text-[10px] uppercase tracking-widest mb-6"></div>
                     <p id="modalDesc" class="text-zinc-400 font-light leading-relaxed text-base md:text-lg italic mb-10"></p>
                     
@@ -162,32 +176,27 @@
                         Copy Exhibit Link
                     </button>
                 </div>
+
                 <div class="coa-card p-6 flex flex-col justify-between min-h-[220px]">
-                    <div class="text-[9px] uppercase tracking-[0.3em] text-zinc-500 font-bold italic">Archive Registry</div>
+                    <div class="text-[9px] uppercase tracking-[0.3em] text-zinc-500 font-bold italic">Registry Record</div>
                     <div>
                         <div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic">Steward</div>
                         <div id="modalSteward" class="text-white font-bold text-xl italic tracking-tighter"></div>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-zinc-800 text-[8px] uppercase text-zinc-600 tracking-widest">Collectors Envy Official Record</div>
+                    <div class="mt-6 pt-4 border-t border-zinc-800 text-[8px] uppercase text-zinc-600 tracking-widest">Collectors Envy Archive</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <button id="backToTop" onclick="scrollToTop()" class="p-4 rounded-full text-white shadow-2xl transition-all">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
-    </button>
-
-    <div id="shareToast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none z-[200] transition-all duration-300">
-        Link Copied to Clipboard
-    </div>
+    <button id="backToTop" onclick="scrollToTop()" class="p-4 rounded-full text-white transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button>
+    <div id="shareToast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none z-[200] transition-all duration-300">Link Copied to Clipboard</div>
 
     <script>
         let currentArtifactId = "";
 
         async function initMuseum() {
             try {
-                // Adjust path as needed for your folder structure
                 const response = await fetch('/assets/museum-data.json');
                 const data = await response.json();
                 window.museumData = data;
@@ -199,11 +208,11 @@
                                 <img src="${item.images[0]}" class="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-all duration-700">
                             </div>
                             <div class="mt-auto">
-                                <div class="flex justify-between items-baseline mb-2">
-                                    <span class="text-[9px] font-bold text-blue-600 uppercase tracking-widest">${item.id}</span>
-                                    <span class="text-[8px] text-zinc-800 font-bold uppercase tracking-widest">Verified</span>
+                                <div class="flex justify-between items-baseline mb-2 uppercase italic">
+                                    <span class="text-[9px] font-bold text-blue-600 tracking-widest">${item.id}</span>
+                                    <span class="text-[8px] text-zinc-800 font-bold">Verified</span>
                                 </div>
-                                <h4 class="serif text-2xl text-white italic leading-none mb-4 uppercase">${item.title}</h4>
+                                <h4 class="serif text-2xl text-white italic mb-4 uppercase tracking-tighter">${item.title}</h4>
                                 <div class="flex justify-between items-center pt-4 border-t border-zinc-900 text-[10px] uppercase tracking-widest font-bold">
                                     <span class="text-zinc-600">Steward</span>
                                     <span class="text-zinc-400">${item.steward}</span>
@@ -215,30 +224,20 @@
                     if(grid) grid.innerHTML += card;
                 });
 
-                // Deep linking check
                 const hash = window.location.hash.substring(1);
                 if (hash) setTimeout(() => openModal(hash), 500);
-
-            } catch (e) {
-                console.error("Archive Error: Ensure museum-data.json exists.");
-            }
+            } catch (e) { console.error("Archive Error: Ensure museum-data.json is in /assets/"); }
         }
 
         function openModal(id) {
             currentArtifactId = id;
             const item = window.museumData.find(a => a.id === id);
             if(!item) return;
-
             document.getElementById('modalTitle').innerText = item.title;
             document.getElementById('modalDesc').innerText = item.description;
             document.getElementById('modalAcc').innerText = "Accession No. " + item.id;
             document.getElementById('modalSteward').innerText = item.steward;
-            
-            const imgContainer = document.getElementById('modalImages');
-            imgContainer.innerHTML = item.images.slice(0, 4).map(img => 
-                `<div class="bg-black p-2 border border-white/5 shadow-2xl"><img src="${img}" class="w-full h-auto object-contain"></div>`
-            ).join('');
-            
+            document.getElementById('modalImages').innerHTML = item.images.slice(0, 4).map(img => `<div class="bg-black p-2 border border-white/5"><img src="${img}" class="w-full h-auto object-contain"></div>`).join('');
             document.getElementById('itemModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
             window.history.replaceState(null, null, "#" + id);
@@ -260,12 +259,7 @@
         }
 
         function scrollToTop() { window.scrollTo({top: 0, behavior: 'smooth'}); }
-
-        window.onscroll = function() {
-            const btn = document.getElementById("backToTop");
-            btn.style.display = (window.scrollY > 500) ? "block" : "none";
-        };
-
+        window.onscroll = function() { document.getElementById("backToTop").style.display = (window.scrollY > 500) ? "block" : "none"; };
         initMuseum();
     </script>
 </body>
