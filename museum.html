@@ -19,47 +19,32 @@
         }
         .display-case:hover { border-color: #3b82f6; transform: translateY(-8px); }
 
-        /* Tiered Badges */
         .curator-choice { border-color: #c5a059 !important; box-shadow: 0 0 40px rgba(197, 160, 89, 0.15); }
         .curator-badge { background: #c5a059; color: black; font-size: 7px; padding: 2px 8px; letter-spacing: 0.2em; font-weight: 900; }
-        
-        /* New Certified Logic */
         .certified-label { background: #3b82f6; color: white; font-size: 8px; padding: 2px 8px; letter-spacing: 0.1em; font-weight: 800; border-radius: 2px; }
         .community-label { background: #27272a; color: #71717a; font-size: 8px; padding: 2px 8px; letter-spacing: 0.1em; font-weight: 800; border-radius: 2px; }
 
         .era-btn.active { color: #3b82f6; border-color: #3b82f6; }
         .filter-btn.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
         
-        /* OLD PAPER / PARCHMENT LOOK */
+        /* IMPROVED PARCHMENT (Mobile Friendly) */
+        .parchment-outer { padding: 40px 10px; }
         .parchment-container {
             background-color: #e5e5e5;
             background-image: url("https://www.transparenttextures.com/patterns/old-mathematics.png");
-            padding: 80px 40px;
+            padding: 60px 20px;
             position: relative;
             color: #1a1a1a;
-            /* Rough Edges effect */
-            clip-path: polygon(0% 2%, 2% 0%, 98% 1%, 100% 3%, 99% 97%, 98% 100%, 2% 98%, 0% 95%);
-            box-shadow: 20px 20px 60px rgba(0,0,0,0.5);
-            max-width: 900px;
+            /* Less aggressive clip for mobile safety */
+            clip-path: polygon(1% 1%, 99% 0%, 100% 99%, 0% 100%);
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.5);
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; overflow-y: auto; align-items: flex-start; justify-content: center; }
         .coa-card { background: linear-gradient(145deg, #111, #080808); border: 1px solid #c5a059; position: relative; overflow: hidden; }
-        
-        /* Certified Stamp in Modal */
-        .certified-stamp {
-            position: absolute;
-            top: 20px;
-            right: -25px;
-            background: #c5a059;
-            color: black;
-            font-size: 9px;
-            font-weight: 900;
-            padding: 4px 40px;
-            transform: rotate(45deg);
-            text-align: center;
-        }
+        .certified-stamp { position: absolute; top: 15px; right: -30px; background: #c5a059; color: black; font-size: 8px; font-weight: 900; padding: 4px 40px; transform: rotate(45deg); text-align: center; }
 
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
         .scroll-indicator { animation: bounce 2s infinite; }
@@ -71,8 +56,8 @@
         <div class="flex items-center gap-6">
             <a href="https://collectorsenvy.com" class="text-[10px] uppercase font-bold text-zinc-500 hover:text-white transition tracking-widest border-r border-white/10 pr-6 hidden md:block">Homepage</a>
             <div class="flex flex-col leading-none">
-                <span class="text-[8px] tracking-[0.3em] font-bold text-zinc-500 uppercase italic">Museum of</span>
-                <span class="text-xl font-black uppercase italic text-white">ESPORTS COLLECTORS</span>
+                <span class="text-[8px] tracking-[0.3em] font-bold text-zinc-500 uppercase italic leading-tight">Museum of</span>
+                <span class="text-xl font-black uppercase italic text-white leading-tight">ESPORTS COLLECTORS</span>
             </div>
         </div>
         <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="px-4 py-2 border border-blue-500/50 text-blue-500 text-[9px] uppercase font-bold hover:bg-blue-500 hover:text-white transition-all">Submit Artifact</a>
@@ -95,24 +80,26 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="relative w-full md:w-96">
                     <input type="text" id="museumSearch" onkeyup="handleSearch()" placeholder="Search archives..." class="w-full bg-zinc-900 border border-zinc-800 px-6 py-3 text-xs text-zinc-300 focus:outline-none focus:border-blue-500 transition uppercase tracking-widest">
-                    <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-bold text-zinc-600 uppercase">
-                        <span id="artifactCount" class="text-blue-500">0</span> Records
-                    </div>
                 </div>
-                <div id="esportFilters" class="flex gap-6 overflow-x-auto scrollbar-hide">
-                    <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase font-bold text-zinc-500">All</button>
-                    <button onclick="filterByEsport('cod')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">CoD</button>
-                    <button onclick="filterByEsport('halo')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Halo</button>
-                    <button onclick="filterByEsport('cs')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">CS</button>
-                    <button onclick="filterByEsport('valorant')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Valorant</button>
-                    <button onclick="filterByEsport('creator')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Creator</button>
+                <div id="esportFilters" class="flex gap-6 overflow-x-auto scrollbar-hide pb-2">
+                    <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">All</button>
+                    <button onclick="filterByEsport('cod')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">CoD</button>
+                    <button onclick="filterByEsport('halo')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Halo</button>
+                    <button onclick="filterByEsport('cs')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">CS</button>
+                    <button onclick="filterByEsport('valorant')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Valorant</button>
+                    <button onclick="filterByEsport('lol')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">LoL</button>
+                    <button onclick="filterByEsport('rl')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">RL</button>
+                    <button onclick="filterByEsport('br')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">BR</button>
+                    <button onclick="filterByEsport('sports')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Sports</button>
+                    <button onclick="filterByEsport('fighting')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Fighting</button>
+                    <button onclick="filterByEsport('creator')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Creator</button>
                 </div>
             </div>
-            <div class="flex gap-6 justify-center items-center text-[8px] uppercase tracking-[0.3em] font-bold text-zinc-600 border-t border-white/5 pt-4">
+            <div class="flex gap-4 md:gap-8 justify-center items-center text-[7px] md:text-[8px] uppercase tracking-[0.3em] font-bold text-zinc-600 border-t border-white/5 pt-4">
                 <button onclick="filterByEra('all')" class="era-btn active">All Eras</button>
-                <button onclick="filterByEra('golden')" class="era-btn">Golden Age (10-15)</button>
-                <button onclick="filterByEra('global')" class="era-btn">Global Era (16-20)</button>
-                <button onclick="filterByEra('modern')" class="era-btn">Modern (21+)</button>
+                <button onclick="filterByEra('golden')" class="era-btn">10-15</button>
+                <button onclick="filterByEra('global')" class="era-btn">16-20</button>
+                <button onclick="filterByEra('modern')" class="era-btn">21+</button>
             </div>
         </div>
     </div>
@@ -121,59 +108,54 @@
         <section id="curator-spotlight" class="mb-40">
             <div class="flex items-center gap-4 mb-12">
                 <div class="h-px flex-1 bg-gradient-to-r from-transparent to-zinc-800"></div>
-                <h2 class="serif text-2xl text-[#c5a059] italic uppercase tracking-widest">Curator's Choice</h2>
+                <h2 class="serif text-2xl text-[#c5a059] italic uppercase tracking-widest text-center">Curator's Choice</h2>
                 <div class="h-px flex-1 bg-gradient-to-l from-transparent to-zinc-800"></div>
             </div>
             <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 gap-12"></div>
         </section>
 
-        <section id="hall-jerseys" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Jersey Collection</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
-        <section id="hall-hardware" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware Wing</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
-        <section id="hall-signatures" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Signature Study</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-jerseys" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Jerseys</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-hardware" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-signatures" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Signatures</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
 
         <section class="border-t border-white/5 pt-40 pb-20">
-            <div class="max-w-4xl mx-auto">
+            <div class="max-w-4xl mx-auto px-4">
                 <h3 class="serif text-3xl text-white italic mb-10 text-center">Accession Log</h3>
                 <div id="accession-log" class="space-y-4"></div>
             </div>
         </section>
 
-        <section class="pt-40 pb-40">
-            <div class="parchment-container">
-                <div class="text-center">
-                    <h2 class="serif text-4xl text-zinc-900 italic mb-6">The Mission</h2>
-                    <p class="text-zinc-700 font-light text-lg italic mb-16 px-10">"In an era defined by digital ephemerality, the physical relics of competition serve as the anchor for our shared history."</p>
-                    
-                    <div class="w-24 h-px bg-zinc-300 mx-auto mb-10"></div>
-                    
-                    <h3 class="serif text-2xl text-zinc-800 italic mb-4 uppercase tracking-widest">Patrons of the Archive</h3>
-                    <p class="text-zinc-500 text-[9px] uppercase tracking-[0.3em] mb-12 font-bold italic">Historical Registry Contributors</p>
-                    
-                    <div id="donor-wall" class="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-6 text-zinc-800"></div>
-                </div>
+        <section class="parchment-outer">
+            <div class="parchment-container text-center">
+                <h2 class="serif text-3xl md:text-4xl text-zinc-900 italic mb-6">The Mission</h2>
+                <p class="text-zinc-700 font-light text-base md:text-lg italic mb-12 px-2 md:px-10 leading-relaxed">"In an era defined by digital ephemerality, the physical relics of competition serve as the anchor for our shared history."</p>
+                <div class="w-16 h-px bg-zinc-400 mx-auto mb-10"></div>
+                <h3 class="serif text-xl md:text-2xl text-zinc-800 italic mb-4 uppercase tracking-widest">Patrons of the Archive</h3>
+                <p class="text-zinc-500 text-[8px] uppercase tracking-[0.2em] mb-10 font-bold italic">Historical Registry Contributors</p>
+                <div id="donor-wall" class="grid grid-cols-1 md:grid-cols-3 gap-y-6 md:gap-y-10 gap-x-6 text-zinc-800 px-4"></div>
             </div>
         </section>
     </main>
 
     <div id="itemModal" class="modal">
         <button onclick="closeModal()" class="fixed top-6 right-6 z-[150] text-white uppercase text-[10px] tracking-widest bg-black/50 px-4 py-2 border border-white/10">Exit Gallery</button>
-        <div class="w-full max-w-5xl px-6 py-24" onclick="event.stopPropagation()">
-            <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div class="w-full max-w-5xl px-4 py-24" onclick="event.stopPropagation()">
+            <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
                 <div class="lg:col-span-2 text-left">
-                    <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4"></h2>
-                    <div id="modalAcc" class="flex gap-3 mb-6"></div>
-                    <p id="modalDesc" class="text-zinc-400 text-lg mb-10 italic"></p>
-                    <button onclick="shareArtifact()" class="bg-blue-600/10 border border-blue-500/50 px-6 py-3 text-blue-400 text-[10px] font-bold uppercase hover:bg-blue-600 hover:text-white transition">Copy Exhibit Link</button>
+                    <h2 id="modalTitle" class="serif text-3xl md:text-6xl text-white italic mb-4 uppercase"></h2>
+                    <div id="modalAcc" class="flex flex-wrap gap-2 mb-6"></div>
+                    <p id="modalDesc" class="text-zinc-400 text-base md:text-lg mb-10 italic"></p>
+                    <button onclick="shareArtifact()" class="w-full md:w-auto bg-blue-600/10 border border-blue-500/50 px-6 py-3 text-blue-400 text-[10px] font-bold uppercase hover:bg-blue-600 hover:text-white transition">Copy Exhibit Link</button>
                 </div>
-                <div class="coa-card p-6 flex flex-col justify-between min-h-[200px] text-left">
+                <div class="coa-card p-6 flex flex-col justify-between min-h-[180px] text-left">
                     <div id="modalStamp"></div>
-                    <div class="text-[9px] uppercase tracking-[0.3em] text-zinc-500 font-bold">Provenance Detail</div>
-                    <div><div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic">Steward</div><div id="modalSteward" class="text-white font-bold text-xl italic leading-none"></div></div>
+                    <div class="text-[9px] uppercase tracking-[0.2em] text-zinc-500 font-bold">Provenance Detail</div>
+                    <div><div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic italic">Steward</div><div id="modalSteward" class="text-white font-bold text-lg md:text-xl italic leading-none"></div></div>
                     <div class="text-[8px] uppercase text-zinc-600 font-bold">Archive Registry No.</div>
                 </div>
             </div>
-            <div id="relatedExhibits" class="mt-20 border-t border-white/5 pt-10 text-left"></div>
+            <div id="relatedExhibits" class="mt-16 border-t border-white/5 pt-10 text-left"></div>
         </div>
     </div>
 
@@ -210,14 +192,14 @@
         function filterByEsport(esport) {
             activeEsport = esport;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'text-blue-500'));
-            event.target.classList.add('active', 'text-blue-500');
+            if(event) event.target.classList.add('active', 'text-blue-500');
             handleSearch();
         }
 
         function filterByEra(era) {
             activeEra = era;
             document.querySelectorAll('.era-btn').forEach(btn => btn.classList.remove('active', 'text-blue-500'));
-            event.target.classList.add('active', 'text-blue-500');
+            if(event) event.target.classList.add('active', 'text-blue-500');
             handleSearch();
         }
 
@@ -225,12 +207,12 @@
             const log = document.getElementById('accession-log');
             const recent = data.slice(-5).reverse();
             log.innerHTML = recent.map(i => `
-                <div class="flex justify-between items-center py-4 border-b border-white/5 text-[10px] uppercase tracking-widest group cursor-pointer hover:bg-white/5 px-4 transition" onclick="openModal('${i.id}')">
-                    <div class="flex gap-4">
-                        <span class="text-zinc-600 font-mono italic">${i.dateAdded || 'RECENT'}</span>
-                        <span class="text-white font-bold">${i.title}</span>
+                <div class="flex justify-between items-center py-4 border-b border-white/5 text-[9px] md:text-[10px] uppercase tracking-widest group cursor-pointer hover:bg-white/5 px-2 md:px-4 transition" onclick="openModal('${i.id}')">
+                    <div class="flex gap-2 md:gap-4 overflow-hidden truncate">
+                        <span class="text-zinc-600 font-mono italic shrink-0">${i.dateAdded || 'RECENT'}</span>
+                        <span class="text-white font-bold truncate">${i.title}</span>
                     </div>
-                    <span class="text-blue-500 italic">Added by ${i.steward}</span>
+                    <span class="text-blue-500 italic shrink-0 ml-2">@${i.steward}</span>
                 </div>`).join('');
         }
 
@@ -239,19 +221,19 @@
             const featured = data.filter(i => i.featured);
             document.getElementById('curator-spotlight').style.display = featured.length ? 'block' : 'none';
             document.getElementById('featured-grid').innerHTML = featured.map(i => `
-                <div class="display-case p-8 curator-choice group cursor-pointer flex flex-col md:flex-row gap-8 items-center" onclick="openModal('${i.id}')">
+                <div class="display-case p-6 md:p-8 curator-choice group cursor-pointer flex flex-col md:flex-row gap-6 md:gap-8 items-center" onclick="openModal('${i.id}')">
                     <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img src="${i.images[0]}" class="w-full h-full object-contain opacity-90 transition-transform"><div class="absolute top-0 left-0 curator-badge">ESSENTIAL RECORD</div></div>
-                    <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[10px] uppercase mb-4 block tracking-widest">${i.id}</span><h3 class="serif text-4xl text-white italic mb-6 leading-tight">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 line-clamp-3 leading-relaxed">${i.description}</p></div>
+                    <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[10px] uppercase mb-2 block tracking-widest">${i.id}</span><h3 class="serif text-2xl md:text-3xl text-white italic mb-4 leading-tight uppercase">${i.title}</h3><p class="text-zinc-500 text-xs md:text-sm italic mb-6 line-clamp-3 leading-relaxed">${i.description}</p></div>
                 </div>`).join('');
 
             ['jerseys', 'hardware', 'signatures'].forEach(cat => {
                 const grid = document.getElementById(`${cat}-grid`);
                 const items = data.filter(i => i.category === cat);
                 grid.innerHTML = items.map(i => `
-                    <div class="display-case p-6 flex flex-col cursor-pointer ${i.featured ? 'curator-choice' : ''}" onclick="openModal('${i.id}')">
-                        <div class="aspect-[4/5] bg-black mb-6 relative shadow-inner overflow-hidden"><img src="${i.images[0]}" loading="lazy" class="w-full h-full object-contain opacity-80">${i.featured ? '<div class="absolute top-0 left-0 curator-badge">CURATOR\'S CHOICE</div>' : ''}</div>
-                        <div class="text-left"><div class="flex justify-between mb-2"><span class="text-[9px] font-bold ${i.featured ? 'text-[#c5a059]' : 'text-blue-600'} uppercase tracking-widest">${i.id}</span><span class="text-[8px] text-zinc-700 font-bold font-mono">${i.year}</span></div><h4 class="serif text-xl text-white italic mb-4 uppercase tracking-tighter">${i.title}</h4></div>
-                    </div>`).join('') + '<div class="display-case p-8 flex flex-col items-center justify-center border-dashed border-zinc-800 min-h-[300px]"><h4 class="serif text-xl text-zinc-600 italic">Space Reserved</h4><a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold border-b border-blue-500 mt-4 tracking-widest">Submit Artifact</a></div>';
+                    <div class="display-case p-4 md:p-6 flex flex-col cursor-pointer ${i.featured ? 'curator-choice' : ''}" onclick="openModal('${i.id}')">
+                        <div class="aspect-[4/5] bg-black mb-4 md:mb-6 relative shadow-inner overflow-hidden"><img src="${i.images[0]}" loading="lazy" class="w-full h-full object-contain opacity-80">${i.featured ? '<div class="absolute top-0 left-0 curator-badge">CURATOR\'S CHOICE</div>' : ''}</div>
+                        <div class="text-left"><div class="flex justify-between mb-2"><span class="text-[9px] font-bold ${i.featured ? 'text-[#c5a059]' : 'text-blue-600'} uppercase tracking-widest">${i.id}</span><span class="text-[8px] text-zinc-700 font-bold font-mono">${i.year}</span></div><h4 class="serif text-xl text-white italic mb-2 uppercase tracking-tighter truncate">${i.title}</h4></div>
+                    </div>`).join('') + '<div class="display-case p-6 flex flex-col items-center justify-center border-dashed border-zinc-800 min-h-[250px]"><h4 class="serif text-lg text-zinc-600 italic">Space Reserved</h4><a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold border-b border-blue-500 mt-4 tracking-widest">Submit Artifact</a></div>';
             });
         }
 
@@ -259,7 +241,7 @@
             const stewards = [...new Set(data.map(i => i.steward))];
             document.getElementById('donor-wall').innerHTML = stewards.map(s => {
                 const info = data.find(i => i.steward === s);
-                return `<div class="group"><a href="${info.stewardLink || '#'}" target="_blank" class="block"><span class="text-zinc-800 group-hover:text-blue-600 text-[11px] uppercase font-bold transition">${s}</span><span class="block text-[7px] text-zinc-500 uppercase font-black italic tracking-widest mt-1">Verified Steward</span></a></div>`;
+                return `<div class="group"><a href="${info.stewardLink || '#'}" target="_blank" class="block"><span class="text-zinc-800 group-hover:text-blue-600 text-sm md:text-base font-bold transition">${s}</span><span class="block text-[8px] text-zinc-500 uppercase font-black italic tracking-widest mt-1">Verified Steward</span></a></div>`;
             }).join('');
         }
 
@@ -269,7 +251,6 @@
             document.getElementById('modalTitle').innerText = i.title;
             document.getElementById('modalDesc').innerText = i.description;
             
-            // New Badge Logic
             const accDiv = document.getElementById('modalAcc');
             accDiv.innerHTML = `<span class="text-zinc-500 font-mono text-[10px] uppercase">No. ${i.id}</span>`;
             if (i.verified) {
@@ -283,7 +264,7 @@
             document.getElementById('modalSteward').innerText = i.steward;
             document.getElementById('modalImages').innerHTML = i.images.map(img => `<div class="bg-black p-2 border border-white/5 shadow-2xl"><img src="${img}" class="w-full h-auto object-contain"></div>`).join('');
             const related = window.museumData.filter(o => o.id !== i.id && (o.esport === i.esport || (o.tags && i.tags && o.tags.some(t => i.tags.includes(t))))).slice(0, 4);
-            document.getElementById('relatedExhibits').innerHTML = related.length ? `<h4 class="serif text-xl text-white italic mb-6">Related Exhibits</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${related.map(r => `<div onclick="openModal('${r.id}')" class="related-card p-3 cursor-pointer"><img src="${r.images[0]}" class="h-24 w-full object-contain mb-2 opacity-60 hover:opacity-100 transition"><div class="text-[10px] text-zinc-300 font-bold uppercase truncate tracking-tight">${r.title}</div></div>`).join('')}</div>` : '';
+            document.getElementById('relatedExhibits').innerHTML = related.length ? `<h4 class="serif text-xl text-white italic mb-6">Related Exhibits</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${related.map(r => `<div onclick="openModal('${r.id}')" class="related-card p-3 cursor-pointer"><img src="${r.images[0]}" class="h-24 w-full object-contain mb-2 opacity-60 hover:opacity-100 transition"><div class="text-[9px] text-zinc-300 font-bold uppercase truncate tracking-tight">${r.title}</div></div>`).join('')}</div>` : '';
             
             document.getElementById('itemModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
