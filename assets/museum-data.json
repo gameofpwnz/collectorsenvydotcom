@@ -39,35 +39,5 @@
     "images": [
       "/assets/images/museum_images/Controller-TST-autographed.png"
   ]
-  },
-  {
-  "id": "PENDING",
-  "category": "jerseys",
-  "title": "Your Piece of History",
-  "steward": "Future Collector",
-  "description": "This exhibit space is reserved for a verified community artifact. Help us document the legacy of esports collectibles.",
-  "images": [
-    "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjEwMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzA4MDgwOCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ic2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc3R5bGU9Iml0YWxpYyI+QXdhaXRpbmcgQWNjZXNzaW9uLi4uPC90ZXh0Pjwvc3ZnPg=="
-  ]
-},
-{
-  "id": "PENDING",
-  "category": "hardware",
-  "title": "Your Piece of History",
-  "steward": "Future Collector",
-  "description": "This exhibit space is reserved for a verified community artifact. Help us document the legacy of esports collectibles.",
-  "images": [
-    "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjEwMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzA4MDgwOCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ic2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc3R5bGU9Iml0YWxpYyI+QXdhaXRpbmcgQWNjZXNzaW9uLi4uPC90ZXh0Pjwvc3ZnPg=="
-  ]
-},
-{
-  "id": "PENDING",
-  "category": "signatures",
-  "title": "Your Piece of History",
-  "steward": "Future Collector",
-  "description": "This exhibit space is reserved for a verified community artifact. Help us document the legacy of esports collectibles.",
-  "images": [
-    "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjEwMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzA4MDgwOCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ic2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc3R5bGU9Iml0YWxpYyI+QXdhaXRpbmcgQWNjZXNzaW9uLi4uPC90ZXh0Pjwvc3ZnPg=="
-  ]
-}
+  }
 ]
