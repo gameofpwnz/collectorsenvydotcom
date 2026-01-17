@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Guidelines - Collectors Envy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ce-bg: #000000;
+            --ce-card-bg: #0a0a0a;
+            --ce-accent: #ffffff;
+            --ce-text-main: #ffffff;
+            --ce-text-dim: #a1a1a1;
+            --ce-border: #222222;
+            --ce-font: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--ce-font);
+            background: var(--ce-bg);
+            color: var(--ce-text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation Menu */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--ce-border);
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .back-home-btn {
+            background: var(--ce-accent);
+            color: #000;
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .back-home-btn:hover { opacity: 0.9; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        /* Header */
+        header { padding: 6rem 0 4rem; text-align: center; }
+        h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem; text-transform: uppercase; }
+        .subtitle { font-size: 1.1rem; color: var(--ce-text-dim); max-width: 600px; margin: 0 auto; }
+
+        /* Section Headers */
+        h2 { font-size: 1.8rem; font-weight: 700; margin: 4rem 0 2rem; letter-spacing: -0.02em; }
+        h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--ce-text-main); }
+
+        /* Logo Grid */
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .logo-card {
+            background: var(--ce-card-bg);
+            border: 1px solid var(--ce-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-preview {
+            background: #111;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+        }
+
+        .logo-preview img { max-width: 100%; height: auto; }
+
+        .logo-card p { font-size: 0.85rem; color: var(--ce-text-dim); margin-bottom: 1.5rem; flex-grow: 1; }
+
+        .download-btn {
+            display: block;
+            text-align: center;
+            background: #222;
+            color: #fff;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+
+        .download-btn:hover { background: #333; }
+
+        /* Color Palette */
+        .color-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+        .color-card { background: var(--ce-card-bg); border: 1px solid var(--ce-border); border-radius: 12px; overflow: hidden; }
+        .color-swatch { height: 100px; }
+        .color-info { padding: 1rem; }
+        .color-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem; }
+        .color-value { font-size: 0.8rem; color: var(--ce-text-dim); font-family: monospace; }
+
+        /* Do/Dont */
+        .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+        .do, .dont { padding: 2rem; border-radius: 12px; background: var(--ce-card-bg); border: 1px solid var(--ce-border); }
+        .do h4 { color: #00ff88; margin-bottom: 1rem; }
+        .dont h4 { color: #ff4444; margin-bottom: 1rem; }
+        ul { list-style: none; }
+        ul li { padding: 0.4rem 0; color: var(--ce-text-dim); font-size: 0.9rem; border-bottom: 1px solid #1a1a1a; }
+
+        /* Footer */
+        footer { margin-top: 10rem; padding: 5rem 0; border-top: 1px solid var(--ce-border); text-align: center; }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .footer-links a { color: var(--ce-text-dim); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .footer-links a:hover { color: #fff; }
+
+        @media (max-width: 768px) {
+            .do-dont { grid-template-columns: 1fr; }
+            header { padding: 4rem 0 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="https://collectorsenvy.com" class="nav-logo">Collectors Envy</a>
+            <a href="https://collectorsenvy.com" class="back-home-btn">Back to Home</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>Brand Guidelines</h1>
+            <p class="subtitle">Our official identity and assets for the global esports collecting community.</p>
+        </header>
+
+        <main>
+            <section>
+                <h2>Logo Variations</h2>
+                <div class="logo-grid">
+                    <div class="logo-card">
+                        <div class="logo-preview"><img src="https://lh3.googleusercontent.com/d/1YUsyR_rYlyOA7HnPvrEHExFwL25cs9DX=w200-h200" alt="Primary Logo"></div>
+                        <h3>Primary Logo</h3>
+                        <p>Standard logo for dark backgrounds. Use as the default mark.</p>
+                        <a href="https://drive.google.com/drive/folders/1_uFFD9rd7jNKpO4V2cg1KmzwHueTkd7c" class="download-btn">Download</a>
+                    </div>
+
+                    <div class="logo-card">
+                        <div class="logo-preview" style="background: #fff;"><img src="https://lh3.googleusercontent.com/d/1M-LPm1ZCXnRmWZfP48tCRuYZXhuB-Jgy=w200-h200" alt="Reverse Logo"></div>
+                        <h3>Reverse Logo</h3>
+                        <p>Optimized for light backgrounds or print applications.</p>
+                        <a href="https://drive.google.com/drive/folders/1_uFFD9rd7jNKpO4V2cg1KmzwHueTkd7c" class="download-btn">Download</a>
+                    </div>
+
+                    <div class="logo-card">
+                        <div class="logo-preview"><img src="https://lh3.googleusercontent.com/d/1UXfBgNfj7C3VimpwAMKJ9xiDEIXE2jDq=w200-h200" alt="Icon"></div>
+                        <h3>Icon / Badge</h3>
+                        <p>For social media avatars, app icons, and favicon usage.</p>
+                        <a href="https://drive.google.com/drive/folders/1s28X6r8HKh2S7_cqOWXXbl-SmiTDSvYY" class="download-btn">Download</a>
+                    </div>
+
+                    <div class="logo-card">
+                        <div class="logo-preview"><img src="https://lh3.googleusercontent.com/d/1iaJphNNj-YeVZL78Ifu17OGo8m7gDw9e=w200-h200" alt="Typeface"></div>
+                        <h3>Wordmark</h3>
+                        <p>Horizontal layout for maximum legibility in tight vertical spaces.</p>
+                        <a href="https://drive.google.com/drive/folders/1LaaoHK12qa4lyxd4fioaSwQ-3Sx11WZV" class="download-btn">Download</a>
+                    </div>
+
+                    <div class="logo-card">
+                        <div class="logo-preview"><img src="https://lh3.googleusercontent.com/d/1eTOh5RiJhCdzHEa1BjASf3AC7KBwvpMv=w200-h200" alt="OG"></div>
+                        <h3>OG Legacy</h3>
+                        <p>The original mark. Reserved for legacy content and limited usage.</p>
+                        <a href="https://drive.google.com/drive/folders/16TLDip3M4ARd-TlL67XY_qx72mBpwpV2" class="download-btn">Download</a>
+                    </div>
+
+                    <div class="logo-card">
+                        <div class="logo-preview"><img src="https://lh3.googleusercontent.com/d/1rkm59iNyV2UcneilDbYrQ-_mEj_eWQNY=w200-h200" alt="Retro"></div>
+                        <h3>Retro Splash</h3>
+                        <p>Vibrant alternative logo for special events and merchandise.</p>
+                        <a href="https://drive.google.com/drive/folders/1GVaxMxaBzkhxUHzfnwk5oIMJq9z_r60x" class="download-btn">Download</a>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Colors & Usage</h2>
+                <div class="color-grid">
+                    <div class="color-card">
+                        <div class="color-swatch" style="background: #000000;"></div>
+                        <div class="color-info"><div class="color-name">Black</div><div class="color-value">#000000</div></div>
+                    </div>
+                    <div class="color-card">
+                        <div class="color-swatch" style="background: #ffffff;"></div>
+                        <div class="color-info"><div class="color-name">White</div><div class="color-value">#FFFFFF</div></div>
+                    </div>
+                    <div class="color-card">
+                        <div class="color-swatch" style="background: #00ff88;"></div>
+                        <div class="color-info"><div class="color-name">Electric Green</div><div class="color-value">#00FF88</div></div>
+                    </div>
+                    <div class="color-card">
+                        <div class="color-swatch" style="background: #a1a1a1;"></div>
+                        <div class="color-info"><div class="color-name">Dim Gray</div><div class="color-value">#A1A1A1</div></div>
+                    </div>
+                </div>
+
+                <div class="do-dont">
+                    <div class="do">
+                        <h4>✓ DO</h4>
+                        <ul>
+                            <li>Use high-quality official vectors</li>
+                            <li>Ensure the logo has room to breathe</li>
+                            <li>Maintain original aspect ratios</li>
+                        </ul>
+                    </div>
+                    <div class="dont">
+                        <h4>✗ DON'T</h4>
+                        <ul>
+                            <li>Add drop shadows or glows</li>
+                            <li>Rotate or skew the emblem</li>
+                            <li>Use low-res pixelated files</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <a href="https://www.collectorsenvy.com">Main Site</a>
+                <a href="https://discord.gg/DyHTs5GDkc">Discord</a>
+                <a href="https://x.com/Collectors_Envy">Twitter/X</a>
+                <a href="https://instagram.com/collectorsenvy">Instagram</a>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--ce-text-dim);">© 2026 Collectors Envy. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
