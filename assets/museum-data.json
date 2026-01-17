@@ -1,5 +1,23 @@
 [
   {
+    "id": "CE-005",
+    "category": "hardware",
+    "esport": "creator",
+    "year": 2019,
+    "featured": true,
+    "verified": true,
+    "tags": ["OpTic", "SCUF", "Impact", "Champ", "White"],
+    "title": "1 of 1 OpTic Gaming 2019 Championship White SCUF Controller (Production Sample)",
+    "steward": "@AARONCREATE",
+    "stewardLink": "https://x.com/AARONCREATE",
+    "description": "This 1 of 1 OpTic SCUF was created and owned by AaronCreate. Information about the general release can be found here: https://x.com/AARONCREATE/status/1106319125205389312",
+    "images": [
+      "/assets/images/museum_images/SCUF-1.png",
+      "/assets/images/museum_images/SCUF-2.png",
+      "/assets/images/museum_images/SCUF-3.png"
+    ]
+  },
+  {
     "id": "CE-001",
     "category": "jerseys",
     "esport": "cod",
@@ -36,7 +54,7 @@
     "category": "jerseys",
     "esport": "halo",
     "year": 2017,
-    "featured": true,
+    "featured": false,
     "verified": true,
     "tags": ["OpTic", "OpTic Gaming", "halo", "match worn", "championship"],
     "title": "2017 OpTic Gaming Lethul Player Jerseys - Black & Championship White",
