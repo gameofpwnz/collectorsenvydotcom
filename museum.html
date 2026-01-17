@@ -12,40 +12,27 @@
         .serif { font-family: 'Cormorant Garamond', serif; }
         .museum-bg { background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #050505 100%); background-attachment: fixed; }
 
-        /* Case Styling */
         .display-case {
             background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
             border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .display-case:hover { border-color: #3b82f6; transform: translateY(-8px); }
 
-        /* Power UI Elements */
+        .display-case:hover { border-color: #3b82f6; transform: translateY(-8px); }
         .curator-choice { border-color: #c5a059 !important; box-shadow: 0 0 40px rgba(197, 160, 89, 0.15); }
         .curator-badge { background: #c5a059; color: black; font-size: 7px; padding: 2px 8px; letter-spacing: 0.2em; font-weight: 900; }
         .verified-badge { background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; color: #3b82f6; font-size: 8px; padding: 2px 8px; letter-spacing: 0.1em; font-weight: 800; }
         .era-btn.active { color: #3b82f6; border-color: #3b82f6; }
         .filter-btn.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
         
-        /* THE MARBLE WALL EFFECT */
+        /* Marble Look for Patrons */
         .patron-marble {
-            background-color: #f3f4f6;
-            background-image: url("https://www.transparenttextures.com/patterns/asfalt-dark.png"), 
-                              linear-gradient(135deg, #ffffff 0%, #e5e7eb 50%, #d1d5db 100%);
-            color: #111827; /* Dark text for light marble */
-            position: relative;
-            box-shadow: inset 0 20px 40px rgba(0,0,0,0.2);
-        }
-        .patron-marble::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: url("https://www.transparenttextures.com/patterns/marble-similar.png");
-            opacity: 0.4;
-            pointer-events: none;
+            background: linear-gradient(to bottom, #080808 0%, #0c0c0c 100%);
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; overflow-y: auto; align-items: flex-start; justify-content: center; }
+        .related-card { background: #0a0a0a; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; }
         .coa-card { background: linear-gradient(145deg, #111, #080808); border: 1px solid #c5a059; position: relative; overflow: hidden; }
         .coa-card::after { content: "VERIFIED"; position: absolute; top: 10px; right: -30px; background: #c5a059; color: black; font-size: 8px; font-weight: 900; padding: 5px 40px; transform: rotate(45deg); }
         
@@ -59,42 +46,42 @@
         <div class="flex items-center gap-6">
             <a href="https://collectorsenvy.com" class="text-[10px] uppercase font-bold text-zinc-500 hover:text-white transition tracking-widest border-r border-white/10 pr-6 hidden md:block">Homepage</a>
             <div class="flex flex-col leading-none">
-                <span class="text-[8px] tracking-[0.3em] font-bold text-zinc-500 uppercase italic leading-none">Museum of</span>
-                <span class="text-xl font-black uppercase italic text-white leading-none">ESPORTS COLLECTORS</span>
+                <span class="text-[8px] tracking-[0.3em] font-bold text-zinc-500 uppercase italic">Museum of</span>
+                <span class="text-xl font-black uppercase italic text-white">ESPORTS COLLECTORS</span>
             </div>
         </div>
         <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="px-4 py-2 border border-blue-500/50 text-blue-500 text-[9px] uppercase font-bold hover:bg-blue-500 hover:text-white transition-all">Submit Artifact</a>
     </nav>
 
     <header class="relative min-h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden">
-        <div class="absolute inset-0 z-0 opacity-25 grayscale bg-[url('https://lh3.googleusercontent.com/d/1YUsyR_rYlyOA7HnPvrEHExFwL25cs9DX=w1000-h1000')] bg-cover bg-center"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505]"></div>
+        <div class="absolute inset-0 z-0 opacity-20 grayscale bg-[url('https://lh3.googleusercontent.com/d/1YUsyR_rYlyOA7HnPvrEHExFwL25cs9DX=w1000-h1000')] bg-cover bg-center"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/70 to-[#050505]"></div>
         <div class="relative z-10">
-            <h1 class="serif text-6xl md:text-9xl text-white italic mb-10 leading-tight tracking-tighter">Preserving the <br>Physical Legacy.</h1>
+            <h1 class="serif text-5xl md:text-9xl text-white italic mb-10 leading-tight">Preserving the <br>Physical Legacy.</h1>
             <div class="mt-20 flex flex-col items-center gap-4 scroll-indicator cursor-pointer" onclick="document.getElementById('museum-controls').scrollIntoView({behavior: 'smooth'})">
                 <span class="text-[9px] uppercase tracking-[0.5em] text-zinc-500 font-bold">Enter the Halls</span>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
             </div>
         </div>
     </header>
 
-    <div id="museum-controls" class="sticky top-[60px] md:top-[70px] z-40 bg-black/95 backdrop-blur-md border-y border-white/5 py-6">
+    <div id="museum-controls" class="sticky top-[60px] md:top-[70px] z-40 bg-black/95 backdrop-blur-md border-y border-white/5 py-4">
         <div class="max-w-7xl mx-auto px-6 space-y-4">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="relative w-full md:w-96">
-                    <input type="text" id="museumSearch" onkeyup="handleSearch()" placeholder="Search Archives (ID, Title, Tag, Steward)..." class="w-full bg-zinc-900 border border-zinc-800 px-6 py-3 text-xs text-zinc-300 focus:outline-none focus:border-blue-500 transition uppercase tracking-widest">
+                    <input type="text" id="museumSearch" onkeyup="handleSearch()" placeholder="Search archives..." class="w-full bg-zinc-900 border border-zinc-800 px-6 py-3 text-xs text-zinc-300 focus:outline-none focus:border-blue-500 transition uppercase tracking-widest">
                     <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-bold text-zinc-600 uppercase">
                         <span id="artifactCount" class="text-blue-500">0</span> Records
                     </div>
                 </div>
                 <div id="esportFilters" class="flex gap-6 overflow-x-auto scrollbar-hide">
-                    <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase font-bold text-zinc-500 tracking-widest">All</button>
-                    <button onclick="filterByEsport('cod')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 tracking-widest">CoD</button>
-                    <button onclick="filterByEsport('halo')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Halo</button>
-                    <button onclick="filterByEsport('creator')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Creator</button>
+                    <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase font-bold text-zinc-500">All</button>
+                    <button onclick="filterByEsport('cod')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">CoD</button>
+                    <button onclick="filterByEsport('halo')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Halo</button>
+                    <button onclick="filterByEsport('creator')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500">Creator</button>
                 </div>
             </div>
-            <div class="flex gap-8 justify-center items-center text-[8px] uppercase tracking-[0.4em] font-bold text-zinc-600 border-t border-white/5 pt-4">
+            <div class="flex gap-6 justify-center items-center text-[8px] uppercase tracking-[0.3em] font-bold text-zinc-600 border-t border-white/5 pt-4">
                 <button onclick="filterByEra('all')" class="era-btn active">All Eras</button>
                 <button onclick="filterByEra('golden')" class="era-btn">Golden Age (10-15)</button>
                 <button onclick="filterByEra('global')" class="era-btn">Global Era (16-20)</button>
@@ -105,54 +92,54 @@
 
     <main class="max-w-7xl mx-auto px-6 py-20">
         <section id="curator-spotlight" class="mb-40">
-            <div class="flex items-center gap-4 mb-16">
+            <div class="flex items-center gap-4 mb-12">
                 <div class="h-px flex-1 bg-gradient-to-r from-transparent to-zinc-800"></div>
-                <h2 class="serif text-3xl text-[#c5a059] italic uppercase tracking-[0.2em]">Curator's Choice</h2>
+                <h2 class="serif text-2xl text-[#c5a059] italic uppercase tracking-widest">Curator's Choice</h2>
                 <div class="h-px flex-1 bg-gradient-to-l from-transparent to-zinc-800"></div>
             </div>
             <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 gap-12"></div>
         </section>
 
-        <section id="hall-jerseys" class="mb-40"><h2 class="serif text-4xl text-white italic mb-12 border-b border-zinc-900 pb-6">Jersey Collection</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div></section>
-        <section id="hall-hardware" class="mb-40"><h2 class="serif text-4xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware Wing</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div></section>
-        <section id="hall-signatures" class="mb-40"><h2 class="serif text-4xl text-white italic mb-12 border-b border-zinc-900 pb-6">Signature Study</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div></section>
+        <section id="hall-jerseys" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Jersey Collection</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-hardware" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware Wing</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-signatures" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Signature Study</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
 
         <section class="border-t border-white/5 pt-40 pb-20">
-            <div class="max-w-4xl mx-auto px-6">
-                <h3 class="serif text-3xl text-white italic mb-10 text-center uppercase tracking-tighter">Accession Log</h3>
+            <div class="max-w-4xl mx-auto">
+                <h3 class="serif text-3xl text-white italic mb-10 text-center">Accession Log</h3>
                 <div id="accession-log" class="space-y-4"></div>
+            </div>
+        </section>
+
+        <section class="patron-marble pt-40 pb-32 text-center">
+            <div class="max-w-4xl mx-auto px-6">
+                <h2 class="serif text-4xl text-white italic mb-8">The Mission</h2>
+                <p class="text-zinc-400 font-light text-lg italic mb-32 max-w-2xl mx-auto">"In an era defined by digital ephemerality, the physical relics of competition serve as the anchor for our shared history."</p>
+                <h3 class="serif text-3xl text-white italic mb-4">Patrons of the Archive</h3>
+                <p class="text-zinc-500 text-[9px] uppercase tracking-[0.4em] mb-16 italic font-bold">Verified Registry Contributors</p>
+                <div id="donor-wall" class="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 mt-16"></div>
             </div>
         </section>
     </main>
 
-    <section class="patron-marble pt-40 pb-40 text-center">
-        <div class="relative z-10 max-w-4xl mx-auto px-6">
-            <h2 class="serif text-5xl text-gray-900 italic mb-10">The Mission</h2>
-            <p class="text-gray-700 font-light text-xl italic mb-32 max-w-2xl mx-auto leading-relaxed underline underline-offset-8 decoration-gray-300">"In an era defined by digital ephemerality, the physical relics of competition serve as the anchor for our shared history."</p>
-            <h3 class="serif text-3xl text-gray-800 italic mb-4">Patrons of the Archive</h3>
-            <p class="text-gray-500 text-[10px] uppercase tracking-[0.4em] mb-16 font-bold">Verified Registry Contributors</p>
-            <div id="donor-wall" class="grid grid-cols-2 md:grid-cols-4 gap-y-16 gap-x-8"></div>
-        </div>
-    </section>
-
     <div id="itemModal" class="modal">
-        <button onclick="closeModal()" class="fixed top-6 right-6 z-[150] text-white uppercase text-[10px] tracking-widest bg-black/50 px-6 py-3 border border-white/10 backdrop-blur-md">Exit Gallery</button>
+        <button onclick="closeModal()" class="fixed top-6 right-6 z-[150] text-white uppercase text-[10px] tracking-widest bg-black/50 px-4 py-2 border border-white/10">Exit Gallery</button>
         <div class="w-full max-w-5xl px-6 py-24" onclick="event.stopPropagation()">
-            <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"></div>
+            <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                <div class="lg:col-span-2 text-left border-l-2 border-blue-600 pl-8">
-                    <h2 id="modalTitle" class="serif text-5xl md:text-7xl text-white italic mb-6 leading-tight"></h2>
-                    <div id="modalAcc" class="text-blue-500 font-mono text-[11px] uppercase mb-8 tracking-widest"></div>
-                    <p id="modalDesc" class="text-zinc-400 text-lg mb-10 italic leading-relaxed font-light"></p>
-                    <button onclick="shareArtifact()" class="bg-blue-600/10 border border-blue-500/50 px-8 py-4 text-blue-400 text-[10px] font-bold uppercase hover:bg-blue-600 hover:text-white transition tracking-widest">Copy Exhibit Link</button>
+                <div class="lg:col-span-2 text-left">
+                    <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4"></h2>
+                    <div id="modalAcc" class="text-blue-500 font-mono text-[10px] uppercase mb-6"></div>
+                    <p id="modalDesc" class="text-zinc-400 text-lg mb-10 italic"></p>
+                    <button onclick="shareArtifact()" class="bg-blue-600/10 border border-blue-500/50 px-6 py-3 text-blue-400 text-[10px] font-bold uppercase hover:bg-blue-600 hover:text-white transition">Copy Exhibit Link</button>
                 </div>
-                <div class="coa-card p-8 flex flex-col justify-between min-h-[250px] text-left">
-                    <div class="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold">Registry Record</div>
-                    <div><div class="text-[9px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic">Steward</div><div id="modalSteward" class="text-white font-bold text-2xl italic tracking-tighter"></div></div>
-                    <div class="text-[9px] uppercase text-zinc-600 font-bold italic tracking-widest border-t border-zinc-800 pt-4">Official Archive Record</div>
+                <div class="coa-card p-6 flex flex-col justify-between min-h-[200px] text-left">
+                    <div class="text-[9px] uppercase tracking-[0.3em] text-zinc-500 font-bold">Registry Record</div>
+                    <div><div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic">Steward</div><div id="modalSteward" class="text-white font-bold text-xl italic"></div></div>
+                    <div class="text-[8px] uppercase text-zinc-600 font-bold italic">Official Archive Record</div>
                 </div>
             </div>
-            <div id="relatedExhibits" class="mt-24 border-t border-white/5 pt-16 text-left"></div>
+            <div id="relatedExhibits" class="mt-20 border-t border-white/5 pt-10 text-left"></div>
         </div>
     </div>
 
@@ -161,8 +148,7 @@
 
         async function initMuseum() {
             try {
-                const cacheBuster = `?v=${new Date().getTime()}`;
-                const response = await fetch('museum-data.json' + cacheBuster);
+                const response = await fetch('/assets/museum-data.json');
                 window.museumData = await response.json();
                 renderItems(window.museumData);
                 renderPatrons(window.museumData);
@@ -204,10 +190,10 @@
             const log = document.getElementById('accession-log');
             const recent = data.slice(-5).reverse();
             log.innerHTML = recent.map(i => `
-                <div class="flex justify-between items-center py-6 border-b border-white/5 text-[11px] uppercase tracking-[0.2em] group cursor-pointer hover:bg-white/5 px-4 transition" onclick="openModal('${i.id}')">
-                    <div class="flex gap-6">
+                <div class="flex justify-between items-center py-4 border-b border-white/5 text-[10px] uppercase tracking-widest group cursor-pointer hover:bg-white/5 px-4 transition" onclick="openModal('${i.id}')">
+                    <div class="flex gap-4">
                         <span class="text-zinc-600 font-mono italic">${i.dateAdded || 'RECENT'}</span>
-                        <span class="text-white font-bold group-hover:text-blue-400 transition">${i.title}</span>
+                        <span class="text-white font-bold">${i.title}</span>
                     </div>
                     <span class="text-blue-500 italic">Steward: ${i.steward}</span>
                 </div>`).join('');
@@ -218,9 +204,9 @@
             const featured = data.filter(i => i.featured);
             document.getElementById('curator-spotlight').style.display = featured.length ? 'block' : 'none';
             document.getElementById('featured-grid').innerHTML = featured.map(i => `
-                <div class="display-case p-10 curator-choice group cursor-pointer flex flex-col md:flex-row gap-10 items-center" onclick="openModal('${i.id}')">
-                    <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img src="${i.images[0]}" class="w-full h-full object-contain opacity-90 transition-transform duration-1000 group-hover:scale-105"><div class="absolute top-0 left-0 curator-badge">ESSENTIAL RECORD</div></div>
-                    <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[11px] uppercase mb-4 block tracking-widest">${i.id}</span><h3 class="serif text-4xl text-white italic mb-6 leading-tight">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 leading-relaxed line-clamp-4 font-light">${i.description}</p></div>
+                <div class="display-case p-8 curator-choice group cursor-pointer flex flex-col md:flex-row gap-8 items-center" onclick="openModal('${i.id}')">
+                    <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative"><img src="${i.images[0]}" class="w-full h-full object-contain opacity-90 transition-transform"><div class="absolute top-0 left-0 curator-badge">ESSENTIAL RECORD</div></div>
+                    <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[10px] uppercase mb-4 block">${i.id}</span><h3 class="serif text-3xl text-white italic mb-6 leading-tight">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 line-clamp-3 leading-relaxed">${i.description}</p></div>
                 </div>`).join('');
 
             ['jerseys', 'hardware', 'signatures'].forEach(cat => {
@@ -228,9 +214,9 @@
                 const items = data.filter(i => i.category === cat);
                 grid.innerHTML = items.map(i => `
                     <div class="display-case p-6 flex flex-col cursor-pointer ${i.featured ? 'curator-choice' : ''}" onclick="openModal('${i.id}')">
-                        <div class="aspect-[4/5] bg-black mb-8 relative shadow-inner overflow-hidden"><img src="${i.images[0]}" loading="lazy" class="w-full h-full object-contain opacity-80 group-hover:scale-110 transition-transform duration-700">${i.featured ? '<div class="absolute top-0 left-0 curator-badge uppercase">CURATOR\'S CHOICE</div>' : ''}</div>
-                        <div class="text-left"><div class="flex justify-between mb-3"><span class="text-[10px] font-bold ${i.featured ? 'text-[#c5a059]' : 'text-blue-600'} uppercase tracking-widest">${i.id}</span><span class="text-[9px] text-zinc-700 font-bold font-mono">${i.year}</span></div><h4 class="serif text-2xl text-white italic mb-4 uppercase tracking-tighter">${i.title}</h4></div>
-                    </div>`).join('') + '<div class="display-case p-10 placeholder-shimmer flex flex-col items-center justify-center border-dashed border-zinc-800 min-h-[350px]"><h4 class="serif text-2xl text-zinc-600 italic">Space Reserved</h4><a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[10px] text-blue-500 uppercase font-bold border-b border-blue-500 mt-6 tracking-widest">Submit Artifact</a></div>';
+                        <div class="aspect-[4/5] bg-black mb-6 relative"><img src="${i.images[0]}" loading="lazy" class="w-full h-full object-contain opacity-80">${i.featured ? '<div class="absolute top-0 left-0 curator-badge">CURATOR\'S CHOICE</div>' : ''}</div>
+                        <div class="text-left"><div class="flex justify-between mb-2"><span class="text-[9px] font-bold ${i.featured ? 'text-[#c5a059]' : 'text-blue-600'} uppercase">${i.id}</span><span class="text-[8px] text-zinc-700 font-bold font-mono">${i.year}</span></div><h4 class="serif text-xl text-white italic mb-4 uppercase tracking-tighter">${i.title}</h4></div>
+                    </div>`).join('') + '<div class="display-case p-8 placeholder-shimmer flex flex-col items-center justify-center border-dashed border-zinc-800 min-h-[300px]"><h4 class="serif text-xl text-zinc-600 italic">Space Reserved</h4><a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold border-b border-blue-500 mt-4">Submit Artifact</a></div>';
             });
         }
 
@@ -238,7 +224,7 @@
             const stewards = [...new Set(data.map(i => i.steward))];
             document.getElementById('donor-wall').innerHTML = stewards.map(s => {
                 const info = data.find(i => i.steward === s);
-                return `<div class="group"><a href="${info.stewardLink || '#'}" target="_blank" class="block"><span class="text-gray-900 group-hover:text-blue-600 text-sm uppercase font-bold transition duration-300">${s}</span><span class="block text-[8px] text-gray-400 uppercase font-black italic tracking-[0.2em] mt-2">Verified Steward</span></a></div>`;
+                return `<div class="group"><a href="${info.stewardLink || '#'}" target="_blank" class="block"><span class="text-zinc-400 group-hover:text-blue-500 text-[11px] uppercase font-bold transition">${s}</span><span class="block text-[7px] text-zinc-700 uppercase font-black italic tracking-widest mt-1">Verified Steward</span></a></div>`;
             }).join('');
         }
 
@@ -249,16 +235,16 @@
             document.getElementById('modalDesc').innerText = i.description;
             document.getElementById('modalAcc').innerHTML = `Accession No. ${i.id} ${i.verified ? '<span class="verified-badge ml-2 inline-block">REGISTRY CERTIFIED</span>' : ''}`;
             document.getElementById('modalSteward').innerText = i.steward;
-            document.getElementById('modalImages').innerHTML = i.images.map(img => `<div class="bg-black p-4 border border-white/5 shadow-2xl"><img src="${img}" class="w-full h-auto object-contain"></div>`).join('');
+            document.getElementById('modalImages').innerHTML = i.images.map(img => `<div class="bg-black p-2 border border-white/5 shadow-2xl"><img src="${img}" class="w-full h-auto object-contain"></div>`).join('');
             const related = window.museumData.filter(o => o.id !== i.id && (o.esport === i.esport || (o.tags && i.tags && o.tags.some(t => i.tags.includes(t))))).slice(0, 4);
-            document.getElementById('relatedExhibits').innerHTML = related.length ? `<h4 class="serif text-2xl text-white italic mb-10">Related Exhibits</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-6">${related.map(r => `<div onclick="openModal('${r.id}')" class="related-card p-4 cursor-pointer group"><img src="${r.images[0]}" class="h-32 w-full object-contain mb-4 opacity-50 group-hover:opacity-100 transition duration-500"><div class="text-[11px] text-zinc-300 font-bold uppercase truncate tracking-tight">${r.title}</div></div>`).join('')}</div>` : '';
+            document.getElementById('relatedExhibits').innerHTML = related.length ? `<h4 class="serif text-xl text-white italic mb-6">Related Exhibits</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${related.map(r => `<div onclick="openModal('${r.id}')" class="related-card p-3 cursor-pointer"><img src="${r.images[0]}" class="h-24 w-full object-contain mb-2 opacity-60 hover:opacity-100 transition"><div class="text-[10px] text-zinc-300 font-bold uppercase truncate">${r.title}</div></div>`).join('')}</div>` : '';
             document.getElementById('itemModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
             window.location.hash = id;
         }
 
         function closeModal() { document.getElementById('itemModal').style.display = 'none'; document.body.style.overflow = 'auto'; history.replaceState(null, null, ' '); }
-        function shareArtifact() { navigator.clipboard.writeText(window.location.href).then(() => alert("Registry Link Copied")); }
+        function shareArtifact() { navigator.clipboard.writeText(window.location.href).then(() => alert("Link Copied")); }
         initMuseum();
     </script>
 </body>
