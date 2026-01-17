@@ -11,7 +11,6 @@
         body { background-color: #050505; color: #d1d5db; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .serif { font-family: 'Cormorant Garamond', serif; }
 
-        /* Cinematic Effects */
         .museum-bg {
             background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #050505 100%);
             background-attachment: fixed;
@@ -25,11 +24,9 @@
 
         .display-case:hover {
             border-color: #3b82f6;
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
             transform: translateY(-8px);
         }
 
-        /* Responsive Hall Labels */
         .hall-label {
             writing-mode: vertical-rl;
             text-orientation: mixed;
@@ -38,11 +35,8 @@
             letter-spacing: 0.5em;
         }
 
-        @media (max-width: 768px) {
-            .hall-label { display: none; }
-        }
+        @media (max-width: 768px) { .hall-label { display: none; } }
 
-        /* Digital COA Aesthetic */
         .coa-card {
             background: linear-gradient(145deg, #111, #080808);
             border: 1px solid #c5a059;
@@ -63,7 +57,6 @@
             transform: rotate(45deg);
         }
 
-        /* Fixed Exit Button */
         .modal-close-trigger {
             position: fixed;
             top: 1.5rem;
@@ -72,10 +65,8 @@
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
         }
 
-        /* Back to Top */
         #backToTop {
             display: none;
             position: fixed;
@@ -87,7 +78,14 @@
             border: 1px solid rgba(59, 130, 246, 0.5);
         }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; align-items: flex-start; justify-content: center; backdrop-filter: blur(10px); overflow-y: auto; }
+        .placeholder-shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(59, 130, 246, 0.05) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; overflow-y: auto; align-items: flex-start; justify-content: center; }
     </style>
 </head>
 <body class="antialiased museum-bg">
@@ -95,14 +93,13 @@
     <nav class="fixed w-full z-50 px-6 md:px-10 py-4 md:py-6 flex justify-between items-center bg-black/80 backdrop-blur-md border-b border-white/5">
         <div class="flex flex-col leading-none">
             <span class="text-[8px] md:text-[9px] tracking-[0.3em] font-bold text-zinc-500 uppercase">Museum of</span>
-            <span class="text-lg md:text-xl font-black uppercase italic tracking-tighter text-white">ESPORTS COLLECTORS</span>
+            <span class="text-xl font-black uppercase italic tracking-tighter text-white">ESPORTS COLLECTORS</span>
         </div>
         <div class="flex gap-4 md:gap-10 items-center text-[9px] uppercase font-bold tracking-widest text-zinc-400">
             <div class="hidden lg:flex gap-8 italic">
-                <a href="#hall-jerseys" class="hover:text-blue-500 transition">Jerseys</a>
-                <a href="#hall-hardware" class="hover:text-blue-500 transition">Hardware</a>
-                <a href="#hall-signatures" class="hover:text-blue-500 transition">Signatures</a>
-                <a href="#hall-posters" class="hover:text-blue-500 transition">Posters</a>
+                <a href="#hall-jerseys" class="hover:text-blue-500">Jerseys</a>
+                <a href="#hall-hardware" class="hover:text-blue-500">Hardware</a>
+                <a href="#hall-signatures" class="hover:text-blue-500">Signatures</a>
             </div>
             <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="px-4 py-2 border border-blue-500/50 text-blue-500 hover:bg-blue-500 hover:text-white transition-all">Submit Artifact</a>
         </div>
@@ -113,90 +110,74 @@
             <img src="https://lh3.googleusercontent.com/d/1YUsyR_rYlyOA7HnPvrEHExFwL25cs9DX=w1000-h1000" class="w-full h-full object-cover opacity-20 grayscale">
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/70 to-[#050505]"></div>
         </div>
-
         <div class="relative z-10 mt-20">
-            <div class="w-px h-16 md:h-20 bg-gradient-to-b from-blue-500 to-transparent mx-auto mb-8"></div>
-            <h2 class="text-zinc-500 uppercase tracking-[0.4em] md:tracking-[0.6em] text-[8px] md:text-[10px] mb-4 font-bold">Collectors Envy Permanent Installation</h2>
-            <h1 class="serif text-5xl md:text-9xl text-white italic mb-10 leading-tight tracking-tight px-4 underline decoration-blue-500/20 underline-offset-8">Preserving the <br class="hidden md:block">Physical Legacy.</h1>
-            <p class="max-w-xl mx-auto text-zinc-400 font-light leading-relaxed mb-12 text-base md:text-lg italic px-4">
-                "A digital sanctuary for the physical relics of the competitive era."
-            </p>
-            <div class="animate-bounce">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="text-zinc-700 mx-auto">
-                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"></path>
-                </svg>
-            </div>
+            <div class="w-px h-20 bg-gradient-to-b from-blue-500 to-transparent mx-auto mb-8"></div>
+            <h2 class="text-zinc-500 uppercase tracking-[0.4em] text-[10px] mb-4 font-bold">Collectors Envy Permanent Installation</h2>
+            <h1 class="serif text-5xl md:text-9xl text-white italic mb-10 leading-tight tracking-tight px-4">Preserving the <br class="hidden md:block">Physical Legacy.</h1>
+            <p class="max-w-xl mx-auto text-zinc-400 font-light leading-relaxed mb-12 text-base md:text-lg italic px-4 italic">"A digital sanctuary for the physical relics of the competitive era."</p>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-6 space-y-40 pb-40">
         
         <section id="hall-jerseys" class="relative px-0 md:pl-20 pt-20">
-            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4">Hall of Textiles</div>
-            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Jersey Collection</h2>
-            <div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 italic"></div>
+            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic">Hall of Textiles</div>
+            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 italic">Jersey Collection</h2>
+            <div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 italic">
+                </div>
         </section>
 
         <section id="hall-hardware" class="relative px-0 md:pl-20">
-            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4">Hardware Wing</div>
-            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware & Controllers</h2>
-            <div id="controllers-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 italic"></div>
+            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic">Hardware Wing</div>
+            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 italic">Hardware & Memorabilia</h2>
+            <div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 italic">
+                </div>
         </section>
 
         <section id="hall-signatures" class="relative px-0 md:pl-20">
-            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4">Signature Study</div>
-            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Autographs & Inscriptions</h2>
-            <div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 italic"></div>
+            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic">Signature Study</div>
+            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 italic italic">Autographs & Inscriptions</h2>
+            <div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 italic">
+                </div>
         </section>
-
-        <section id="hall-posters" class="relative px-0 md:pl-20">
-            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4">Print Gallery</div>
-            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Posters & Memorabilia</h2>
-            <div id="posters-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 italic"></div>
-        </section>
-
     </main>
 
     <div id="itemModal" class="modal">
         <button onclick="closeModal()" class="modal-close-trigger flex items-center gap-2 px-4 py-2 rounded-full transition">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-white">Exit Gallery</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-white tracking-tighter">Exit Gallery</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
 
         <div class="w-full max-w-5xl px-6 py-24" onclick="event.stopPropagation()">
             <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
-            
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div class="lg:col-span-2 border-l-2 border-blue-600 pl-8">
-                    <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4 tracking-tight leading-none"></h2>
-                    <div id="modalAcc" class="text-blue-500 font-mono text-[10px] uppercase tracking-widest mb-6"></div>
-                    <p id="modalDesc" class="text-zinc-400 font-light leading-relaxed text-base md:text-lg italic mb-10"></p>
-                    
-                    <button onclick="shareArtifact()" class="flex items-center gap-3 bg-blue-600/10 border border-blue-500/50 px-6 py-3 text-blue-400 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all">
-                        Copy Exhibit Link
-                    </button>
+                    <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4 tracking-tight leading-none italic"></h2>
+                    <div id="modalAcc" class="text-blue-500 font-mono text-[10px] uppercase tracking-widest mb-6 tracking-tighter"></div>
+                    <p id="modalDesc" class="text-zinc-400 font-light text-base md:text-lg mb-10 italic"></p>
+                    <button onclick="shareArtifact()" class="flex items-center gap-3 bg-blue-600/10 border border-blue-500/50 px-6 py-3 text-blue-400 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">Copy Exhibit Link</button>
                 </div>
-
                 <div class="coa-card p-6 flex flex-col justify-between min-h-[220px]">
                     <div class="text-[9px] uppercase tracking-[0.3em] text-zinc-500 font-bold italic">Registry Record</div>
                     <div>
                         <div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic">Steward</div>
-                        <div id="modalSteward" class="text-white font-bold text-xl italic tracking-tighter"></div>
+                        <div id="modalSteward" class="text-white font-bold text-xl italic tracking-tighter italic"></div>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-zinc-800 text-[8px] uppercase text-zinc-600 tracking-widest">Collectors Envy Archive</div>
+                    <div class="mt-6 pt-4 border-t border-zinc-800 text-[8px] uppercase text-zinc-600 tracking-widest">Collectors Envy Official Record</div>
                 </div>
             </div>
         </div>
     </div>
 
     <button id="backToTop" onclick="scrollToTop()" class="p-4 rounded-full text-white transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button>
-    <div id="shareToast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none z-[200] transition-all duration-300">Link Copied to Clipboard</div>
+    <div id="shareToast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none z-[200] transition-all">Link Copied to Clipboard</div>
 
     <script>
         let currentArtifactId = "";
-
+        
         async function initMuseum() {
             try {
+                // Fetch from your data file
                 const response = await fetch('/assets/museum-data.json');
                 const data = await response.json();
                 window.museumData = data;
@@ -208,25 +189,34 @@
                                 <img src="${item.images[0]}" class="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-all duration-700">
                             </div>
                             <div class="mt-auto">
-                                <div class="flex justify-between items-baseline mb-2 uppercase italic">
-                                    <span class="text-[9px] font-bold text-blue-600 tracking-widest">${item.id}</span>
-                                    <span class="text-[8px] text-zinc-800 font-bold">Verified</span>
+                                <div class="flex justify-between items-baseline mb-2 italic">
+                                    <span class="text-[9px] font-bold text-blue-600 uppercase tracking-widest">${item.id}</span>
+                                    <span class="text-[8px] text-zinc-800 font-bold uppercase">Verified</span>
                                 </div>
-                                <h4 class="serif text-2xl text-white italic mb-4 uppercase tracking-tighter">${item.title}</h4>
+                                <h4 class="serif text-2xl text-white italic leading-none mb-4 uppercase tracking-tighter">${item.title}</h4>
                                 <div class="flex justify-between items-center pt-4 border-t border-zinc-900 text-[10px] uppercase tracking-widest font-bold">
                                     <span class="text-zinc-600">Steward</span>
-                                    <span class="text-zinc-400">${item.steward}</span>
+                                    <span class="text-zinc-400 italic">${item.steward}</span>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
+                    
                     const grid = document.getElementById(`${item.category}-grid`);
                     if(grid) grid.innerHTML += card;
                 });
 
+                // ADD STAND-IN PLACEHOLDER TO THE JERSEY HALL
+                const jerseyGrid = document.getElementById('jerseys-grid');
+                jerseyGrid.innerHTML += `
+                    <div class="display-case p-8 placeholder-shimmer flex flex-col items-center justify-center text-center group h-full border-dashed border-zinc-800">
+                        <div class="mb-6 opacity-20"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1"><path d="M21 8l-9-4-9 4v8l9 4 9-4V8z"></path></svg></div>
+                        <h4 class="serif text-xl text-zinc-600 italic mb-4 uppercase">Space Reserved</h4>
+                        <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold tracking-widest border-b border-blue-500 pb-1">Submit Your Artifact</a>
+                    </div>`;
+
                 const hash = window.location.hash.substring(1);
                 if (hash) setTimeout(() => openModal(hash), 500);
-            } catch (e) { console.error("Archive Error: Ensure museum-data.json is in /assets/"); }
+            } catch (e) { console.error("Archive Error: Ensure museum-data.json exists."); }
         }
 
         function openModal(id) {
@@ -243,21 +233,8 @@
             window.history.replaceState(null, null, "#" + id);
         }
 
-        function closeModal() {
-            document.getElementById('itemModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            window.history.replaceState(null, null, window.location.pathname);
-        }
-
-        function shareArtifact() {
-            const shareUrl = window.location.origin + window.location.pathname + "#" + currentArtifactId;
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                const toast = document.getElementById('shareToast');
-                toast.style.opacity = "1";
-                setTimeout(() => { toast.style.opacity = "0"; }, 2000);
-            });
-        }
-
+        function closeModal() { document.getElementById('itemModal').style.display = 'none'; document.body.style.overflow = 'auto'; window.history.replaceState(null, null, window.location.pathname); }
+        function shareArtifact() { navigator.clipboard.writeText(window.location.origin + window.location.pathname + "#" + currentArtifactId).then(() => { const toast = document.getElementById('shareToast'); toast.style.opacity = "1"; setTimeout(() => { toast.style.opacity = "0"; }, 2000); }); }
         function scrollToTop() { window.scrollTo({top: 0, behavior: 'smooth'}); }
         window.onscroll = function() { document.getElementById("backToTop").style.display = (window.scrollY > 500) ? "block" : "none"; };
         initMuseum();
