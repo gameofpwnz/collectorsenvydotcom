@@ -151,7 +151,7 @@
         async function initMuseum() {
             try {
                 const cacheBuster = `?v=${new Date().getTime()}`;
-                const response = await fetch('assets/museum-data.json' + cacheBuster);
+                const response = await fetch('assets/museum-data.json');
                 if (!response.ok) throw new Error("Load failure");
                 window.museumData = await response.json();
                 renderItems(window.museumData);
@@ -247,3 +247,4 @@
     </script>
 </body>
 </html>
+
