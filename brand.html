@@ -153,6 +153,34 @@
             .do-dont { grid-template-columns: 1fr; }
             header { padding: 4rem 0 2rem; }
         }
+
+                /* Voice Grid Styling */
+        .guidelines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .guideline-card {
+            background: var(--ce-card-bg);
+            border: 1px solid var(--ce-border);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        
+        .guideline-card h4 {
+            font-size: 1rem;
+            color: var(--ce-accent);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .guideline-card p {
+            font-size: 0.9rem;
+            color: var(--ce-text-dim);
+        }
     </style>
 </head>
 <body>
@@ -214,6 +242,28 @@
                         <h3>Retro Splash</h3>
                         <p>Vibrant alternative logo for special events and merchandise.</p>
                         <a href="https://drive.google.com/drive/folders/1GVaxMxaBzkhxUHzfnwk5oIMJq9z_r60x" class="download-btn">Download</a>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Brand Voice</h2>
+                <div class="guidelines-grid">
+                    <div class="guideline-card">
+                        <h4>Passionate</h4>
+                        <p>We speak with genuine enthusiasm about esports collecting and the community we've built.</p>
+                    </div>
+                    <div class="guideline-card">
+                        <h4>Authentic</h4>
+                        <p>We're real collectors talking to real collectors. No corporate jargon, just straight talk.</p>
+                    </div>
+                    <div class="guideline-card">
+                        <h4>Knowledgeable</h4>
+                        <p>We know our stuff and share expertise to help others grow their collections.</p>
+                    </div>
+                    <div class="guideline-card">
+                        <h4>Community-First</h4>
+                        <p>Everything we do is about bringing collectors together and celebrating the culture.</p>
                     </div>
                 </div>
             </section>
