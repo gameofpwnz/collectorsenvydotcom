@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Archive | Collectors Envy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;700&display=swap');
+        
+        body { background-color: #050505; color: #d1d5db; font-family: 'Inter', sans-serif; }
+        .serif { font-family: 'Cormorant Garamond', serif; }
+
+        /* Cinematic Background & Lighting */
+        .museum-bg {
+            background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #050505 100%);
+            background-attachment: fixed;
+        }
+
+        /* The Glass Display Case */
+        .display-case {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .display-case:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+            transform: translateY(-8px);
+        }
+
+        /* Spotlight Overlays */
+        .spotlight-overlay {
+            background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+        }
+
+        /* Section Hall Labels */
+        .hall-label {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            font-size: 0.65rem;
+            letter-spacing: 0.5em;
+        }
+
+        /* The 'Awaiting Donation' Shimmer Effect */
+.placeholder-shimmer {
+    background: linear-gradient(
+        90deg, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(59, 130, 246, 0.05) 50%, 
+        rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.empty-plinth {
+    border: 1px dashed rgba(59, 130, 246, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="antialiased museum-bg">
+
+    <nav class="fixed w-full z-50 px-10 py-6 flex justify-between items-center bg-black/80 backdrop-blur-md border-b border-white/5">
+        <div class="flex flex-col leading-none">
+            <span class="text-[9px] tracking-[0.5em] font-bold text-zinc-500 uppercase">Museum of</span>
+            <span class="text-xl font-black uppercase italic tracking-tighter text-white">ESPORTS COLLECTORS</span>
+        </div>
+        <div class="flex gap-10 items-center">
+            <div class="hidden lg:flex gap-8 text-[9px] uppercase tracking-[0.3em] font-bold text-zinc-400">
+                <a href="/" class="hover:text-blue-500 transition">CE Homepage</a>
+                <a href="#hall-jerseys" class="hover:text-blue-500 transition">Jerseys</a>
+                <a href="#hall-hardware" class="hover:text-blue-500 transition">Hardware</a>
+                <a href="#hall-signatures" class="hover:text-blue-500 transition">Signatures</a>
+            </div>
+            <a href="https://forms.gle/hrbaadeGTpLCaeYj7" class="px-6 py-2 border border-blue-500/50 text-blue-500 text-[10px] uppercase tracking-widest font-bold hover:bg-blue-500 hover:text-white transition-all">Submit Artifact</a>
+        </div>
+    </nav>
+
+<header class="relative min-h-screen flex flex-col justify-center items-center text-center px-6 pb-32 overflow-hidden">
+    
+    <div class="absolute inset-0 z-0">
+        <img src="https://lh3.googleusercontent.com/d/1YUsyR_rYlyOA7HnPvrEHExFwL25cs9DX=w1000-h1000" class="w-full h-full object-cover opacity-20 grayscale">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/70 to-[#050505]"></div>
+    </div>
+
+    <div class="relative z-10 flex flex-col items-center mt-20">
+        <div class="w-px h-20 bg-gradient-to-b from-blue-500 to-transparent mb-8"></div>
+        <h2 class="text-zinc-500 uppercase tracking-[0.6em] text-[10px] mb-4 font-bold">Collectors Envy Permanent Installation</h2>
+        <h1 class="serif text-6xl md:text-9xl text-white italic mb-10 leading-tight tracking-tight drop-shadow-2xl">
+            Preserving the <br>Physical Legacy.
+        </h1>
+        <p class="max-w-xl text-zinc-400 font-light leading-relaxed mb-16 text-lg italic">
+            "A digital sanctuary for the physical relics of the competitive era."
+        </p>
+        
+        <div class="animate-bounce">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="text-zinc-700">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"></path>
+            </svg>
+        </div>
+    </div>
+</header>
+
+    <main class="max-w-7xl mx-auto px-6 space-y-40 pb-40">
+        
+        <section id="hall-jerseys" class="relative pl-12 md:pl-20 pt-40 pb-32">
+            <div class="hall-label absolute left-0 top-0 h-full flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4">Hall of Textiles</div>
+            <h2 class="serif text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Jersey Collection</h2>
+            <div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 italic"></div>
+        </section>
+
+        <section id="hall-hardware" class="relative pl-12 md:pl-20">
+            <div class="hall-label absolute left-0 top-0 h-full flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4">Hardware Wing</div>
+            <h2 class="serif text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware & Memorabilia</h2>
+            <div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 italic"></div>
+        </section>
+
+        <section id="hall-signatures" class="relative pl-12 md:pl-20">
+            <div class="hall-label absolute left-0 top-0 h-full flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4">Signature Study</div>
+            <h2 class="serif text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Autographs & Inscriptions</h2>
+            <div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 italic"></div>
+        </section>
+
+    </main>
+
+    <div id="itemModal" class="modal" onclick="closeModal()">
+        <div class="max-w-5xl w-full p-6" onclick="event.stopPropagation()">
+            <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"></div>
+            <div class="border-l-2 border-blue-600 pl-8">
+                <h2 id="modalTitle" class="serif text-5xl text-white italic mb-4 tracking-tight"></h2>
+                <div id="modalAcc" class="text-blue-500 font-mono text-xs uppercase tracking-widest mb-6"></div>
+                <p id="modalDesc" class="text-zinc-400 font-light leading-relaxed text-lg max-w-2xl"></p>
+                <button onclick="closeModal()" class="mt-12 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.4em] hover:text-white transition italic underline underline-offset-8">Return to Hall</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // UPDATED: Dynamic Hall Population
+        async function initMuseum() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                window.museumData = data;
+
+                data.forEach(item => {
+                    const card = `
+                        <div class="display-case p-6 flex flex-col group" onclick="openModal('${item.id}')">
+                            <div class="aspect-[4/5] bg-black mb-6 overflow-hidden relative shadow-inner">
+                                <img src="${item.images[0]}" class="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-all duration-700">
+                                <div class="absolute inset-0 spotlight-overlay"></div>
+                            </div>
+                            <div class="mt-auto">
+                                <div class="flex justify-between items-baseline mb-2">
+                                    <span class="text-[9px] font-bold text-blue-600 uppercase tracking-[0.2em]">${item.id}</span>
+                                    <span class="text-[8px] text-zinc-700 font-bold uppercase tracking-widest font-mono">Verified</span>
+                                </div>
+                                <h4 class="serif text-2xl text-white italic leading-none mb-4 uppercase tracking-tighter">${item.title}</h4>
+                                <div class="flex justify-between items-center pt-4 border-t border-zinc-900 text-[10px] uppercase tracking-widest font-bold">
+                                    <span class="text-zinc-600">Steward</span>
+                                    <span class="text-zinc-400">${item.steward}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    const grid = document.getElementById(`${item.category}-grid`);
+                    if(grid) grid.innerHTML += card;
+                });
+            } catch (e) { console.error("Archive Error: Ensure data.json exists and is valid JSON."); }
+        }
+
+        function openModal(id) {
+            const item = window.museumData.find(a => a.id === id);
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalDesc').innerText = item.description;
+            document.getElementById('modalAcc').innerText = "Accession No. " + item.id;
+            
+            // Show up to 4 images in the modal
+            const imgContainer = document.getElementById('modalImages');
+            imgContainer.innerHTML = item.images.slice(0, 4).map(img => 
+                `<div class="bg-black p-4 border border-white/5"><img src="${img}" class="w-full h-80 object-contain"></div>`
+            ).join('');
+            
+            document.getElementById('itemModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('itemModal').style.display = 'none'; }
+        initMuseum();
+    </script>
+</body>
+</html>
