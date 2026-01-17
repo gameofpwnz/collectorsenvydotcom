@@ -17,24 +17,20 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .display-case:hover { border-color: #3b82f6; transform: translateY(-8px); }
         .curator-choice { border-color: #c5a059 !important; box-shadow: 0 0 40px rgba(197, 160, 89, 0.15); }
         .curator-badge { background: #c5a059; color: black; font-size: 7px; padding: 2px 8px; letter-spacing: 0.2em; font-weight: 900; }
         
-        /* Tiered Labels */
         .certified-label { background: #3b82f6; color: white; font-size: 8px; padding: 2px 8px; letter-spacing: 0.1em; font-weight: 800; border-radius: 2px; }
         .community-label { background: #27272a; color: #71717a; font-size: 8px; padding: 2px 8px; letter-spacing: 0.1em; font-weight: 800; border-radius: 2px; }
 
         .era-btn.active { color: #3b82f6; border-color: #3b82f6; }
         .filter-btn.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
         
-        /* Modal and Stamp */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; overflow-y: auto; align-items: flex-start; justify-content: center; }
         .coa-card { background: linear-gradient(145deg, #111, #080808); border: 1px solid #c5a059; position: relative; overflow: hidden; }
         .certified-stamp { position: absolute; top: 15px; right: -30px; background: #c5a059; color: black; font-size: 8px; font-weight: 900; padding: 4px 40px; transform: rotate(45deg); text-align: center; }
         
-        /* Clean Horizontal Scroll for Mobile */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -48,7 +44,7 @@
         <div class="flex items-center gap-6">
             <a href="https://collectorsenvy.com" class="text-[10px] uppercase font-bold text-zinc-500 hover:text-white transition tracking-widest border-r border-white/10 pr-6 hidden md:block">Homepage</a>
             <div class="flex flex-col leading-none">
-                <span class="text-[8px] tracking-[0.3em] font-bold text-zinc-500 uppercase italic leading-tight">Museum of</span>
+                <span class="text-[8px] tracking-[0.3em] font-bold text-zinc-500 uppercase italic leading-tight text-left">Museum of</span>
                 <span class="text-xl font-black uppercase italic text-white leading-tight">ESPORTS COLLECTORS</span>
             </div>
         </div>
@@ -70,7 +66,7 @@
     <div id="museum-controls" class="sticky top-[60px] md:top-[70px] z-40 bg-black/95 backdrop-blur-md border-y border-white/5 py-4 overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 space-y-4">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="relative w-full md:w-96">
+                <div class="relative w-full md:w-96 text-left">
                     <input type="text" id="museumSearch" onkeyup="handleSearch()" placeholder="Search archives..." class="w-full bg-zinc-900 border border-zinc-800 px-6 py-3 text-xs text-zinc-300 focus:outline-none focus:border-blue-500 transition uppercase tracking-widest">
                 </div>
                 <div class="w-full md:w-auto overflow-x-auto scrollbar-hide">
@@ -108,9 +104,9 @@
             <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 gap-12"></div>
         </section>
 
-        <section id="hall-jerseys" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase">Jerseys</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
-        <section id="hall-hardware" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase">Hardware</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
-        <section id="hall-signatures" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase">Signatures</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-jerseys" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase text-left">Jerseys</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-hardware" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase text-left">Hardware</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-signatures" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase text-left">Signatures</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
 
         <section class="border-t border-white/5 pt-40 pb-20 text-center">
             <div class="max-w-4xl mx-auto">
@@ -123,11 +119,11 @@
         </section>
     </main>
 
-    <div id="itemModal" class="modal">
+    <div id="itemModal" class="modal text-left">
         <button onclick="closeModal()" class="fixed top-6 right-6 z-[150] text-white uppercase text-[10px] tracking-widest bg-black/50 px-4 py-2 border border-white/10">Exit Gallery</button>
         <div class="w-full max-w-5xl px-4 py-24" onclick="event.stopPropagation()">
             <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 text-left">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
                 <div class="lg:col-span-2">
                     <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4 uppercase"></h2>
                     <div id="modalAcc" class="flex gap-3 mb-6"></div>
@@ -137,11 +133,11 @@
                 <div class="coa-card p-6 flex flex-col justify-between min-h-[200px]">
                     <div id="modalStamp"></div>
                     <div class="text-[9px] uppercase tracking-[0.3em] text-zinc-500 font-bold">Provenance Detail</div>
-                    <div><div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic">Steward</div><div id="modalSteward" class="text-white font-bold text-xl italic leading-none"></div></div>
-                    <div class="text-[8px] uppercase text-zinc-600 font-bold">Archive Registry No.</div>
+                    <div><div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic italic">Steward</div><div id="modalSteward" class="text-white font-bold text-xl italic leading-none"></div></div>
+                    <div class="text-[8px] uppercase text-zinc-600 font-bold italic tracking-widest">Official Archive Record</div>
                 </div>
             </div>
-            <div id="relatedExhibits" class="mt-20 border-t border-white/5 pt-10 text-left"></div>
+            <div id="relatedExhibits" class="mt-20 border-t border-white/5 pt-10"></div>
         </div>
     </div>
 
@@ -150,14 +146,27 @@
 
         async function initMuseum() {
             try {
+                // AUTO-DETECT PATH LOGIC
+                // This ensures it works on local (index.html) and GitHub Pages (/repo/assets/...)
+                const currentPath = window.location.pathname.includes('museum.html') ? 'assets/museum-data.json' : 'assets/museum-data.json';
                 const cacheBuster = `?v=${new Date().getTime()}`;
-                const response = await fetch('assets/museum-data.json');
-                if (!response.ok) throw new Error("Load failure");
+                
+                console.log("Attempting to fetch data from:", currentPath);
+
+                const response = await fetch(currentPath + cacheBuster);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status} at ${currentPath}`);
+                }
+
                 window.museumData = await response.json();
                 renderItems(window.museumData);
                 renderPatrons(window.museumData);
                 if (window.location.hash) setTimeout(() => openModal(window.location.hash.substring(1)), 500);
-            } catch (e) { console.error("Data Load Error"); }
+            } catch (e) { 
+                console.error("FATAL DATA LOAD ERROR:", e.message);
+                alert("Archive Data failed to load. Please check console for path details.");
+            }
         }
 
         function handleSearch() {
@@ -196,7 +205,7 @@
             document.getElementById('featured-grid').innerHTML = featured.map(i => `
                 <div class="display-case p-6 md:p-8 curator-choice group cursor-pointer flex flex-col md:flex-row gap-8 items-center" onclick="openModal('${i.id}')">
                     <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img src="${i.images[0]}" class="w-full h-full object-contain opacity-90 transition-transform"><div class="absolute top-0 left-0 curator-badge">ESSENTIAL RECORD</div></div>
-                    <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[10px] uppercase mb-4 block tracking-widest">${i.id}</span><h3 class="serif text-3xl md:text-4xl text-white italic mb-6 leading-tight uppercase tracking-tighter">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 leading-relaxed line-clamp-3">${i.description}</p></div>
+                    <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[10px] uppercase mb-4 block tracking-widest">${i.id}</span><h3 class="serif text-3xl md:text-4xl text-white italic mb-6 leading-tight uppercase tracking-tighter">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 line-clamp-3 leading-relaxed">${i.description}</p></div>
                 </div>`).join('');
 
             ['jerseys', 'hardware', 'signatures'].forEach(cat => {
@@ -204,9 +213,9 @@
                 const items = data.filter(i => i.category === cat);
                 grid.innerHTML = items.map(i => `
                     <div class="display-case p-6 flex flex-col cursor-pointer ${i.featured ? 'curator-choice' : ''}" onclick="openModal('${i.id}')">
-                        <div class="aspect-[4/5] bg-black mb-6 relative shadow-inner overflow-hidden"><img src="${i.images[0]}" loading="lazy" class="w-full h-full object-contain opacity-80 group-hover:scale-105 transition-transform duration-700">${i.featured ? '<div class="absolute top-0 left-0 curator-badge">CURATOR\'S CHOICE</div>' : ''}</div>
+                        <div class="aspect-[4/5] bg-black mb-6 relative shadow-inner overflow-hidden"><img src="${i.images[0]}" loading="lazy" class="w-full h-full object-contain opacity-80 group-hover:scale-105 transition-transform duration-700">${i.featured ? '<div class="absolute top-0 left-0 curator-badge uppercase">CURATOR\'S CHOICE</div>' : ''}</div>
                         <div class="text-left"><div class="flex justify-between mb-2"><span class="text-[9px] font-bold ${i.featured ? 'text-[#c5a059]' : 'text-blue-600'} uppercase tracking-widest">${i.id}</span><span class="text-[8px] text-zinc-700 font-bold font-mono">${i.year}</span></div><h4 class="serif text-xl text-white italic mb-4 uppercase tracking-tighter truncate">${i.title}</h4></div>
-                    </div>`).join('') + '<div class="display-case p-8 flex flex-col items-center justify-center border-dashed border-zinc-800 min-h-[300px]"><h4 class="serif text-xl text-zinc-600 italic">Space Reserved</h4><a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold border-b border-blue-500 mt-4 tracking-widest">Submit Artifact</a></div>';
+                    </div>`).join('') + '<div class="display-case p-8 flex flex-col items-center justify-center border-dashed border-zinc-800 min-h-[300px]"><h4 class="serif text-xl text-zinc-600 italic">Space Reserved</h4><a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold border-b border-blue-500 mt-4 tracking-widest text-center">Submit Artifact</a></div>';
             });
         }
 
@@ -214,7 +223,7 @@
             const stewards = [...new Set(data.map(i => i.steward))];
             document.getElementById('donor-wall').innerHTML = stewards.map(s => {
                 const info = data.find(i => i.steward === s);
-                return `<div class="group"><a href="${info.stewardLink || '#'}" target="_blank" class="block"><span class="text-white group-hover:text-blue-600 text-sm md:text-base font-bold transition uppercase">${s}</span><span class="block text-[7px] text-zinc-500 uppercase font-black italic tracking-widest mt-1">Verified Steward</span></a></div>`;
+                return `<div class="group"><a href="${info.stewardLink || '#'}" target="_blank" class="block"><span class="text-white group-hover:text-blue-600 text-[11px] md:text-base font-bold transition uppercase">${s}</span><span class="block text-[7px] text-zinc-600 uppercase font-black italic tracking-widest mt-1">Verified Steward</span></a></div>`;
             }).join('');
         }
 
@@ -224,7 +233,7 @@
             document.getElementById('modalTitle').innerText = i.title;
             document.getElementById('modalDesc').innerText = i.description;
             const accDiv = document.getElementById('modalAcc');
-            accDiv.innerHTML = `<span class="text-zinc-500 font-mono text-[10px] uppercase">No. ${i.id}</span>`;
+            accDiv.innerHTML = `<span class="text-zinc-500 font-mono text-[10px] uppercase tracking-widest">No. ${i.id}</span>`;
             if (i.verified) {
                 accDiv.innerHTML += `<span class="certified-label uppercase">Curator Certified</span>`;
                 document.getElementById('modalStamp').innerHTML = `<div class="certified-stamp">CERTIFIED</div>`;
@@ -247,4 +256,3 @@
     </script>
 </body>
 </html>
-
