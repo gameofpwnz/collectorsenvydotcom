@@ -57,6 +57,7 @@
             transform: rotate(45deg);
         }
 
+        /* Fixed Exit Button */
         .modal-close-trigger {
             position: fixed;
             top: 1.5rem;
@@ -78,6 +79,7 @@
             border: 1px solid rgba(59, 130, 246, 0.5);
         }
 
+        /* Placeholder Shimmer */
         .placeholder-shimmer {
             background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(59, 130, 246, 0.05) 50%, rgba(255,255,255,0) 100%);
             background-size: 200% 100%;
@@ -92,8 +94,8 @@
 
     <nav class="fixed w-full z-50 px-6 md:px-10 py-4 md:py-6 flex justify-between items-center bg-black/80 backdrop-blur-md border-b border-white/5">
         <div class="flex flex-col leading-none">
-            <span class="text-[8px] md:text-[9px] tracking-[0.3em] font-bold text-zinc-500 uppercase">Museum of</span>
-            <span class="text-xl font-black uppercase italic tracking-tighter text-white">ESPORTS COLLECTORS</span>
+            <span class="text-[8px] md:text-[9px] tracking-[0.3em] font-bold text-zinc-500 uppercase font-mono italic">Museum of</span>
+            <span class="text-xl font-black uppercase italic tracking-tighter text-white font-mono">ESPORTS COLLECTORS</span>
         </div>
         <div class="flex gap-4 md:gap-10 items-center text-[9px] uppercase font-bold tracking-widest text-zinc-400">
             <div class="hidden lg:flex gap-8 italic">
@@ -112,9 +114,9 @@
         </div>
         <div class="relative z-10 mt-20">
             <div class="w-px h-20 bg-gradient-to-b from-blue-500 to-transparent mx-auto mb-8"></div>
-            <h2 class="text-zinc-500 uppercase tracking-[0.4em] text-[10px] mb-4 font-bold">Collectors Envy Permanent Installation</h2>
-            <h1 class="serif text-5xl md:text-9xl text-white italic mb-10 leading-tight tracking-tight px-4">Preserving the <br class="hidden md:block">Physical Legacy.</h1>
-            <p class="max-w-xl mx-auto text-zinc-400 font-light leading-relaxed mb-12 text-base md:text-lg italic px-4 italic">"A digital sanctuary for the physical relics of the competitive era."</p>
+            <h2 class="text-zinc-500 uppercase tracking-[0.4em] text-[10px] mb-4 font-bold font-mono tracking-tighter italic">Collectors Envy Permanent Installation</h2>
+            <h1 class="serif text-6xl md:text-9xl text-white italic mb-10 leading-tight tracking-tight px-4">Preserving the <br>Physical Legacy.</h1>
+            <p class="max-w-xl mx-auto text-zinc-400 font-light text-base md:text-lg italic mb-12 italic tracking-tighter underline underline-offset-8">"A digital sanctuary for the physical relics of the competitive era."</p>
         </div>
     </header>
 
@@ -123,22 +125,19 @@
         <section id="hall-jerseys" class="relative px-0 md:pl-20 pt-20">
             <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic">Hall of Textiles</div>
             <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 italic">Jersey Collection</h2>
-            <div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 italic">
-                </div>
+            <div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 italic"></div>
         </section>
 
         <section id="hall-hardware" class="relative px-0 md:pl-20">
-            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic">Hardware Wing</div>
+            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic font-mono">Hardware Wing</div>
             <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 italic">Hardware & Memorabilia</h2>
-            <div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 italic">
-                </div>
+            <div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 italic"></div>
         </section>
 
         <section id="hall-signatures" class="relative px-0 md:pl-20">
-            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic">Signature Study</div>
-            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 italic italic">Autographs & Inscriptions</h2>
-            <div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 italic">
-                </div>
+            <div class="hall-label absolute left-0 top-0 h-full hidden md:flex items-center text-zinc-800 font-black uppercase border-r border-zinc-900 pr-4 italic font-mono">Signature Study</div>
+            <h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 italic">Autographs & Inscriptions</h2>
+            <div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 italic"></div>
         </section>
     </main>
 
@@ -157,11 +156,11 @@
                     <p id="modalDesc" class="text-zinc-400 font-light text-base md:text-lg mb-10 italic"></p>
                     <button onclick="shareArtifact()" class="flex items-center gap-3 bg-blue-600/10 border border-blue-500/50 px-6 py-3 text-blue-400 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">Copy Exhibit Link</button>
                 </div>
-                <div class="coa-card p-6 flex flex-col justify-between min-h-[220px]">
+                <div class="coa-card p-6 flex flex-col justify-between min-h-[200px]">
                     <div class="text-[9px] uppercase tracking-[0.3em] text-zinc-500 font-bold italic">Registry Record</div>
                     <div>
                         <div class="text-[8px] uppercase text-[#c5a059] font-bold tracking-widest mb-1 italic">Steward</div>
-                        <div id="modalSteward" class="text-white font-bold text-xl italic tracking-tighter italic"></div>
+                        <div id="modalSteward" class="text-white font-bold text-lg italic tracking-tighter"></div>
                     </div>
                     <div class="mt-6 pt-4 border-t border-zinc-800 text-[8px] uppercase text-zinc-600 tracking-widest">Collectors Envy Official Record</div>
                 </div>
@@ -169,7 +168,7 @@
         </div>
     </div>
 
-    <button id="backToTop" onclick="scrollToTop()" class="p-4 rounded-full text-white transition-all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button>
+    <button id="backToTop" onclick="scrollToTop()" class="p-4 rounded-full text-white transition-all shadow-2xl"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button>
     <div id="shareToast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none z-[200] transition-all">Link Copied to Clipboard</div>
 
     <script>
@@ -177,8 +176,7 @@
         
         async function initMuseum() {
             try {
-                // Fetch from your data file
-                const response = await fetch('/assets/museum-data.json');
+                const response = await fetch('museum-data.json');
                 const data = await response.json();
                 window.museumData = data;
 
@@ -190,7 +188,7 @@
                             </div>
                             <div class="mt-auto">
                                 <div class="flex justify-between items-baseline mb-2 italic">
-                                    <span class="text-[9px] font-bold text-blue-600 uppercase tracking-widest">${item.id}</span>
+                                    <span class="text-[9px] font-bold text-blue-600 uppercase tracking-widest tracking-tighter">${item.id}</span>
                                     <span class="text-[8px] text-zinc-800 font-bold uppercase">Verified</span>
                                 </div>
                                 <h4 class="serif text-2xl text-white italic leading-none mb-4 uppercase tracking-tighter">${item.title}</h4>
@@ -205,14 +203,19 @@
                     if(grid) grid.innerHTML += card;
                 });
 
-                // ADD STAND-IN PLACEHOLDER TO THE JERSEY HALL
-                const jerseyGrid = document.getElementById('jerseys-grid');
-                jerseyGrid.innerHTML += `
-                    <div class="display-case p-8 placeholder-shimmer flex flex-col items-center justify-center text-center group h-full border-dashed border-zinc-800">
-                        <div class="mb-6 opacity-20"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1"><path d="M21 8l-9-4-9 4v8l9 4 9-4V8z"></path></svg></div>
-                        <h4 class="serif text-xl text-zinc-600 italic mb-4 uppercase">Space Reserved</h4>
-                        <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold tracking-widest border-b border-blue-500 pb-1">Submit Your Artifact</a>
-                    </div>`;
+                // Add ONE hardcoded placeholder per category to encourage growth
+                const categories = ['jerseys', 'hardware', 'signatures'];
+                categories.forEach(cat => {
+                    const grid = document.getElementById(`${cat}-grid`);
+                    if(grid) {
+                        grid.innerHTML += `
+                            <div class="display-case p-8 placeholder-shimmer flex flex-col items-center justify-center text-center group h-full border-dashed border-zinc-800">
+                                <div class="mb-6 opacity-20"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1"><path d="M21 8l-9-4-9 4v8l9 4 9-4V8z"></path></svg></div>
+                                <h4 class="serif text-xl text-zinc-600 italic mb-4 uppercase">Space Reserved</h4>
+                                <a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold tracking-widest border-b border-blue-500 pb-1">Submit Your Artifact</a>
+                            </div>`;
+                    }
+                });
 
                 const hash = window.location.hash.substring(1);
                 if (hash) setTimeout(() => openModal(hash), 500);
