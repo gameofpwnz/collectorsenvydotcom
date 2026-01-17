@@ -176,7 +176,7 @@
         
         async function initMuseum() {
             try {
-                const response = await fetch('museum-data.json');
+                const response = await fetch('/assets/museum-data.json');
                 const data = await response.json();
                 window.museumData = data;
 
@@ -244,3 +244,4 @@
     </script>
 </body>
 </html>
+
