@@ -18,6 +18,14 @@
 	</head>
 	<body class="is-loading">
 		<div class="site-wrapper">
+			<div class="sticky top-[80px] z-40 bg-black/80 backdrop-blur-md border-b border-white/5 py-4">
+    			<div class="max-w-7xl mx-auto px-6 flex gap-6 overflow-x-auto scrollbar-hide items-center justify-center">
+        			<button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase tracking-[0.2em] font-bold text-blue-500 whitespace-nowrap">All Titles</button>
+       				<button onclick="filterByEsport('cod')" class="filter-btn text-[10px] uppercase tracking-[0.2em] font-bold text-zinc-500 hover:text-white transition whitespace-nowrap">Call of Duty</button>
+        			<button onclick="filterByEsport('halo')" class="filter-btn text-[10px] uppercase tracking-[0.2em] font-bold text-zinc-500 hover:text-white transition whitespace-nowrap">Halo</button>
+        			<button onclick="filterByEsport('creator')" class="filter-btn text-[10px] uppercase tracking-[0.2em] font-bold text-zinc-500 hover:text-white transition whitespace-nowrap">Valorant</button>
+    			</div>
+			</div>
 			<div class="site-main">
 				<div class="inner">
 					<div id="image01" class="image-component instance-1">
