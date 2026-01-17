@@ -99,19 +99,12 @@
             <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 gap-12"></div>
         </section>
 
-        <section id="hall-jerseys" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase tracking-tighter">Jersey Collection</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
-        <section id="hall-hardware" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase tracking-tighter">Hardware Wing</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
-        <section id="hall-signatures" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase tracking-tighter">Signature Study</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-jerseys" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Jerseys</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-hardware" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Hardware</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-signatures" class="mb-40"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6">Signatures</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
 
-        <section class="border-t border-white/5 pt-40 pb-20 px-4">
+        <section class="border-t border-white/5 pt-40 pb-20 px-4 text-center">
             <div class="max-w-4xl mx-auto">
-                <h3 class="serif text-3xl text-white italic mb-10 text-center uppercase tracking-tighter">Accession Log</h3>
-                <div id="accession-log" class="space-y-4"></div>
-            </div>
-        </section>
-
-        <section class="border-t border-white/5 pt-40 pb-40 text-center">
-            <div class="max-w-4xl mx-auto px-6">
                 <h2 class="serif text-4xl text-white italic mb-8">The Mission</h2>
                 <p class="text-zinc-400 font-light text-lg italic mb-32 leading-relaxed">"In an era defined by digital ephemerality, the physical relics of competition serve as the anchor for our shared history."</p>
                 <div class="w-16 h-px bg-zinc-800 mx-auto mb-10"></div>
@@ -128,7 +121,7 @@
             <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"></div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
                 <div class="lg:col-span-2 text-left">
-                    <h2 id="modalTitle" class="serif text-3xl md:text-6xl text-white italic mb-4 uppercase tracking-tighter"></h2>
+                    <h2 id="modalTitle" class="serif text-3xl md:text-6xl text-white italic mb-4 uppercase"></h2>
                     <div id="modalAcc" class="flex flex-wrap gap-2 mb-6"></div>
                     <p id="modalDesc" class="text-zinc-400 text-base md:text-lg mb-10 italic leading-relaxed"></p>
                     <button onclick="shareArtifact()" class="w-full md:w-auto bg-blue-600/10 border border-blue-500/50 px-6 py-3 text-blue-400 text-[10px] font-bold uppercase hover:bg-blue-600 hover:text-white transition">Copy Exhibit Link</button>
@@ -149,16 +142,23 @@
 
         async function initMuseum() {
             try {
-                // FIXED: Changed to relative path for GitHub Pages stability
+                // FIXED: Using relative path 'assets/...' instead of absolute '/assets/...'
                 const cacheBuster = `?v=${new Date().getTime()}`;
-                const response = await fetch('assets/museum-data.json' + cacheBuster);
+                const dataPath = 'assets/museum-data.json';
+                
+                const response = await fetch(dataPath + cacheBuster);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 window.museumData = await response.json();
                 renderItems(window.museumData);
                 renderPatrons(window.museumData);
-                renderLog(window.museumData);
                 if (window.location.hash) setTimeout(() => openModal(window.location.hash.substring(1)), 500);
             } catch (e) { 
-                console.error("Data Load Error: assets/museum-data.json not found."); 
+                console.error("Data Load Error:", e);
+                alert("Failed to load museum data. Check console for details.");
             }
         }
 
@@ -189,19 +189,6 @@
             document.querySelectorAll('.era-btn').forEach(btn => btn.classList.remove('active', 'text-blue-500'));
             if(event) event.target.classList.add('active', 'text-blue-500');
             handleSearch();
-        }
-
-        function renderLog(data) {
-            const log = document.getElementById('accession-log');
-            const recent = data.slice(-5).reverse();
-            log.innerHTML = recent.map(i => `
-                <div class="flex justify-between items-center py-4 border-b border-white/5 text-[9px] md:text-[10px] uppercase tracking-widest group cursor-pointer hover:bg-white/5 px-2 md:px-4 transition" onclick="openModal('${i.id}')">
-                    <div class="flex gap-2 md:gap-4 truncate overflow-hidden">
-                        <span class="text-zinc-600 font-mono italic shrink-0">${i.dateAdded || 'RECENT'}</span>
-                        <span class="text-white font-bold truncate">${i.title}</span>
-                    </div>
-                    <span class="text-blue-500 italic shrink-0 ml-4">@${i.steward}</span>
-                </div>`).join('');
         }
 
         function renderItems(data) {
@@ -238,7 +225,6 @@
             if (!i) return;
             document.getElementById('modalTitle').innerText = i.title;
             document.getElementById('modalDesc').innerText = i.description;
-            
             const accDiv = document.getElementById('modalAcc');
             accDiv.innerHTML = `<span class="text-zinc-500 font-mono text-[10px] uppercase">No. ${i.id}</span>`;
             if (i.verified) {
@@ -248,12 +234,10 @@
                 accDiv.innerHTML += `<span class="community-label uppercase tracking-widest">Community Entry</span>`;
                 document.getElementById('modalStamp').innerHTML = '';
             }
-
             document.getElementById('modalSteward').innerText = i.steward;
             document.getElementById('modalImages').innerHTML = i.images.map(img => `<div class="bg-black p-2 border border-white/5 shadow-2xl"><img src="${img}" class="w-full h-auto object-contain"></div>`).join('');
             const related = window.museumData.filter(o => o.id !== i.id && (o.esport === i.esport || (o.tags && i.tags && o.tags.some(t => i.tags.includes(t))))).slice(0, 4);
             document.getElementById('relatedExhibits').innerHTML = related.length ? `<h4 class="serif text-xl text-white italic mb-6">Related Exhibits</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${related.map(r => `<div onclick="openModal('${r.id}')" class="related-card p-3 cursor-pointer"><img src="${r.images[0]}" class="h-24 w-full object-contain mb-2 opacity-60 hover:opacity-100 transition"><div class="text-[10px] text-zinc-300 font-bold uppercase truncate tracking-tight">${r.title}</div></div>`).join('')}</div>` : '';
-            
             document.getElementById('itemModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
             window.location.hash = id;
