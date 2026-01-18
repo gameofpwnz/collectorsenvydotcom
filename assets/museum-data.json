@@ -1,5 +1,22 @@
 [
   {
+    "id": "CE-009",
+    "category": "jerseys",
+    "esport": "cs",
+    "year": 2014,
+    "featured": false,
+    "verified": true,
+    "tags": ["Ex6TenZ ", "game worn", "signed", "Titan Esports", "cs"],
+    "title": "2014 Titan Esports Ex6TenZ Jersey",
+    "steward": "poopaboo",
+    "stewardLink": "https://x.com/poopaboo",
+    "description": "Titan Esports has always been one of my favorite esport org logos with an infamous history in Counter-Strike. These jerseys are extremely rare and almost impossible to find nowadays.  " ,
+    "images": [
+      "https://cdn.discordapp.com/attachments/1221945230979366943/1462472293501370440/image.png?ex=696e50f6&is=696cff76&hm=c6059b0b301d72d26a64b7e650672bff8f930cc93db6bbfe04eebfd818d19b4d&",
+      "https://cdn.discordapp.com/attachments/1221945230979366943/1462472292985602391/image.png?ex=696e50f6&is=696cff76&hm=0735978f4930be289962e624612c2d437bc5a97d02a317d06db04c96aa04aa30&"
+    ]
+  },
+  {
     "id": "CE-008",
     "category": "jerseys",
     "esport": "cod",
@@ -7,7 +24,7 @@
     "featured": false,
     "verified": true,
     "tags": ["simp", "game worn", "signed", "eUnited", "cod"],
-    "title": "2019 eUnited Simp Jersey ",
+    "title": "2019 eUnited Simp Jersey",
     "steward": "poopaboo",
     "stewardLink": "https://x.com/poopaboo",
     "description": "A rookie eUnited jersey signed and worn by Simp during the 2018-2019 CoD BO4 season. This jersey was either worn at Fort Worth when he won the AM open or during the London event. " ,
