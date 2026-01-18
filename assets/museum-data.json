@@ -1,5 +1,39 @@
 [
   {
+    "id": "CE-007",
+    "category": "jerseys",
+    "esport": "cs",
+    "year": 2018,
+    "featured": false,
+    "verified": true,
+    "tags": ["olofmeister", "game worn", "signed", "faze", "cs"],
+    "title": "2018 FaZe Clan Olofmeister Jersey",
+    "steward": "poopaboo",
+    "stewardLink": "https://x.com/poopaboo",
+    "description": "A 2018 FaZe Clan Jersey signed and worn by Olofmeister during the 2018 season of Counter-Strike: Global Offensive. x2 Major, x1 Major MVP, Best Player of the Year in 2015, Olof is one of the most well-known names in Counter Strike." ,
+    "images": [
+      "https://cdn.discordapp.com/attachments/1221945230979366943/1462472154787483762/image.png?ex=696e50d5&is=696cff55&hm=6db80284bad485b5316e57b3b06d1e9c8f8029756feb44c6077fca5523d11da7&",
+      "https://cdn.discordapp.com/attachments/1221945230979366943/1462472154070253639/image.png?ex=696e50d4&is=696cff54&hm=81aac9a7ecc463acdfce31aaac491f671eb41edd9606b3580d58f3347f59c63b&"
+    ]
+  },
+  {
+    "id": "CE-006",
+    "category": "jerseys",
+    "esport": "cs",
+    "year": 2014,
+    "featured": false,
+    "verified": true,
+    "tags": ["rookie year", "game worn", "signed", "LDLC", "Shox"],
+    "title": "2014 Team LDLC Shox Jersey - Signed",
+    "steward": "poopaboo",
+    "stewardLink": "https://x.com/poopaboo",
+    "description": "This is a 2014 Team LDLC jersey worn and signed by Richard "shox" Papillon. This is a special team jersey for myself and shox as this was the team he won his first and only major for. This is the early 2014 design of the jersey. ",
+    "images": [
+      "https://cdn.discordapp.com/attachments/1221945230979366943/1462472292272443537/image.png?ex=696e50f5&is=696cff75&hm=d04f54c3e163558dfbc3ad30e4a4b160810b1d08ef8c7ca232409d62f28ad29f&",
+      "https://cdn.discordapp.com/attachments/1221945230979366943/1462472291735699536/image.png?ex=696e50f5&is=696cff75&hm=305b84ebbda2337354ba39e9ec6e21dc619be503e5d2f11377a424789b6fd08d&"
+    ]
+  },
+  {
     "id": "CE-005",
     "category": "hardware",
     "esport": "creator",
