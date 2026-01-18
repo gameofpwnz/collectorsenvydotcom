@@ -1,5 +1,22 @@
 [
   {
+    "id": "CE-008",
+    "category": "jerseys",
+    "esport": "cod",
+    "year": 2019,
+    "featured": false,
+    "verified": true,
+    "tags": ["simp", "game worn", "signed", "eUnited", "cod"],
+    "title": "2019 eUnited Simp Jersey ",
+    "steward": "poopaboo",
+    "stewardLink": "https://x.com/poopaboo",
+    "description": "A rookie eUnited jersey signed and worn by Simp during the 2018-2019 CoD BO4 season. This jersey was either worn at Fort Worth when he won the AM open or during the London event. " ,
+    "images": [
+      "https://cdn.discordapp.com/attachments/1221945230979366943/1462472156775452916/image.png?ex=696e50d5&is=696cff55&hm=aec6b034a322547ac4cacda61acb5f2982a125d0fe6faea62d5ec85231f1d2f2&",
+      "https://cdn.discordapp.com/attachments/1221945230979366943/1462472155550974022/image.png?ex=696e50d5&is=696cff55&hm=44894bd77baac9956fce7bc8373c74b84c3677d225ae6820a0a28eab66b91900&"
+    ]
+  },
+  {
     "id": "CE-007",
     "category": "jerseys",
     "esport": "cs",
