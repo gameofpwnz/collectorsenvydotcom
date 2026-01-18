@@ -25,7 +25,7 @@
         .certified-label { background: #3b82f6; color: white; font-size: 8px; padding: 2px 8px; letter-spacing: 0.1em; font-weight: 800; border-radius: 2px; }
         .community-label { background: #27272a; color: #71717a; font-size: 8px; padding: 2px 8px; letter-spacing: 0.1em; font-weight: 800; border-radius: 2px; }
 
-        .era-btn.active { color: #3b82f6; border-color: #3b82f6; }
+        .era-btn.active, .hall-btn.active { color: #3b82f6; border-color: #3b82f6; }
         .filter-btn.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
         
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; overflow-y: auto; align-items: flex-start; justify-content: center; }
@@ -36,6 +36,17 @@
         .filter-container { max-width: 100vw; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Back to Top Styling */
+        #backToTop {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        #backToTop.visible {
+            opacity: 1;
+            visibility: visible;
+        }
 
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
         .scroll-indicator { animation: bounce 2s infinite; }
@@ -77,7 +88,7 @@
                 </div>
                 <div class="filter-container scrollbar-hide">
                     <div id="esportFilters" class="flex gap-6 flex-nowrap md:flex-wrap pb-2 md:pb-0">
-                        <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">All</button>
+                        <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">All Titles</button>
                         <button onclick="filterByEsport('cod')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">CoD</button>
                         <button onclick="filterByEsport('halo')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Halo</button>
                         <button onclick="filterByEsport('cs')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Counter Strike</button>
@@ -91,11 +102,22 @@
                     </div>
                 </div>
             </div>
-            <div class="flex gap-6 justify-center items-center text-[8px] uppercase tracking-[0.3em] font-bold text-zinc-600 border-t border-white/5 pt-4">
-                <button onclick="filterByEra('all')" class="era-btn active">All Eras</button>
-                <button onclick="filterByEra('golden')" class="era-btn">Golden Age (10-15)</button>
-                <button onclick="filterByEra('global')" class="era-btn">Global Era (16-20)</button>
-                <button onclick="filterByEra('modern')" class="era-btn">Modern (21+)</button>
+            
+            <div class="flex flex-col md:flex-row gap-4 md:gap-12 justify-center items-center border-t border-white/5 pt-4">
+                <div class="flex gap-6 items-center text-[8px] uppercase tracking-[0.3em] font-bold text-zinc-600">
+                    <span class="text-zinc-800 hidden md:inline">The Halls:</span>
+                    <button onclick="scrollToHall('hall-jerseys')" class="hall-btn hover:text-white transition">Jerseys</button>
+                    <button onclick="scrollToHall('hall-hardware')" class="hall-btn hover:text-white transition">Hardware</button>
+                    <button onclick="scrollToHall('hall-signatures')" class="hall-btn hover:text-white transition">Signatures</button>
+                </div>
+                <div class="h-4 w-px bg-white/10 hidden md:block"></div>
+                <div class="flex gap-6 items-center text-[8px] uppercase tracking-[0.3em] font-bold text-zinc-600">
+                    <span class="text-zinc-800 hidden md:inline">The Eras:</span>
+                    <button onclick="filterByEra('all')" class="era-btn active">All</button>
+                    <button onclick="filterByEra('golden')" class="era-btn">Golden Age</button>
+                    <button onclick="filterByEra('global')" class="era-btn">Global Era</button>
+                    <button onclick="filterByEra('modern')" class="era-btn">Modern</button>
+                </div>
             </div>
         </div>
     </div>
@@ -110,9 +132,9 @@
             <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 gap-12"></div>
         </section>
 
-        <section id="hall-jerseys" class="mb-40 text-left"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase">Jersey Collection</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
-        <section id="hall-hardware" class="mb-40 text-left"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase">Hardware Wing</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
-        <section id="hall-signatures" class="mb-40 text-left"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase">Signature Study</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-jerseys" class="mb-40 text-left pt-20"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase">Jersey Collection</h2><div id="jerseys-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-hardware" class="mb-40 text-left pt-20"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase">Hardware Wing</h2><div id="hardware-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+        <section id="hall-signatures" class="mb-40 text-left pt-20"><h2 class="serif text-3xl md:text-5xl text-white italic mb-12 border-b border-zinc-900 pb-6 uppercase">Signature Study</h2><div id="signatures-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
 
         <section class="border-t border-white/5 pt-40 pb-20 text-center">
             <div class="max-w-4xl mx-auto px-4">
@@ -128,7 +150,7 @@
                 <div class="w-16 h-px bg-zinc-800 mx-auto mb-10"></div>
                 <h3 class="serif text-2xl text-white italic mb-4 uppercase tracking-widest">Patrons of the Archive</h3>
                 <p class="text-zinc-600 text-[8px] uppercase tracking-[0.2em] mb-12 font-bold italic">Historical Registry Contributors</p>
-                <div id="donor-wall" class="grid grid-cols-1 md:grid-cols-3 gap-y-12 gap-x-8 px-4"></div>
+                <div id="donor-wall" class="grid grid-cols-1 md:grid-cols-3 gap-y-12 gap-x-8 px-4 text-left"></div>
             </div>
         </section>
     </main>
@@ -142,7 +164,7 @@
                     <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4 uppercase"></h2>
                     <div id="modalAcc" class="flex gap-3 mb-6"></div>
                     <p id="modalDesc" class="text-zinc-400 text-lg mb-10 italic leading-relaxed"></p>
-                    <button onclick="shareArtifact()" class="w-full md:w-auto bg-blue-600/10 border border-blue-500/50 px-6 py-3 text-blue-400 text-[10px] font-bold uppercase hover:bg-blue-600 hover:text-white transition">Copy Exhibit Link</button>
+                    <button onclick="shareArtifact()" class="w-full md:w-auto bg-blue-600/10 border border-blue-500/50 px-6 py-3 text-blue-400 text-[10px] font-bold uppercase hover:bg-blue-600 hover:text-white transition tracking-widest">Copy Exhibit Link</button>
                 </div>
                 <div class="coa-card p-6 flex flex-col justify-between min-h-[220px]">
                     <div id="modalStamp"></div>
@@ -161,8 +183,19 @@
         </div>
     </div>
 
+    <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-10 right-10 z-50 bg-blue-600/20 border border-blue-500/40 p-4 rounded-full hover:bg-blue-600 hover:text-white transition-all text-blue-400 shadow-2xl">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+
     <script>
         let activeEsport = "all", activeEra = "all";
+
+        // Scroll listener for Back to Top
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 800) { btn.classList.add('visible'); } 
+            else { btn.classList.remove('visible'); }
+        });
 
         async function initMuseum() {
             try {
@@ -175,13 +208,22 @@
                 renderLog(window.museumData);
                 if (window.location.hash) setTimeout(() => openModal(window.location.hash.substring(1)), 500);
             } catch (e) { 
-                console.error("Critical Load Error:", e);
                 const fb = await fetch('assets/museum-data.json');
                 window.museumData = await fb.json();
                 renderItems(window.museumData);
                 renderPatrons(window.museumData);
                 renderLog(window.museumData);
             }
+        }
+
+        function scrollToHall(id) {
+            const element = document.getElementById(id);
+            const offset = 140; 
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = element.getBoundingClientRect().top;
+            const elementPosition = elementRect - bodyRect;
+            const offsetPosition = elementPosition - offset;
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         }
 
         function handleSearch() {
@@ -232,7 +274,7 @@
             document.getElementById('curator-spotlight').style.display = featured.length ? 'block' : 'none';
             document.getElementById('featured-grid').innerHTML = featured.map(i => `
                 <div class="display-case p-6 md:p-8 curator-choice group cursor-pointer flex flex-col md:flex-row gap-8 items-center" onclick="openModal('${i.id}')">
-                    <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img src="${i.images[0]}" class="w-full h-full object-contain opacity-90 transition-transform"><div class="absolute top-0 left-0 curator-badge">ESSENTIAL RECORD</div></div>
+                    <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img src="${i.images[0]}" class="w-full h-full object-contain opacity-90 transition-transform"></div>
                     <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[10px] uppercase mb-4 block tracking-widest">${i.id}</span><h3 class="serif text-3xl md:text-4xl text-white italic mb-6 leading-tight uppercase tracking-tighter">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 leading-relaxed line-clamp-3">${i.description}</p></div>
                 </div>`).join('');
 
@@ -260,7 +302,7 @@
             if (!i) return;
             document.getElementById('modalTitle').innerText = i.title;
             document.getElementById('modalDesc').innerText = i.description;
-            document.getElementById('modalRegistryId').innerText = i.id; // Map ID to box
+            document.getElementById('modalRegistryId').innerText = i.id;
             
             const stewardContainer = document.getElementById('modalStewardContainer');
             if (i.stewardLink) {
@@ -270,7 +312,6 @@
             }
 
             const accDiv = document.getElementById('modalAcc');
-            // CLEARED: NO ID TEXT HERE ANYMORE
             accDiv.innerHTML = ''; 
             if (i.verified) {
                 accDiv.innerHTML += `<span class="certified-label uppercase">Curator Certified</span>`;
@@ -295,4 +336,3 @@
     </script>
 </body>
 </html>
-
