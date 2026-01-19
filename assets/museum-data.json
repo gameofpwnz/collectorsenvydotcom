@@ -149,5 +149,75 @@
     "images": [
       "/assets/images/museum_images/Controller-TST-autographed.png"
   ]
+  },
+  {
+    "id": "CE-010",
+    "category": "jerseys",
+    "esport": "cod",
+    "year": 2017,
+    "featured": false,
+    "verified": true,
+    "tags": ["Zer0", "game worn", "cod", "Splyce"],
+    "title": "2017 Splyce Zer0 Champs Game Worn Jersey",
+    "steward": "Sterling",
+    "stewardLink": "https://x.com/AidanSterlingg",
+    "description": "Zer0, former Call of Duty professional, was known as one of the best European players. He wore this jersey at the 2017 Call of Duty championship while playing for Splyce. This jersey is known to be 1/4." ,
+    "images": [
+      "https://lh3.googleusercontent.com/d/1AFeJOfd0JKpFQ_L0afsY-zNEuI6PTKM9",
+      "https://lh3.googleusercontent.com/d/19CWsZyiCX56fxMkzHkzekiBjgvtFSOgg"
+    ]
+  },
+  {
+    "id": "CE-011",
+    "category": "jerseys",
+    "esport": "cod",
+    "year": 2017,
+    "featured": false,
+    "verified": true,
+    "tags": ["Zer0", "unreleased", "cod", "Splyce", "sample"],
+    "title": "2017 Splyce Zer0 Unreleased Jersey",
+    "steward": "Sterling",
+    "stewardLink": "https://x.com/AidanSterlingg",
+    "description": "Zer0, former Call of Duty professional, was known as one of the best European players. He was given this jersey while playing for Splyce, but the jersey was never released." ,
+    "images": [
+      "https://lh3.googleusercontent.com/d/1VZAVld028zKEexLTBCUF70mElHudMvmP",
+      "https://lh3.googleusercontent.com/d/16zpvaj-WcDF5TbW_kBXeTB4hEx5iOmf7"
+    ]
+  },
+  {
+    "id": "CE-012",
+    "category": "jerseys",
+    "esport": "cod",
+    "year": 2019,
+    "featured": false,
+    "verified": true,
+    "tags": ["Priestahh", "100 Thieves", "cod", "Championship", "game worn", "signed"],
+    "title": "2019 100 Thieves Priestahh Game Worn Jersey (Signed)",
+    "steward": "Sterling",
+    "stewardLink": "https://x.com/AidanSterlingg",
+    "description": "Priestahh, often referred to as one of the best flex players in his prime and 1x Call of Duty champion, wore this jersey while playing for 100 Thieves." ,
+    "images": [
+      "https://lh3.googleusercontent.com/d/1uv3IZDggXq6-g6ZCQ9jiNgD6imoWR6at",
+      "https://lh3.googleusercontent.com/d/1uv3IZDggXq6-g6ZCQ9jiNgD6imoWR6at"
+    ]
+  },
+  {
+    "id": "CE-013",
+    "category": "jerseys",
+    "esport": "other",
+    "year": 2019,
+    "featured": false,
+    "verified": true,
+    "tags": ["OpTic", "Gears of War", "gow", "Mental", "game worn", "signed"],
+    "title": "2019 OpTic Gaming MENTAL Signed Game Worn Jerseys (Black and Championship White)",
+    "steward": "mohawk marco",
+    "stewardLink": "https://x.com/Markmolina60",
+    "description": "Billy MENTAL Putnam was a Gears of War champion. He wore these jerseys while playing for OpTic Gaming. He was part of OpTic Gaming from 2016 - 2019." ,
+    "images": [
+      "https://lh3.googleusercontent.com/d/1fifQ2iyN3oEBUmX9pndBt_UMKKWfaIUh",
+      "https://lh3.googleusercontent.com/d/1YjpPB4KbxDuVn9Iwa9nL058-k6_Q_c0w",
+      "https://lh3.googleusercontent.com/d/1_8YMyfr7BgC77C1AljOW9vHnUTsTZk_T",
+      "https://lh3.googleusercontent.com/d/1667f19jMFoJlFlG-usxBj21mkpH3axTf"
+    ]
   }
 ]
