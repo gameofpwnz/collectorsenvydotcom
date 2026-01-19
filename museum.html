@@ -19,7 +19,6 @@
         }
 
         .display-case:hover { border-color: #3b82f6; transform: translateY(-8px); }
-        .curator-choice { border-color: #c5a059 !important; box-shadow: 0 0 40px rgba(197, 160, 89, 0.15); }
         .curator-badge { background: #c5a059; color: black; font-size: 7px; padding: 2px 8px; letter-spacing: 0.2em; font-weight: 900; }
         
         .certified-label { background: #3b82f6; color: white; font-size: 8px; padding: 2px 8px; letter-spacing: 0.1em; font-weight: 800; border-radius: 2px; }
@@ -28,8 +27,8 @@
         .era-btn.active, .hall-btn.active { color: #3b82f6; border-color: #3b82f6; }
         .filter-btn.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
         
+        /* Modals */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; overflow-y: auto; align-items: flex-start; justify-content: center; }
-        .related-card { background: #0a0a0a; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; }
         .coa-card { background: linear-gradient(145deg, #111, #080808); border: 1px solid #c5a059; position: relative; overflow: hidden; }
         .certified-stamp { position: absolute; top: 15px; right: -30px; background: #c5a059; color: black; font-size: 8px; font-weight: 900; padding: 4px 40px; transform: rotate(45deg); text-align: center; }
         
@@ -37,16 +36,8 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Back to Top Styling */
-        #backToTop {
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        #backToTop.visible {
-            opacity: 1;
-            visibility: visible;
-        }
+        #backToTop { opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        #backToTop.visible { opacity: 1; visibility: visible; }
 
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
         .scroll-indicator { animation: bounce 2s infinite; }
@@ -88,17 +79,16 @@
                 </div>
                 <div class="filter-container scrollbar-hide">
                     <div id="esportFilters" class="flex gap-6 flex-nowrap md:flex-wrap pb-2 md:pb-0">
-                        <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">All</button>
+                        <button onclick="filterByEsport('all')" class="filter-btn active text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">All Titles</button>
                         <button onclick="filterByEsport('cod')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">CoD</button>
                         <button onclick="filterByEsport('halo')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Halo</button>
-                        <button onclick="filterByEsport('cs')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">CS</button>
+                        <button onclick="filterByEsport('cs')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Counter Strike</button>
                         <button onclick="filterByEsport('valorant')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Valorant</button>
                         <button onclick="filterByEsport('lol')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">LoL</button>
-                        <button onclick="filterByEsport('rl')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">RL</button>
-                        <button onclick="filterByEsport('br')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">BR</button>
-                        <button onclick="filterByEsport('gow')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">GoW</button>
+                        <button onclick="filterByEsport('rl')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Rocket League</button>
+                        <button onclick="filterByEsport('br')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Battle Royale</button>
+                        <button onclick="filterByEsport('sports')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Sports/Racing</button>
                         <button onclick="filterByEsport('fighting')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Fighting</button>
-                        <button onclick="filterByEsport('sports')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Sports</button>
                         <button onclick="filterByEsport('creator')" class="filter-btn text-[10px] uppercase font-bold text-zinc-500 whitespace-nowrap">Other</button>
                     </div>
                 </div>
@@ -180,18 +170,33 @@
                     </div>
                 </div>
             </div>
-            <div id="relatedExhibits" class="mt-20 border-t border-white/5 pt-10 text-left"></div>
+            <div id="relatedExhibits" class="mt-20 border-t border-white/5 pt-10"></div>
         </div>
     </div>
 
-    <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-10 right-10 z-50 bg-blue-600/20 border border-blue-500/40 p-4 rounded-full hover:bg-blue-600 hover:text-white transition-all text-blue-400 shadow-2xl">
+    <div id="profileModal" class="modal text-left">
+        <button onclick="closeProfile()" class="fixed top-6 right-6 z-[150] text-white uppercase text-[10px] tracking-widest bg-black/50 px-4 py-2 border border-white/10">Return to Archive</button>
+        <div class="w-full max-w-6xl px-4 py-24" onclick="event.stopPropagation()">
+            <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/10 pb-10 mb-20 gap-8">
+                <div>
+                    <span class="text-blue-500 font-bold text-[10px] uppercase tracking-[0.4em] mb-4 block">Archive Steward Profile</span>
+                    <h2 id="profileName" class="serif text-5xl md:text-8xl text-white italic leading-none"></h2>
+                </div>
+                <div id="profileLinkBox"></div>
+            </div>
+            
+            <h3 class="serif text-2xl text-[#c5a059] italic mb-10 uppercase tracking-widest">Steward's Registry Entries</h3>
+            <div id="profileGrid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+        </div>
+    </div>
+
+    <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-10 right-10 z-50 bg-blue-600/20 border border-blue-500/40 p-4 rounded-full hover:bg-blue-600 hover:text-white transition-all text-blue-400">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
     </button>
 
     <script>
         let activeEsport = "all", activeEra = "all";
 
-        // Scroll listener for Back to Top
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('backToTop');
             if (window.scrollY > 800) { btn.classList.add('visible'); } 
@@ -220,11 +225,39 @@
         function scrollToHall(id) {
             const element = document.getElementById(id);
             const offset = 140; 
-            const bodyRect = document.body.getBoundingClientRect().top;
-            const elementRect = element.getBoundingClientRect().top;
-            const elementPosition = elementRect - bodyRect;
-            const offsetPosition = elementPosition - offset;
-            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            window.scrollTo({ top: element.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
+        }
+
+        // --- STEWARD PROFILE LOGIC ---
+        function openProfile(stewardName) {
+            const stewardData = window.museumData.find(i => i.steward === stewardName);
+            if (!stewardData) return;
+
+            document.getElementById('profileName').innerText = stewardName;
+            document.getElementById('profileLinkBox').innerHTML = stewardData.stewardLink ? 
+                `<a href="${stewardData.stewardLink}" target="_blank" class="px-8 py-4 border border-blue-500 text-blue-500 text-[10px] font-bold uppercase hover:bg-blue-500 hover:text-white transition tracking-widest">Connect on X / Twitter</a>` : '';
+
+            const items = window.museumData.filter(i => i.steward === stewardName);
+            document.getElementById('profileGrid').innerHTML = items.map(i => `
+                <div class="display-case p-4 flex flex-col cursor-pointer" onclick="openModal('${i.id}')">
+                    <div class="aspect-square bg-black mb-4 relative overflow-hidden">
+                        <img src="${i.images[0]}" class="w-full h-full object-contain opacity-80">
+                    </div>
+                    <div class="text-left">
+                        <span class="text-[8px] font-bold text-blue-600 uppercase tracking-widest">${i.id}</span>
+                        <h4 class="serif text-lg text-white italic truncate">${i.title}</h4>
+                    </div>
+                </div>
+            `).join('');
+
+            closeModal(); // Ensure item modal is closed
+            document.getElementById('profileModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProfile() {
+            document.getElementById('profileModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
         function handleSearch() {
@@ -263,7 +296,7 @@
             log.innerHTML = recent.map(i => `
                 <div class="flex justify-between items-center py-4 border-b border-white/5 text-[10px] uppercase tracking-widest group cursor-pointer hover:bg-white/5 px-4 transition" onclick="openModal('${i.id}')">
                     <div class="flex gap-4"><span class="text-zinc-600 font-mono italic shrink-0">${i.dateAdded || 'RECENT'}</span><span class="text-white font-bold truncate">${i.title}</span></div>
-                    <span class="text-blue-500 italic shrink-0">@${i.steward}</span>
+                    <span onclick="event.stopPropagation(); openProfile('${i.steward}')" class="text-blue-500 italic shrink-0 hover:underline">@${i.steward}</span>
                 </div>`).join('');
         }
 
@@ -276,16 +309,16 @@
             document.getElementById('featured-grid').innerHTML = featured.map(i => `
                 <div class="display-case p-6 md:p-8 curator-choice group cursor-pointer flex flex-col md:flex-row gap-8 items-center" onclick="openModal('${i.id}')">
                     <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img src="${i.images[0]}" class="w-full h-full object-contain opacity-90 transition-transform"></div>
-                    <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[10px] uppercase mb-4 block tracking-widest">${i.id}</span><h3 class="serif text-3xl md:text-4xl text-white italic mb-6 leading-tight uppercase tracking-tighter">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 leading-relaxed line-clamp-3">${i.description}</p></div>
+                    <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[10px] uppercase mb-4 block tracking-widest">${i.id}</span><h3 class="serif text-3xl md:text-4xl text-white italic mb-6 leading-tight uppercase tracking-tighter">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 line-clamp-3 leading-relaxed">${i.description}</p></div>
                 </div>`).join('');
 
             ['jerseys', 'hardware', 'signatures'].forEach(cat => {
                 const grid = document.getElementById(`${cat}-grid`);
                 const items = data.filter(i => i.category === cat);
                 grid.innerHTML = items.map(i => `
-                    <div class="display-case p-6 flex flex-col cursor-pointer ${i.featured ? 'curator-choice' : ''}" onclick="openModal('${i.id}')">
-                        <div class="aspect-[4/5] bg-black mb-6 relative shadow-inner overflow-hidden"><img src="${i.images[0]}" loading="lazy" class="w-full h-full object-contain opacity-80 group-hover:scale-105 transition-transform duration-700">${i.featured ? '<div class="absolute top-0 left-0 curator-badge uppercase">CURATOR\'S CHOICE</div>' : ''}</div>
-                        <div class="text-left"><div class="flex justify-between mb-2"><span class="text-[9px] font-bold ${i.featured ? 'text-[#c5a059]' : 'text-blue-600'} uppercase tracking-widest">${i.id}</span><span class="text-[8px] text-zinc-700 font-bold font-mono">${i.year}</span></div><h4 class="serif text-xl text-white italic mb-4 uppercase tracking-tighter truncate">${i.title}</h4></div>
+                    <div class="display-case p-6 flex flex-col cursor-pointer" onclick="openModal('${i.id}')">
+                        <div class="aspect-[4/5] bg-black mb-6 relative shadow-inner overflow-hidden"><img src="${i.images[0]}" loading="lazy" class="w-full h-full object-contain opacity-80 group-hover:scale-105 transition-transform duration-700"></div>
+                        <div class="text-left"><div class="flex justify-between mb-2"><span class="text-[9px] font-bold text-[#3b82f6] uppercase tracking-widest">${i.id}</span><span class="text-[8px] text-zinc-700 font-bold font-mono">${i.year}</span></div><h4 class="serif text-xl text-white italic mb-4 uppercase tracking-tighter truncate">${i.title}</h4></div>
                     </div>`).join('') + '<div class="display-case p-8 flex flex-col items-center justify-center border-dashed border-zinc-800 min-h-[300px] text-center"><h4 class="serif text-xl text-zinc-600 italic">Space Reserved</h4><a href="https://forms.gle/hrbaadeGTpLCaeYj7" target="_blank" class="text-[9px] text-blue-500 uppercase font-bold border-b border-blue-500 mt-4 tracking-widest">Submit Artifact</a></div>';
             });
         }
@@ -293,8 +326,7 @@
         function renderPatrons(data) {
             const stewards = [...new Set(data.map(i => i.steward))];
             document.getElementById('donor-wall').innerHTML = stewards.map(s => {
-                const info = data.find(i => i.steward === s);
-                return `<div class="group"><a href="${info.stewardLink || '#'}" target="_blank" class="block"><span class="text-white group-hover:text-blue-600 text-[11px] md:text-base font-bold transition uppercase">${s}</span><span class="block text-[7px] text-zinc-600 uppercase font-black italic tracking-widest mt-1">Verified Steward</span></a></div>`;
+                return `<div class="group"><button onclick="openProfile('${s}')" class="block text-left"><span class="text-white group-hover:text-blue-600 text-[11px] md:text-base font-bold transition uppercase">${s}</span><span class="block text-[7px] text-zinc-600 uppercase font-black italic tracking-widest mt-1">Verified Steward</span></button></div>`;
             }).join('');
         }
 
@@ -305,12 +337,9 @@
             document.getElementById('modalDesc').innerText = i.description;
             document.getElementById('modalRegistryId').innerText = i.id;
             
+            // Link Steward to Profile inside the Item Modal
             const stewardContainer = document.getElementById('modalStewardContainer');
-            if (i.stewardLink) {
-                stewardContainer.innerHTML = `<a href="${i.stewardLink}" target="_blank" class="hover:text-blue-400 transition underline underline-offset-4 decoration-zinc-800">${i.steward}</a>`;
-            } else {
-                stewardContainer.innerText = i.steward;
-            }
+            stewardContainer.innerHTML = `<button onclick="openProfile('${i.steward}')" class="hover:text-blue-400 transition underline underline-offset-4 decoration-zinc-800">${i.steward}</button>`;
 
             const accDiv = document.getElementById('modalAcc');
             accDiv.innerHTML = ''; 
@@ -337,5 +366,3 @@
     </script>
 </body>
 </html>
-
-
