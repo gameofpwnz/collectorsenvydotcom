@@ -219,5 +219,57 @@
       "https://lh3.googleusercontent.com/d/1_8YMyfr7BgC77C1AljOW9vHnUTsTZk_T",
       "https://lh3.googleusercontent.com/d/1667f19jMFoJlFlG-usxBj21mkpH3axTf"
     ]
+  },
+  {
+    "id": "CE-014",
+    "category": "signatures",
+    "esport": "cod",
+    "year": 2023,
+    "featured": false,
+    "verified": true,
+    "tags": ["Atlanta", "Faze", "cod", "abezy", "upper deck", "signed"],
+    "title": "2023 TYLER 'ABEZY' PHARRIS Signed Game Dated Moments Major IV Upper Deck Card",
+    "steward": "GameOfPWNZ",
+    "stewardLink": "https://x.com/pwnzie_09",
+    "description": "ABEZY is a Call of Duty professional that played for Atlanta FaZe. This card depicts a moment during Major IV of the 2023 season. It is authenticated by The Upper Deck Company." ,
+    "images": [
+      "https://lh3.googleusercontent.com/d/1WFh9IOiVn7isf1_oYV0tXfaLXaTawI1V",
+      "https://lh3.googleusercontent.com/d/1sBeaG7EUQQnf_7yfav7D6VE0o_UXpAij"
+    ]
+  },
+  {
+    "id": "CE-015",
+    "category": "signatures",
+    "esport": "cod",
+    "year": 2022,
+    "featured": false,
+    "verified": true,
+    "tags": ["OpTic", "HECZ", "cod", "baseball", "og", "signed"],
+    "title": "OpTic Gaming Hector 'HECZ' Rodriguez Signed Baseball Card",
+    "steward": "GameOfPWNZ",
+    "stewardLink": "https://x.com/pwnzie_09",
+    "description": "HECZ is the owner of OpTic Gaming. He is one of the most active owners in esports and leader of the GREENWALL." ,
+    "images": [
+      "https://lh3.googleusercontent.com/d/1-8RfxgOx5RAdJzEgijoHHC3b0ezYjTgC",
+      "https://lh3.googleusercontent.com/d/1qYEqZ6m--Ux8y1ihbhTi_R4vM20hlxWX"
+    ]
+  },
+  {
+    "id": "CE-016",
+    "category": "hardware",
+    "esport": "cod",
+    "year": 2024,
+    "featured": false,
+    "verified": true,
+    "tags": ["OpTic", "suite", "cod", "badge", "og", "champs"],
+    "title": "2024 Call of Duty League Championship - Hosted By OpTic Gaming Suite Badge and Ticket",
+    "steward": "GameOfPWNZ",
+    "stewardLink": "https://x.com/pwnzie_09",
+    "description": "For the first time ever, the Call of Duty League Championship was hosted in Allen, Texas by OpTic Gaming. The badge was for the Suite Level of the Credit Union of Texas Event Center. During the Friday of the event, the digital ticketing system was down during the early morning resulting in the issuance of the physical ticket that is included." ,
+    "images": [
+      "https://lh3.googleusercontent.com/d/1KT-RYLrgbftS-tJHUh25bsRhEZ7mlMwm",
+      "https://lh3.googleusercontent.com/d/1evElbAiXItDQP6Yab8-rJqwoZ47NWc_P",
+      "https://lh3.googleusercontent.com/d/17Hie_7lx3vaotC9cSttGGGy6KySb2ibD"
+    ]
   }
 ]
