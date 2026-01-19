@@ -19,7 +19,7 @@
         }
         .display-case:hover { border-color: #3b82f6; transform: translateY(-8px); }
 
-        /* V25/26 DIFFERENTIATION: Verified (Blue) vs Curator Choice (Gold) */
+        /* Prestige Effects */
         .verified-record { border-color: rgba(59, 130, 246, 0.3) !important; box-shadow: 0 0 20px rgba(59, 130, 246, 0.05); }
         .verified-record:hover { border-color: #3b82f6 !important; box-shadow: 0 0 30px rgba(59, 130, 246, 0.15); }
         .curator-choice { border-color: #c5a059 !important; box-shadow: 0 0 40px rgba(197, 160, 89, 0.15); }
@@ -31,6 +31,7 @@
         .era-btn.active, .hall-btn.active { color: #3b82f6; border-color: #3b82f6; }
         .filter-btn.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
         
+        /* Modals */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; overflow-y: auto; align-items: flex-start; justify-content: center; }
         #profileModal { z-index: 200; background: rgba(0,0,0,0.99); }
         
@@ -183,15 +184,21 @@
                     </div>
                 </div>
             </div>
-            <div id="relatedExhibits" class="mt-20 border-t border-white/5 pt-10"></div>
         </div>
     </div>
 
     <div id="profileModal" class="modal">
         <button onclick="closeProfile()" class="fixed top-6 right-6 z-[250] text-white uppercase text-[10px] tracking-widest bg-black/50 px-4 py-2 border border-white/10">Return to Archive</button>
         <div class="w-full max-w-6xl px-4 py-24 text-left" onclick="event.stopPropagation()">
-            <h2 id="profileName" class="serif text-5xl md:text-8xl text-white italic mb-10 leading-tight"></h2>
-            <div id="profileLinkBox" class="mb-20"></div>
+            <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/10 pb-10 mb-20 gap-8">
+                <div>
+                    <span class="text-blue-500 font-bold text-[10px] uppercase tracking-[0.4em] mb-4 block">Archive Steward Profile</span>
+                    <h2 id="profileName" class="serif text-5xl md:text-8xl text-white italic leading-none"></h2>
+                </div>
+                <div id="profileLinkBox"></div>
+            </div>
+            
+            <h3 class="serif text-2xl text-[#c5a059] italic mb-10 uppercase tracking-widest">Steward's Registry Entries</h3>
             <div id="profileGrid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
         </div>
     </div>
@@ -212,7 +219,6 @@
                 const response = await fetch('/assets/museum-data.json?v=' + new Date().getTime());
                 window.museumData = await response.json();
                 
-                // Live Stats Logic
                 const stewards = [...new Set(window.museumData.map(i => i.steward))];
                 const verifiedItems = window.museumData.filter(i => i.verified).length;
                 const years = window.museumData.map(i => i.year).filter(y => y > 0);
@@ -244,10 +250,10 @@
             document.getElementById('profileLinkBox').innerHTML = data.stewardLink ? `<a href="${data.stewardLink}" target="_blank" class="px-8 py-4 border border-blue-500 text-blue-500 text-[10px] font-bold uppercase tracking-widest hover:bg-blue-500 hover:text-white transition">Connect on X</a>` : '';
             const items = window.museumData.filter(i => i.steward === name);
             document.getElementById('profileGrid').innerHTML = items.map(i => `
-                <div class="display-case p-4 cursor-pointer" onclick="openModal('${i.id}')">
+                <div class="display-case p-4 cursor-pointer hover:border-blue-500" onclick="openModal('${i.id}')">
                     <img src="${i.images[0]}" class="aspect-square w-full object-contain mb-4 opacity-80">
-                    <span class="text-[8px] font-bold text-blue-600 uppercase">${i.id}</span>
-                    <h4 class="serif text-lg text-white italic truncate uppercase">${i.title}</h4>
+                    <span class="text-[8px] font-bold text-blue-600 uppercase tracking-widest">${i.id}</span>
+                    <h4 class="serif text-lg text-white italic truncate uppercase leading-tight">${i.title}</h4>
                 </div>`).join('');
             document.getElementById('profileModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -275,21 +281,21 @@
         function filterByEsport(esport) {
             activeEsport = esport;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'text-blue-500'));
-            if(event) event.target.classList.add('active', 'text-blue-500');
+            event.target.classList.add('active', 'text-blue-500');
             handleSearch();
         }
 
         function filterByEra(era) {
             activeEra = era;
             document.querySelectorAll('.era-btn').forEach(btn => btn.classList.remove('active', 'text-blue-500'));
-            if(event) event.target.classList.add('active', 'text-blue-500');
+            event.target.classList.add('active', 'text-blue-500');
             handleSearch();
         }
 
         function renderLog(data) {
             const log = document.getElementById('accession-log');
             if(!log) return;
-            log.innerHTML = data.slice(-5).reverse().map(i => `<div class="flex justify-between items-center py-4 border-b border-white/5 text-[10px] uppercase tracking-widest px-4 hover:bg-white/5 cursor-pointer" onclick="openModal('${i.id}')"><div class="flex gap-4"><span class="text-zinc-600 italic shrink-0">${i.dateAdded || 'RECENT'}</span><span class="text-white font-bold truncate">${i.title}</span></div><span onclick="event.stopPropagation(); openProfile('${i.steward}')" class="text-blue-500 shrink-0">@${i.steward}</span></div>`).join('');
+            log.innerHTML = data.slice(-5).reverse().map(i => `<div class="flex justify-between items-center py-4 border-b border-white/5 text-[10px] uppercase tracking-widest px-4 hover:bg-white/5 cursor-pointer" onclick="openModal('${i.id}')"><div class="flex gap-4"><span class="text-zinc-600 italic shrink-0">${i.dateAdded || 'RECENT'}</span><span class="text-white font-bold truncate">${i.title}</span></div><span onclick="event.stopPropagation(); openProfile('${i.steward}')" class="text-blue-500 shrink-0 hover:underline">@${i.steward}</span></div>`).join('');
         }
 
         function renderItems(data) {
@@ -299,7 +305,7 @@
             const featured = data.filter(i => i.featured);
             document.getElementById('curator-spotlight').style.display = featured.length ? 'block' : 'none';
             document.getElementById('featured-grid').innerHTML = featured.map(i => `
-                <div class="display-case p-6 md:p-8 ${i.verified ? 'verified-record' : ''} group cursor-pointer flex flex-col md:flex-row gap-8 items-center" onclick="openModal('${i.id}')">
+                <div class="display-case p-6 md:p-8 curator-choice group cursor-pointer flex flex-col md:flex-row gap-8 items-center" onclick="openModal('${i.id}')">
                     <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img src="${i.images[0]}" class="w-full h-full object-contain opacity-90 transition-transform"><div class="absolute top-0 left-0 curator-badge">ESSENTIAL RECORD</div></div>
                     <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[10px] uppercase mb-4 block tracking-widest">${i.id}</span><h3 class="serif text-3xl md:text-4xl text-white italic mb-6 leading-tight uppercase tracking-tighter">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 line-clamp-3 leading-relaxed">${i.description}</p></div>
                 </div>`).join('');
@@ -325,7 +331,6 @@
             const i = window.museumData.find(a => a.id === id);
             if (!i) return;
 
-            // Bridge logic: If we are clicking an item from a profile, close the profile first
             if (document.getElementById('profileModal').style.display === 'flex') {
                 document.getElementById('profileModal').style.display = 'none';
             }
