@@ -1,0 +1,34 @@
+name: Build and Deploy Tailwind
+on:
+  push:
+    branches:
+      - main # Or 'master' depending on your branch name
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Tailwind
+        run: npm install -D tailwindcss
+
+      - name: Build Production CSS
+        run: npx tailwindcss -o ./assets/style.css --minify
+
+      - name: Commit and Push CSS
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add ./assets/style.css
+          git commit -m "Auto-generated production CSS" || exit 0
+          git push
