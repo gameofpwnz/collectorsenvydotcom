@@ -2,7 +2,7 @@ name: Build and Deploy Tailwind
 on:
   push:
     branches:
-      - main # Ensure this matches your branch name (main or master)
+      - main # Change to master if that's your branch name
 
 permissions:
   contents: write
@@ -14,18 +14,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install Tailwind
-        # We use --save-dev to ensure it's recorded correctly
-        run: npm install tailwindcss postcss autoprefixer --save-dev
+      - name: Download Tailwind Standalone CLI
+        run: |
+          curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64
+          chmod +x tailwindcss-linux-x64
+          mv tailwindcss-linux-x64 tailwindcss
 
       - name: Build Production CSS
-        # We call the binary directly from node_modules instead of using npx
-        run: ./node_modules/.bin/tailwindcss -o ./assets/style.css --minify
+        # This uses the standalone file we just downloaded
+        run: ./tailwindcss -o ./assets/style.css --minify
 
       - name: Commit and Push CSS
         run: |
