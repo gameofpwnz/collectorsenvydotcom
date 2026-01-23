@@ -316,10 +316,45 @@
     "title": "2019 Chicago Huntsmen Arcitys and Sender Jerseys",
     "steward": "Disarray",
     "stewardLink": "https://x.com/TacDisarray",
-    "description": " In 2019, the Call of Duty League created franchising. Formerly OpTic Gaming, HECZ created the Chicago Huntsmen. Arcitys, a 2x Call of Duty champion, played for the Huntsmen. Sender, a former player, coached the Huntsmen." ,
+    "description": "In 2019, the Call of Duty League created franchising. Formerly OpTic Gaming, HECZ created the Chicago Huntsmen. Arcitys, a 2x Call of Duty champion, played for the Huntsmen. Sender, a former player, coached the Huntsmen." ,
     "images": [
       "https://lh3.googleusercontent.com/d/1-mzzHLw98xpvkxd3cvaVbKdMWllu3AXO",
       "https://lh3.googleusercontent.com/d/1DHb3a33ssEacB0z9S9nSWCL_LD2FW641"
+    ]
+  },
+  {
+    "id": "CE-020",
+    "category": "jerseys",
+    "esport": "cod",
+    "year": 2011,
+    "featured": false,
+    "verified": true,
+    "tags": ["cod", "mw3", "FeaR", "ASSASS1N", "game worn", "call of duty"],
+    "title": "2011 Modern Warfare 3 Call of Duty: XP FeaR ASSASS1N Jersey",
+    "steward": "charly",
+    "stewardLink": "https://x.com/CharlyCJH",
+    "description": "This jersey was owned by Call of Duty legend Robert “ASSASS1N” Walsh and was worn during the 2011 CoD XP tournament. The event was hosted at the Playa Vista Hanger in Los Angeles, California from September 2nd through September 3rd and boasted an impressive million dollar prize pool. Each player was given a CoD XP jersey (with their corresponding team name and gamertag on the back) to be used only during this tournament making this a 1 of 1 ASSASS1N game used jersey." ,
+    "images": [
+      "https://lh3.googleusercontent.com/d/1TvDx6pt34F6spaqqmw78aFlcpyVhKmdl",
+      "https://lh3.googleusercontent.com/d/1jF9Ffg3jROSZaYCreUuJpgOo4VKv0zma"
+    ]
+  },
+  {
+    "id": "CE-021",
+    "category": "jerseys",
+    "esport": "cod",
+    "year": 2016,
+    "featured": false,
+    "verified": true,
+    "tags": ["cloud9", "c9", "player", "signed", "game worn", "call of duty", "black ops 3"],
+    "title": "2016 Cloud9 Champs Ricky Player Jersey (Signed)",
+    "steward": "TheOnlyAmplifyy",
+    "stewardLink": "https://x.com/TheOnlyAmplifyy",
+    "description": "This is the infamous jersey that Ricky was wearing when he alongside Aches and co eliminated OpTic Gaming at Black Ops 3 champs." ,
+    "images": [
+      "https://lh3.googleusercontent.com/d/1w8FJTldahAHCatWZ8P7Veapt4v_8pv8Z",
+      "https://lh3.googleusercontent.com/d/1nuGfXKWi2oYHRP7tFQ1BQZDl-wMEkJMG",
+      "https://lh3.googleusercontent.com/d/1G1Hi61f0p7U_uLTur0yXmjgofaSCmJZo"
     ]
   }
 ]
