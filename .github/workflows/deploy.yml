@@ -2,7 +2,7 @@ name: Build and Deploy Tailwind
 on:
   push:
     branches:
-      - main # Change this to master if that is your branch name
+      - main # Ensure this matches your branch name (main or master)
 
 permissions:
   contents: write
@@ -19,14 +19,13 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Tailwind and Dependencies
-        # We explicitly install tailwindcss and autoprefixer so npx knows what to execute
-        run: npm install tailwindcss postcss autoprefixer
+      - name: Install Tailwind
+        # We use --save-dev to ensure it's recorded correctly
+        run: npm install tailwindcss postcss autoprefixer --save-dev
 
       - name: Build Production CSS
-        # If you renamed your file to input.css, use: -i ./assets/input.css
-        # Otherwise, if you are just using Tailwind classes in HTML, keep it as below:
-        run: npx tailwindcss -o ./assets/style.css --minify
+        # We call the binary directly from node_modules instead of using npx
+        run: ./node_modules/.bin/tailwindcss -o ./assets/style.css --minify
 
       - name: Commit and Push CSS
         run: |
