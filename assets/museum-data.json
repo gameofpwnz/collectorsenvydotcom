@@ -350,11 +350,96 @@
     "title": "2016 Cloud9 Champs Ricky Player Jersey (Signed)",
     "steward": "TheOnlyAmplifyy",
     "stewardLink": "https://x.com/TheOnlyAmplifyy",
-    "description": "This is the infamous jersey that Ricky was wearing when he alongside Aches and co eliminated OpTic Gaming at Black Ops 3 champs." ,
+    "description": "This is the infamous jersey that Ricky was wearing when he alongside Aches and co eliminated OpTic Gaming at Black Ops 3 champs.",
     "images": [
       "https://lh3.googleusercontent.com/d/1w8FJTldahAHCatWZ8P7Veapt4v_8pv8Z",
       "https://lh3.googleusercontent.com/d/1nuGfXKWi2oYHRP7tFQ1BQZDl-wMEkJMG",
       "https://lh3.googleusercontent.com/d/1G1Hi61f0p7U_uLTur0yXmjgofaSCmJZo"
+    ]
+  },
+  {
+    "id": "CE-022",
+    "category": "jerseys",
+    "esport": "gow",
+    "year": 2016,
+    "featured": false,
+    "verified": true,
+    "tags": ["envy", "envyus", "player", "praized", "game worn", "mvp", "gears of war"],
+    "title": "2016 EnvyUs Praized Player Jersey",
+    "steward": "mohawk marco",
+    "stewardLink": "https://x.com/Markmolina60",
+    "description": "Arodys Dipre was a professional Gears of War player - 14x champion and MVP. From 2015-2017, Praized played for Team EnvyUs.",
+    "images": [
+      "https://lh3.googleusercontent.com/d/157H1e6fxuHqnfa9DIsb8laEj6lcMBHsy",
+      "https://lh3.googleusercontent.com/d/1j8EYTR_2Nh1ZiYZ7K0P7PD-w7bQQn2D5"
+    ]
+  },
+  {
+    "id": "CE-023",
+    "category": "jerseys",
+    "esport": "halo",
+    "year": 2025,
+    "featured": false,
+    "verified": true,
+    "tags": ["complexity", "halo", "player", "ashes", "game worn", "coach", "gears of war"],
+    "title": "2025 Complexity Gaming Ashes Coach Jersey",
+    "steward": "mohawk marco",
+    "stewardLink": "https://x.com/Markmolina60",
+    "description": "Nick 'Ashes' Ridgeway is one of the most winningest coaches in Halo. Coming from a professional career in Gears of War, he coached the 2025 Complexity Gaming roster.",
+    "images": [
+      "https://lh3.googleusercontent.com/d/1VcoNdXx3LNUUiIGUCA1LZD3kqoWVCifq",
+      "https://lh3.googleusercontent.com/d/1UdIxuQQVpZCrW68clx-ptejvZ_C732Rn"
+    ]
+  },
+  {
+    "id": "CE-024",
+    "category": "jerseys",
+    "esport": "halo",
+    "year": 2018,
+    "featured": false,
+    "verified": true,
+    "tags": ["OpTic", "halo", "player", "lethul", "game worn", "goat", "signed"],
+    "title": "2018 OpTic Gaming Lethul Player Jersey (Signed)",
+    "steward": "mohawk marco",
+    "stewardLink": "https://x.com/Markmolina60",
+    "description": "Lethul is known as one of the greatest Halo players in history. He played for OpTic Gaming during 2016-2018 adding to his championships (currently 4x Halo champion with 18 tournament wins).",
+    "images": [
+      "https://lh3.googleusercontent.com/d/17ZwUn7X-K_6hwRUfhMXkujTA96ZI-BEc",
+      "https://lh3.googleusercontent.com/d/1gmQBxuIF4iUdMNqo9QODFeyP4ItHUrAG"
+    ]
+  },
+  {
+    "id": "CE-025",
+    "category": "jerseys",
+    "esport": "gow",
+    "year": 2018,
+    "featured": false,
+    "verified": true,
+    "tags": ["OpTic", "gow", "player", "sumuns", "game worn"],
+    "title": "2018 OpTic Gaming SuMuns Player Jersey",
+    "steward": "mohawk marco",
+    "stewardLink": "https://x.com/Markmolina60",
+    "description": " SuMuns played for OpTic Gaming from 2016-2019 on the professional Gears of War team. He is a 16x GoW champion.",
+    "images": [
+      "https://lh3.googleusercontent.com/d/1aKau2qyhhgQE0wOM48cem0jNmCqxcGVQ",
+      "https://lh3.googleusercontent.com/d/1jR044mqB9yTbixo2tdk8oZmsgGLMEVl-"
+    ]
+  },
+  {
+    "id": "CE-026",
+    "category": "jerseys",
+    "esport": "gow",
+    "year": 2018,
+    "featured": false,
+    "verified": true,
+    "tags": ["OpTic", "gow", "player", "sumuns", "game worn"],
+    "title": "2018 OpTic Gaming Solurs Player Jacket",
+    "steward": "mohawk marco",
+    "stewardLink": "https://x.com/Markmolina60",
+    "description": " Solurs played Gears of War for OpTic Gaming from 2018 to 2019. He is a 4x Gears of War champion.",
+    "images": [
+      "https://lh3.googleusercontent.com/d/14RK_Mb7laEeJ_ppfmSBrSnS1q2DOsqAL",
+      "https://lh3.googleusercontent.com/d/1hIT-x4u-MTUMp5uNODN84Ui6ljtU_Xbi"
     ]
   }
 ]
