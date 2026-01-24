@@ -1255,4 +1255,56 @@ body.is-instant::after {
 	.icons-component.instance-2 {
 		gap: 1.125rem;
 	}
+
+	/* --- SHARED STICKY NAV STYLES --- */
+.global-nav {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 18px 0;
+    font-family: 'Inter', sans-serif;
+    /* This ensures it has height even before the content loads */
+    min-height: 20px; 
+}
+
+.nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: #fff;
+}
 }
