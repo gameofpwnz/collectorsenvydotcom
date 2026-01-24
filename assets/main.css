@@ -1255,7 +1255,7 @@ body.is-instant::after {
 	.icons-component.instance-2 {
 		gap: 1.125rem;
 	}
-
+}
 	/* --- SHARED STICKY NAV STYLES --- */
 .global-nav {
     position: sticky;
@@ -1307,4 +1307,4 @@ body.is-instant::after {
 .nav-links a:hover, .nav-links a.active {
     color: #fff;
 }
-}
+
