@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Archive | Collectors Envy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #0d0d0d;
+            --card-border: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #666666;
+            --accent-white: #ffffff;
+            --nav-border: #222222;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- STICKY NAV BAR --- */
+        .global-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--nav-border);
+            padding: 20px 0;
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #fff;
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .header {
+            margin-bottom: 80px;
+            text-align: left;
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin: 0;
+        }
+
+        #archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .auction-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            transition: border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auction-card:hover { border-color: #444; }
+
+        .image-viewport {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #050505;
+        }
+
+        .main-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-dots {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+        }
+
+        .card-info { padding: 30px; }
+
+        .price-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .price { font-size: 1.8rem; font-weight: 800; }
+        .dns-label { color: var(--text-secondary); text-decoration: line-through; font-size: 1.4rem; }
+
+        .title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 0 20px 0;
+            min-height: 2.4em;
+            line-height: 1.2;
+        }
+
+        .meta {
+            border-top: 1px solid var(--card-border);
+            padding-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .meta b { color: #fff; display: block; margin-bottom: 3px; }
+
+        .btn-view {
+            display: block;
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--accent-white);
+            color: #000;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .card-dns { opacity: 0.6; }
+        #loading { padding: 100px; text-align: center; font-weight: 900; color: #333; }
+    </style>
+</head>
+<body>
+
+    <nav class="global-nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">Collectors Envy</a>
+            <div class="nav-links">
+                <a href="/">Home/a>
+                <a href="/museum">Museum</a>
+                <a href="#">Request An Auction</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Auction History</h1>
+        </div>
+
+        <div id="loading">LOADING VAULT...</div>
+        <div id="archive-grid"></div>
+    </div>
+
+    <script>
+        const SHEET_ID = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
+        const TAB_NAME = 'Auctions'; 
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${TAB_NAME}`;
+
+        async function initArchive() {
+            try {
+                const response = await fetch(url);
+                const data = await response.text();
+                const rows = data.split('\n').slice(1);
+                const grid = document.getElementById('archive-grid');
+                document.getElementById('loading').style.display = 'none';
+
+                rows.forEach(row => {
+                    const columns = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+                    if (!columns) return;
+                    const clean = (str) => str ? str.replace(/^"|"$/g, '').trim() : '';
+
+                    const item = {
+                        title: clean(columns[0]),
+                        img1: clean(columns[1]),
+                        img2: clean(columns[2]),
+                        img3: clean(columns[3]),
+                        winner: clean(columns[4]),
+                        bid: clean(columns[5]),
+                        date: clean(columns[6]),
+                        link: clean(columns[7])
+                    };
+
+                    const isDNS = item.winner.toUpperCase() === 'DNS';
+                    const images = [item.img1, item.img2, item.img3].filter(url => url && url.startsWith('http'));
+
+                    const card = document.createElement('div');
+                    card.className = `auction-card ${isDNS ? 'card-dns' : ''}`;
+                    
+                    let dotsHtml = '';
+                    if (images.length > 1) {
+                        dotsHtml = `<div class="gallery-dots">` + 
+                            images.map(() => `<div class="dot"></div>`).join('') + 
+                            `</div>`;
+                    }
+
+                    card.innerHTML = `
+                        <div class="image-viewport">
+                            <img src="${images[0]}" class="main-img">
+                            ${dotsHtml}
+                        </div>
+                        <div class="card-info">
+                            <div class="price-line">
+                                <div class="${isDNS ? 'dns-label' : 'price'}">${isDNS ? 'PASSED' : item.bid}</div>
+                            </div>
+                            <h3 class="title">${item.title}</h3>
+                            <div class="meta">
+                                <div><b>Winner</b> ${isDNS ? 'N/A' : item.winner}</div>
+                                <div><b>Date</b> ${item.date}</div>
+                            </div>
+                            <a href="${item.link}" target="_blank" class="btn-view">View Thread</a>
+                        </div>
+                    `;
+
+                    if (images.length > 1) {
+                        const imgElement = card.querySelector('.main-img');
+                        let interval;
+                        card.addEventListener('mouseenter', () => {
+                            let i = 0;
+                            interval = setInterval(() => {
+                                i = (i + 1) % images.length;
+                                imgElement.src = images[i];
+                            }, 1000);
+                        });
+                        card.addEventListener('mouseleave', () => {
+                            clearInterval(interval);
+                            imgElement.src = images[0];
+                        });
+                    }
+
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                document.getElementById('loading').innerText = "ERROR LOADING ARCHIVE";
+            }
+        }
+        initArchive();
+    </script>
+</body>
+</html>
