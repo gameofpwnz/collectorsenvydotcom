@@ -436,10 +436,26 @@
     "title": "2018 OpTic Gaming Solurs Player Jacket",
     "steward": "mohawk marco",
     "stewardLink": "https://x.com/Markmolina60",
-    "description": " Solurs played Gears of War for OpTic Gaming from 2018 to 2019. He is a 4x Gears of War champion.",
+    "description": "Solurs played Gears of War for OpTic Gaming from 2018 to 2019. He is a 4x Gears of War champion.",
     "images": [
       "https://lh3.googleusercontent.com/d/14RK_Mb7laEeJ_ppfmSBrSnS1q2DOsqAL",
       "https://lh3.googleusercontent.com/d/1hIT-x4u-MTUMp5uNODN84Ui6ljtU_Xbi"
+    ]
+  },
+  {
+    "id": "CE-027",
+    "category": "jerseys",
+    "esport": "cod",
+    "year": 2020,
+    "featured": false,
+    "verified": true,
+    "tags": ["Faze", "Atlanta", "player", "abezy", "game worn", "signed"],
+    "title": "2020 Atlanta FaZe AbeZy Player Jersey (Signed)",
+    "steward": "GameOfPWNZ",
+    "stewardLink": "https://x.com/pwnzie_09",
+    "description": "AbeZy is a 2x Call of Duty World Champion, winning with eUnited and Atlanta FaZe. Previously half of one of the greatest Call of Duty duos - The Tiny Terrors. This jersey is from the Call of Duty: Modern Warfare 2019 season. #2ez4abezy.",
+    "images": [
+      "https://lh3.googleusercontent.com/d/1fEiqMx0-VM1lDVEtUu2EnfFofHcFITuD"
     ]
   }
 ]
