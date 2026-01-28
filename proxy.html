@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxies | Collectors Envy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #0d0d0d;
+            --card-border: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #666666;
+            --accent-white: #ffffff;
+            --nav-border: #222222;
+            --accent-green: #00ff00;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- STICKY NAV BAR --- */
+        .global-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--nav-border);
+            padding: 20px 0;
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #fff;
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .header {
+            margin-bottom: 80px;
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin: 0 0 20px 0;
+        }
+
+        .header-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            line-height: 1.6;
+        }
+
+        /* --- SECTIONS --- */
+        .section {
+            margin-bottom: 100px;
+        }
+
+        .section-header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin: 0 0 10px 0;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* --- RULES SECTION --- */
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+        }
+
+        .rules-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 40px;
+        }
+
+        .rules-card h3 {
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            margin: 0 0 30px 0;
+            color: var(--accent-green);
+        }
+
+        .rules-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .rules-card li {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--card-border);
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .rules-card li:last-child {
+            border-bottom: none;
+        }
+
+        .rules-card li::before {
+            content: "→";
+            color: var(--accent-green);
+            font-weight: 900;
+            margin-right: 15px;
+        }
+
+        /* --- EVENTS SECTION --- */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .event-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            transition: border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            border-color: #444;
+        }
+
+        .event-header {
+            padding: 30px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .event-header h3 {
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            margin: 0 0 10px 0;
+        }
+
+        .event-date {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .event-body {
+            padding: 30px;
+            flex-grow: 1;
+        }
+
+        .event-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .btn-signup {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--accent-white);
+            color: #000;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-signup:hover {
+            background: #e0e0e0;
+        }
+
+        /* --- VERIFIED PROXIES SECTION --- */
+        .proxies-intro {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .proxies-intro p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin: 0 0 25px 0;
+        }
+
+        .proxies-intro p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .become-proxy-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 15px 30px;
+            background: var(--accent-green);
+            color: #000;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: background 0.3s ease;
+        }
+
+        .become-proxy-btn:hover {
+            background: #00dd00;
+        }
+
+        .proxies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .proxy-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 30px;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .proxy-card:hover {
+            border-color: var(--accent-green);
+        }
+
+        .proxy-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #000;
+        }
+
+        .proxy-name {
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 0 0 10px 0;
+        }
+
+        .proxy-location {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .proxy-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            font-size: 0.65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .events-grid,
+            .proxies-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="global-nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">Collectors Envy</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Proxy Services</h1>
+            <p class="header-description">
+                Can't make it to an event? Our proxy service connects you with trusted community members who can purchase items on your behalf and ship them directly to you.
+            </p>
+        </div>
+
+        <!-- RULES SECTION -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Rules & Guidelines</h2>
+                <p class="section-subtitle">Please read carefully before participating</p>
+            </div>
+
+            <div class="rules-grid">
+                <div class="rules-card">
+                    <h3>For Proxies</h3>
+                    <ul>
+                        <li>You must be a verified proxy via our Form and Approval Process</li>
+                        <li>You must attend the event in person and have reliable transportation</li>
+                        <li>Respond to all proxy requests within 24 hours of receiving them</li>
+                        <li>Provide clear photos of items and receipts after purchase</li>
+                        <li>Ship items within 5 business days using tracking</li>
+                        <li>Only charge exact costs (item + tax + shipping + fee)</li>
+                        <li>Refund any unused funds if unable to complete the transaction</li>
+                        <li>Communicate any issues or complications immediately</li>
+                        <li>Maintain professionalism and respect at all times</li>
+                    </ul>
+                </div>
+
+                <div class="rules-card">
+                    <h3>For Buyers</h3>
+                    <ul>
+                        <li>Submit requests at least 48 hours before event via our Form for the event</li>
+                        <li>Provide clear instructions and product details</li>
+                        <li>Send 50% of the total cost upfront</li>
+                        <li>Understand that items may sell out and cannot be guaranteed</li>
+                        <li>Cover all costs (item, tax, shipping, tariffs, and fees)</li>
+                        <li>If theme night ticket required, buy and transfer to Proxy</li>
+                        <li>Respond to proxy communications in a timely manner</li>
+                        <li>Leave feedback after successful transactions</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEES SECTION -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Fee Structure</h2>
+                <p class="section-subtitle">Understanding proxy costs</p>
+            </div>
+
+            <div class="rules-grid">
+                <div class="rules-card">
+                    <h3>Promotional Ticketed Events - Flat Rate</h3>
+                    <ul>
+                        <li>This is an event where the promotional ticket is required for the item</li>
+                        <li>Fixed Proxy Fee $30</li>
+                        <li>Fee covers time, travel, and effort to attend</li>
+                        <li>Fee does not cover item cost, promo ticket, tax, tariffs, or shipping</li>
+                    </ul>
+                </div>
+
+                <div class="rules-card">
+                    <h3>Multi-Item Events & Conventions - Percentage</h3>
+                    <ul>
+                        <li>Proxy Fee is $20 + 5% of item cost</li>
+                        <li>Covers time, badge cost, travel, and effort</li>
+                        <li>Fee does not cover item cost, tax, tariffs, or shipping</li>
+                        <li>Scaled to reward proxies and cover multi-item pickups</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="proxies-intro" style="margin-top: 40px;">
+                <p>
+                    <strong>Example calculations:</strong> 
+                </p>
+                <p>
+  
+                    If you are requesting an OpTic Gaming x Texas Rangers Theme Night jersey, you would pay for the Theme Ticket via the Texas Rangers + the $30 flat Proxy fee + shipping + tariffs if applicable.
+                </p>
+                <p>
+  
+                    If you are requesting multiple items at a convention totaling $400, you would pay $400 + $20 + ($400 x 0.05) + shipping + tariffs if applicable.
+                </p>
+                <p>
+                    All fees should be discussed and agreed upon before the proxy attends the event. Buyers are responsible for all costs including the item, any promotional tickets, applicable taxes/tariffs, proxy fee, and shipping. Most proxies accept PayPal Goods & Services for buyer protection.
+                </p>
+            </div>
+        </section>
+
+        <!-- EVENTS SECTION -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Upcoming Events</h2>
+                <p class="section-subtitle">Sign up for proxy services at these events. Don't see an event here? Fill out <a href="https://forms.gle/EXAMPLE5" target="_blank">this form</a></p>
+            </div>
+
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-header">
+                        <h3>Call of Duty OpTic Major 1</h3>
+                        <p class="event-date">1/29/26 - 2/1/2026 • Dallas, TX</p>
+                    </div>
+                    <div class="event-body">
+                        <p class="event-description">
+                            Looking for items sold at the CDL Major 1? Sign up for a proxy today.
+                        </p>
+                        <a href="https://forms.gle/EXAMPLE1" target="_blank" class="btn-signup">Sign Up for Proxy</a>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-header">
+                        <h3>OpTic Gaming x Dallas Stars Night</h3>
+                        <p class="event-date">3/6/2026 • Dallas, TX</p>
+                    </div>
+                    <div class="event-body">
+                        <p class="event-description">
+                            OpTic Gaming night at the Dallas Stars! Get the exclusive jersey!
+                        </p>
+                        <a href="https://forms.gle/EXAMPLE2" target="_blank" class="btn-signup">Sign Up for Proxy</a>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-header">
+                        <h3>Dreamhack Birmingham</h3>
+                        <p class="event-date">3/27/2026 - 3/29/2026 • Birmingham, UK</p>
+                    </div>
+                    <div class="event-body">
+                        <p class="event-description">
+                            Dreamhack returns to the UK with ESL ONE, CDL MAJOR II, and the EXPO. Sign up for a proxy today!
+                        </p>
+                        <a href="https://forms.gle/EXAMPLE3" target="_blank" class="btn-signup">Sign Up for Proxy</a>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-header">
+                        <h3>Dreamhack Atlanta</h3>
+                        <p class="event-date">5/15/2026 - 5/17/2026 • Atlanta, GA</p>
+                    </div>
+                    <div class="event-body">
+                        <p class="event-description">
+                            Dreamhack returns to Atlanta with IEM, CDL MAJOR III, HALO, and the EXPO. Sign up for a proxy today!
+                        </p>
+                        <a href="https://forms.gle/EXAMPLE4" target="_blank" class="btn-signup">Sign Up for Proxy</a>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-header">
+                        <h3>2026 Call of Duty Major IV</h3>
+                        <p class="event-date">6/25/2026 - 6/28/2026 • Paris, France</p>
+                    </div>
+                    <div class="event-body">
+                        <p class="event-description">
+                            The CDL goes to Paris! Sign up for a proxy to get exclusive items from the event.
+                        </p>
+                        <a href="https://forms.gle/EXAMPLE5" target="_blank" class="btn-signup">Sign Up for Proxy</a>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-header">
+                        <h3>2026 Call of Duty League Championship (Hosted by Vegas FaZe)</h3>
+                        <p class="event-date">7/16/2026 - 7/19/2026 • Las Vegas, NV</p>
+                    </div>
+                    <div class="event-body">
+                        <p class="event-description">
+                            Call of Duty Champs returns to Las Vegas! Sign up for a proxy to get exclusive items from the event.
+                        </p>
+                        <a href="https://forms.gle/EXAMPLE6" target="_blank" class="btn-signup">Sign Up for Proxy</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VERIFIED PROXIES SECTION -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Verified Proxies</h2>
+                <p class="section-subtitle">Trusted community members with proven track records</p>
+            </div>
+
+            <div class="proxies-intro">
+                <p>
+                    Our verified proxies have completed multiple successful transactions and maintained excellent feedback from the community. They're experienced convention-goers who understand the ins and outs of securing exclusive items.
+                </p>
+                <p>
+                    <strong>Interested in becoming a verified proxy?</strong> We're always looking for reliable community members to join our network. You'll need to provide references, attend events regularly, and maintain a high standard of service.
+                </p>
+                <a href="https://forms.gle/EXAMPLE_PROXY_APPLICATION" target="_blank" class="become-proxy-btn">Apply to Be a Proxy</a>
+            </div>
+
+            <div class="proxies-grid">
+                <div class="proxy-card">
+                    <div class="proxy-avatar">D</div>
+                    <h3 class="proxy-name">Disarray</h3>
+                    <p class="proxy-location">Texas</p>
+                    <span class="proxy-badge">Verified</span>
+                </div>
+
+                <div class="proxy-card">
+                    <div class="proxy-avatar">LJ</div>
+                    <h3 class="proxy-name">Little-John27</h3>
+                    <p class="proxy-location">Texas</p>
+                    <span class="proxy-badge">Verified</span>
+                </div>
+
+                <div class="proxy-card">
+                    <div class="proxy-avatar">I</div>
+                    <h3 class="proxy-name">Infamuz</h3>
+                    <p class="proxy-location">Florida</p>
+                    <span class="proxy-badge">Verified</span>
+                </div>
+
+                <div class="proxy-card">
+                    <div class="proxy-avatar">MF</div>
+                    <h3 class="proxy-name">musicfiend08</h3>
+                    <p class="proxy-location">Texas</p>
+                    <span class="proxy-badge">Verified</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FAQ SECTION -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p class="section-subtitle">Common questions about our proxy service</p>
+            </div>
+
+            <div class="proxies-intro">
+                <p style="margin-bottom: 35px;">
+                    <strong style="color: #fff; display: block; margin-bottom: 10px;">How do I know my proxy will actually get the item?</strong>
+                    Items at conventions and events can sell out quickly. While our verified proxies will do their best to secure your items, availability cannot be guaranteed. We recommend having backup options and communicating priorities clearly.
+                </p>
+
+                <p style="margin-bottom: 35px;">
+                    <strong style="color: #fff; display: block; margin-bottom: 10px;">When should I send payment?</strong>
+                    A down payment of 50% of the estimated cost is typically required. You may negotiate with your Proxy. Always use payment methods with buyer protection.
+                </p>
+
+                <p style="margin-bottom: 35px;">
+                    <strong style="color: #fff; display: block; margin-bottom: 10px;">What if the item is damaged during shipping?</strong>
+                    Proxies should package items securely and provide tracking. If damage occurs during shipping, this is typically a matter between the buyer and shipping carrier. Discuss insurance options with your proxy for high-value items.
+                </p>
+
+                <p style="margin-bottom: 35px;">
+                    <strong style="color: #fff; display: block; margin-bottom: 10px;">Can I request multiple items from one proxy?</strong>
+                    Yes! Most proxies are happy to pick up multiple items. Be sure to provide a prioritized list in case everything isn't available. Review Structured Fee section.
+                </p>
+
+                <p style="margin-bottom: 35px;">
+                    <strong style="color: #fff; display: block; margin-bottom: 10px;">What happens if there's a dispute?</strong>
+                    We encourage open communication between buyers and proxies to resolve any issues. However, Collectors Envy is a facilitation platform only. We are not responsible for disputes, lost items, payment issues, or any problems that arise during transactions.
+                </p>
+
+                <p style="margin-bottom: 35px;">
+                    <strong style="color: #fff; display: block; margin-bottom: 10px;">I bought an item, but it ended up cheaper after the event. Can I get a refund?</strong>
+                    No, all sales are final. Proxies purchase items based on the information available at the time. Any price changes after the fact are not the responsibility of the proxy. Proxies are not responsible for market fluctuations.
+                </p>
+
+                <p style="margin-bottom: 35px;">
+                    <strong style="color: #fff; display: block; margin-bottom: 10px;">I live in another country that the Proxy. Can I still use this service?</strong>
+                    Yes, just ensure that the Proxy you are using is willing to ship internationally. Be aware of any customs duties, tariffs, or shipping costs that may apply.
+                </p>
+
+                <p style="margin-bottom: 35px;">
+                    <strong style="color: #fff; display: block; margin-bottom: 10px;">I don't want to pay a proxy fee. Why do I have to?</strong>
+                    Proxy fees cover the time, effort, and costs incurred by the proxy to attend events and secure items. They are not optional and should be factored into your budget when requesting proxy services. Over time, you may develop a relationship with a Proxy and could negotiate deals. However, you are not required to use this service. You can use a friend or buy resale after an event. This is just a platform for convenience.
+                </p>
+            </div>
+
+            <div class="proxies-intro" style="margin-top: 0; border: 2px solid var(--card-border); background: #0a0a0a;">
+                <p style="margin: 0; font-size: 0.9rem; line-height: 1.8;">
+                    <strong style="color: #fff; display: block; margin-bottom: 15px; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">⚠️ Important Disclaimer</strong>
+                    Collectors Envy provides a platform to connect buyers with proxies but is not a party to any transactions. We are not responsible for any disputes, issues, losses, damages, or problems that may arise between buyers and proxies. All transactions are conducted at your own risk. We strongly recommend using secure payment methods with buyer protection, maintaining clear communication, and documenting all agreements. By using this service, you acknowledge that Collectors Envy holds no liability for any aspect of proxy transactions.
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
