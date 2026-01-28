@@ -14,6 +14,7 @@
             --text-secondary: #666666;
             --accent-white: #ffffff;
             --nav-border: #222222;
+            --accent-live: #00ff00;
         }
 
         body {
@@ -79,8 +80,7 @@
         }
 
         .header {
-            margin-bottom: 80px;
-            text-align: left;
+            margin-bottom: 60px;
         }
 
         .header h1 {
@@ -88,10 +88,84 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: -2px;
+            margin: 0 0 30px 0;
+        }
+
+        /* --- FILTER TABS --- */
+        .filter-tabs {
+            display: flex;
+            gap: 15px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 15px;
+        }
+
+        .filter-tab {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .filter-tab:hover {
+            color: #fff;
+        }
+
+        .filter-tab.active {
+            color: #fff;
+        }
+
+        .filter-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -16px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #fff;
+        }
+
+        /* --- SECTION HEADERS --- */
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            margin: 60px 0 40px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
             margin: 0;
         }
 
-        #archive-grid {
+        .live-indicator {
+            width: 12px;
+            height: 12px;
+            background: var(--accent-live);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .archive-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 30px;
@@ -106,6 +180,10 @@
         }
 
         .auction-card:hover { border-color: #444; }
+
+        .auction-card.live-card {
+            border-color: var(--accent-live);
+        }
 
         .image-viewport {
             position: relative;
@@ -185,10 +263,42 @@
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 2px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-view:hover {
+            background: #e0e0e0;
+        }
+
+        .live-card .btn-view {
+            background: var(--accent-live);
+        }
+
+        .live-card .btn-view:hover {
+            background: #00dd00;
         }
 
         .card-dns { opacity: 0.6; }
-        #loading { padding: 100px; text-align: center; font-weight: 900; color: #333; }
+        
+        #loading { 
+            padding: 100px; 
+            text-align: center; 
+            font-weight: 900; 
+            color: #333; 
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
@@ -206,25 +316,189 @@
 
     <div class="container">
         <div class="header">
-            <h1>Auction History</h1>
+            <h1>Auction Archive</h1>
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All Auctions</button>
+                <button class="filter-tab" data-filter="current">Current Auctions</button>
+                <button class="filter-tab" data-filter="past">Past Auctions</button>
+            </div>
         </div>
 
         <div id="loading">LOADING VAULT...</div>
-        <div id="archive-grid"></div>
+
+        <div id="current-section" class="section">
+            <div class="section-header">
+                <h2>Current Auctions</h2>
+                <div class="live-indicator"></div>
+            </div>
+            <div id="current-grid" class="archive-grid"></div>
+        </div>
+
+        <div id="past-section" class="section">
+            <div class="section-header">
+                <h2>Past Auctions</h2>
+            </div>
+            <div id="past-grid" class="archive-grid"></div>
+        </div>
     </div>
 
     <script>
         const SHEET_ID = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
-        const TAB_NAME = 'Auctions'; 
-        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${TAB_NAME}`;
+        const PAST_TAB = 'Auctions';
+        const CURRENT_TAB = 'LiveAuctions';
 
-        async function initArchive() {
+        let currentAuctions = [];
+        let pastAuctions = [];
+
+        // Filter functionality
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const currentSection = document.getElementById('current-section');
+        const pastSection = document.getElementById('past-section');
+
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const filter = tab.dataset.filter;
+                
+                if (filter === 'all') {
+                    currentSection.classList.remove('hidden');
+                    pastSection.classList.remove('hidden');
+                } else if (filter === 'current') {
+                    currentSection.classList.remove('hidden');
+                    pastSection.classList.add('hidden');
+                } else if (filter === 'past') {
+                    currentSection.classList.add('hidden');
+                    pastSection.classList.remove('hidden');
+                }
+            });
+        });
+
+        function createImageCycling(card, images) {
+            if (images.length <= 1) return;
+
+            const imgElement = card.querySelector('.main-img');
+            let interval;
+            
+            card.addEventListener('mouseenter', () => {
+                let i = 0;
+                interval = setInterval(() => {
+                    i = (i + 1) % images.length;
+                    imgElement.src = images[i];
+                }, 1000);
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                clearInterval(interval);
+                imgElement.src = images[0];
+            });
+        }
+
+        function createAuctionCard(item, isLive = false) {
+            const images = [item.img1, item.img2, item.img3].filter(url => url && url.startsWith('http'));
+            if (images.length === 0) return null;
+
+            const isDNS = !isLive && item.winner && item.winner.toUpperCase() === 'DNS';
+            
+            const card = document.createElement('div');
+            card.className = `auction-card ${isDNS ? 'card-dns' : ''} ${isLive ? 'live-card' : ''}`;
+            
+            let dotsHtml = '';
+            if (images.length > 1) {
+                dotsHtml = `<div class="gallery-dots">` + 
+                    images.map(() => `<div class="dot"></div>`).join('') + 
+                    `</div>`;
+            }
+
+            if (isLive) {
+                card.innerHTML = `
+                    <div class="image-viewport">
+                        <img src="${images[0]}" class="main-img">
+                        ${dotsHtml}
+                    </div>
+                    <div class="card-info">
+                        <div class="price-line">
+                            <div class="price">${item.price}</div>
+                        </div>
+                        <h3 class="title">${item.title}</h3>
+                        <div class="meta">
+                            <div><b>Ends At</b> ${item.endsAt}</div>
+                            <div><b>Status</b> LIVE</div>
+                        </div>
+                        <a href="${item.link}" target="_blank" class="btn-view">Place Bid</a>
+                    </div>
+                `;
+            } else {
+                card.innerHTML = `
+                    <div class="image-viewport">
+                        <img src="${images[0]}" class="main-img">
+                        ${dotsHtml}
+                    </div>
+                    <div class="card-info">
+                        <div class="price-line">
+                            <div class="${isDNS ? 'dns-label' : 'price'}">${isDNS ? 'PASSED' : item.bid}</div>
+                        </div>
+                        <h3 class="title">${item.title}</h3>
+                        <div class="meta">
+                            <div><b>Winner</b> ${isDNS ? 'N/A' : item.winner}</div>
+                            <div><b>Date</b> ${item.date}</div>
+                        </div>
+                        <a href="${item.link}" target="_blank" class="btn-view">View Thread</a>
+                    </div>
+                `;
+            }
+
+            createImageCycling(card, images);
+            return card;
+        }
+
+        async function loadCurrentAuctions() {
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${CURRENT_TAB}`;
             try {
                 const response = await fetch(url);
                 const data = await response.text();
                 const rows = data.split('\n').slice(1);
-                const grid = document.getElementById('archive-grid');
-                document.getElementById('loading').style.display = 'none';
+                const grid = document.getElementById('current-grid');
+
+                rows.forEach(row => {
+                    const columns = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+                    if (!columns || columns.length < 7) return;
+                    const clean = (str) => str ? str.replace(/^"|"$/g, '').trim() : '';
+
+                    const item = {
+                        title: clean(columns[0]),
+                        price: clean(columns[1]),
+                        img1: clean(columns[2]),
+                        img2: clean(columns[3]),
+                        img3: clean(columns[4]),
+                        endsAt: clean(columns[5]),
+                        link: clean(columns[6])
+                    };
+
+                    const card = createAuctionCard(item, true);
+                    if (card) {
+                        grid.appendChild(card);
+                        currentAuctions.push(item);
+                    }
+                });
+
+                if (currentAuctions.length === 0) {
+                    grid.innerHTML = '<div class="empty-state">No current auctions at this time</div>';
+                }
+            } catch (e) {
+                console.error('Error loading current auctions:', e);
+                document.getElementById('current-grid').innerHTML = '<div class="empty-state">Error loading current auctions</div>';
+            }
+        }
+
+        async function loadPastAuctions() {
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${PAST_TAB}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.text();
+                const rows = data.split('\n').slice(1);
+                const grid = document.getElementById('past-grid');
 
                 rows.forEach(row => {
                     const columns = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
@@ -242,59 +516,31 @@
                         link: clean(columns[7])
                     };
 
-                    const isDNS = item.winner.toUpperCase() === 'DNS';
-                    const images = [item.img1, item.img2, item.img3].filter(url => url && url.startsWith('http'));
-
-                    const card = document.createElement('div');
-                    card.className = `auction-card ${isDNS ? 'card-dns' : ''}`;
-                    
-                    let dotsHtml = '';
-                    if (images.length > 1) {
-                        dotsHtml = `<div class="gallery-dots">` + 
-                            images.map(() => `<div class="dot"></div>`).join('') + 
-                            `</div>`;
+                    const card = createAuctionCard(item, false);
+                    if (card) {
+                        grid.appendChild(card);
+                        pastAuctions.push(item);
                     }
-
-                    card.innerHTML = `
-                        <div class="image-viewport">
-                            <img src="${images[0]}" class="main-img">
-                            ${dotsHtml}
-                        </div>
-                        <div class="card-info">
-                            <div class="price-line">
-                                <div class="${isDNS ? 'dns-label' : 'price'}">${isDNS ? 'PASSED' : item.bid}</div>
-                            </div>
-                            <h3 class="title">${item.title}</h3>
-                            <div class="meta">
-                                <div><b>Winner</b> ${isDNS ? 'N/A' : item.winner}</div>
-                                <div><b>Date</b> ${item.date}</div>
-                            </div>
-                            <a href="${item.link}" target="_blank" class="btn-view">View Thread</a>
-                        </div>
-                    `;
-
-                    if (images.length > 1) {
-                        const imgElement = card.querySelector('.main-img');
-                        let interval;
-                        card.addEventListener('mouseenter', () => {
-                            let i = 0;
-                            interval = setInterval(() => {
-                                i = (i + 1) % images.length;
-                                imgElement.src = images[i];
-                            }, 1000);
-                        });
-                        card.addEventListener('mouseleave', () => {
-                            clearInterval(interval);
-                            imgElement.src = images[0];
-                        });
-                    }
-
-                    grid.appendChild(card);
                 });
+
+                if (pastAuctions.length === 0) {
+                    grid.innerHTML = '<div class="empty-state">No past auctions available</div>';
+                }
+            } catch (e) {
+                console.error('Error loading past auctions:', e);
+                document.getElementById('past-grid').innerHTML = '<div class="empty-state">Error loading past auctions</div>';
+            }
+        }
+
+        async function initArchive() {
+            try {
+                await Promise.all([loadCurrentAuctions(), loadPastAuctions()]);
+                document.getElementById('loading').style.display = 'none';
             } catch (e) {
                 document.getElementById('loading').innerText = "ERROR LOADING ARCHIVE";
             }
         }
+
         initArchive();
     </script>
 </body>
