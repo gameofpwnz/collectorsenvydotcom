@@ -278,6 +278,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 30px;
+            margin-bottom: 40px;
         }
 
         .proxy-card {
@@ -331,6 +332,76 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        /* --- RATING SECTION --- */
+        .proxy-rating {
+            margin: 20px 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .rating-stars {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .star {
+            color: var(--accent-green);
+            font-size: 1.2rem;
+        }
+
+        .star.empty {
+            color: var(--card-border);
+        }
+
+        .rating-text {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rating-loading {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-style: italic;
+        }
+
+        /* --- REVIEW BUTTON --- */
+        .review-section {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 50px;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .review-section p {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .btn-review {
+            display: inline-block;
+            padding: 18px 40px;
+            background: var(--accent-green);
+            color: #000;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-review:hover {
+            background: #00dd00;
         }
 
         @media (max-width: 768px) {
@@ -565,6 +636,10 @@
                     <h3 class="proxy-name">Disarray</h3>
                     <p class="proxy-location">Texas</p>
                     <span class="proxy-badge">Verified</span>
+                    
+                    <div class="proxy-rating" data-proxy-name="Disarray">
+                        <div class="rating-loading">Loading rating...</div>
+                    </div>
                 </div>
 
                 <div class="proxy-card">
@@ -572,6 +647,10 @@
                     <h3 class="proxy-name">Little-John27</h3>
                     <p class="proxy-location">Texas</p>
                     <span class="proxy-badge">Verified</span>
+                    
+                    <div class="proxy-rating" data-proxy-name="Little-John27">
+                        <div class="rating-loading">Loading rating...</div>
+                    </div>
                 </div>
 
                 <div class="proxy-card">
@@ -579,6 +658,10 @@
                     <h3 class="proxy-name">Infamuz</h3>
                     <p class="proxy-location">Florida</p>
                     <span class="proxy-badge">Verified</span>
+                    
+                    <div class="proxy-rating" data-proxy-name="Infamuz">
+                        <div class="rating-loading">Loading rating...</div>
+                    </div>
                 </div>
 
                 <div class="proxy-card">
@@ -586,8 +669,17 @@
                     <h3 class="proxy-name">musicfiend08</h3>
                     <p class="proxy-location">Texas</p>
                     <span class="proxy-badge">Verified</span>
+                    
+                    <div class="proxy-rating" data-proxy-name="musicfiend08">
+                        <div class="rating-loading">Loading rating...</div>
+                    </div>
                 </div>
+            </div>
 
+            <!-- REVIEW BUTTON SECTION -->
+            <div class="review-section">
+                <p>Have you worked with one of our verified proxies? Share your experience to help the community!</p>
+                <a href="https://forms.gle/YOUR_REVIEW_FORM_ID" target="_blank" class="btn-review">Leave a Review</a>
             </div>
         </section>
 
@@ -649,6 +741,115 @@
         </section>
 
     </div>
+
+    <script>
+        // ========================================
+        // GOOGLE SHEETS RATING INTEGRATION
+        // ========================================
+        
+        // CONFIGURATION - UPDATE THESE VALUES
+        const SPREADSHEET_ID = '1LyTBnhI7kKFn6tmlSWmeqgohlJnb43zfb_oTBJiYabc';  // Replace with your actual spreadsheet ID
+        const SHEET_NAME = 'Proxy Ratings';  // Replace with your sheet name
+        
+        // Mapping of proxy names to their rating cell locations
+        const PROXY_RATING_CELLS = {
+            'Disarray': 'B2',        // Example: Rating is in cell B2
+            'Little-John27': 'B3',   // Example: Rating is in cell B3
+            'Infamuz': 'B4',         // Example: Rating is in cell B4
+            'musicfiend08': 'B5'     // Example: Rating is in cell B5
+        };
+
+        // Function to generate star display
+        function generateStars(rating) {
+            const stars = [];
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            // Add full stars
+            for (let i = 0; i < fullStars; i++) {
+                stars.push('<span class="star">★</span>');
+            }
+            
+            // Add half star if needed
+            if (hasHalfStar && fullStars < 5) {
+                stars.push('<span class="star">★</span>');
+            }
+            
+            // Add empty stars
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 0; i < emptyStars; i++) {
+                stars.push('<span class="star empty">★</span>');
+            }
+            
+            return stars.join('');
+        }
+
+        // Function to load ratings from Google Sheets (public sheet, no API key needed)
+        async function loadRatings() {
+            try {
+                // For each proxy, fetch their specific rating cell
+                for (const [proxyName, cell] of Object.entries(PROXY_RATING_CELLS)) {
+                    try {
+                        // Use the CSV export URL for a specific range
+                        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}&range=${cell}`;
+                        
+                        const response = await fetch(url);
+                        const text = await response.text();
+                        
+                        // Clean up the CSV response (remove quotes and trim)
+                        const cellValue = text.replace(/"/g, '').trim();
+                        
+                        console.log(`${proxyName} (${cell}):`, cellValue); // Debug logging
+                        
+                        if (!cellValue || cellValue === '') {
+                            updateProxyRating(proxyName, 'No Rating Available');
+                        } else if (cellValue.toLowerCase().includes('no rating')) {
+                            updateProxyRating(proxyName, 'No Rating Available');
+                        } else {
+                            const rating = parseFloat(cellValue);
+                            if (isNaN(rating)) {
+                                updateProxyRating(proxyName, 'No Rating Available');
+                            } else {
+                                updateProxyRating(proxyName, rating);
+                            }
+                        }
+                    } catch (cellError) {
+                        console.error(`Error loading rating for ${proxyName}:`, cellError);
+                        updateProxyRating(proxyName, 'No Rating Available');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading ratings:', error);
+                // Show error state for all proxies
+                document.querySelectorAll('.proxy-rating').forEach(ratingDiv => {
+                    ratingDiv.innerHTML = '<div class="rating-loading">Rating unavailable</div>';
+                });
+            }
+        }
+
+        // Function to update a specific proxy's rating display
+        function updateProxyRating(proxyName, rating) {
+            const ratingDiv = document.querySelector(`[data-proxy-name="${proxyName}"]`);
+            
+            if (!ratingDiv) return;
+            
+            // Check if rating is a string (like "No Rating Available")
+            if (typeof rating === 'string' || rating === null || isNaN(rating)) {
+                ratingDiv.innerHTML = '<div class="rating-loading">No Rating Available</div>';
+                return;
+            }
+            
+            const starsHtml = generateStars(rating);
+            
+            ratingDiv.innerHTML = `
+                <div class="rating-stars">${starsHtml}</div>
+                <div class="rating-text">${rating.toFixed(1)} out of 5</div>
+            `;
+        }
+
+        // Load ratings when page loads
+        document.addEventListener('DOMContentLoaded', loadRatings);
+    </script>
 
 </body>
 </html>
