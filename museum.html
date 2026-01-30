@@ -157,7 +157,7 @@
     <div id="itemModal" class="modal">
         <button onclick="closeModal()" class="fixed top-6 right-6 z-[150] text-white uppercase text-[10px] tracking-widest bg-black/50 px-4 py-2 border border-white/10">Exit Gallery</button>
         <div class="w-full max-w-5xl px-4 py-24" onclick="event.stopPropagation()">
-            <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12 cursor-zoom-in"></div>
+            <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 text-left">
                 <div class="lg:col-span-2">
                     <h2 id="modalTitle" class="serif text-4xl md:text-6xl text-white italic mb-4 uppercase leading-tight"></h2>
@@ -208,6 +208,13 @@
             else btn.classList.remove('visible');
         });
 
+        // Helper function to get thumbnail from media array
+        function getThumbnail(item) {
+            if (!item.media || item.media.length === 0) return '';
+            const firstImage = item.media.find(m => m.type === 'image');
+            return firstImage ? firstImage.url : '';
+        }
+
         async function initMuseum() {
             try {
                 const response = await fetch('/assets/museum-data.json?v=' + new Date().getTime());
@@ -239,7 +246,7 @@
             const items = window.museumData.filter(i => i.steward === name);
             document.getElementById('profileGrid').innerHTML = items.map(i => `
                 <div class="display-case p-4 cursor-pointer" onclick="openModal('${i.id}')">
-                    <img src="${i.images[0]}" class="aspect-square w-full object-contain mb-4 opacity-80">
+                    <img src="${getThumbnail(i)}" class="aspect-square w-full object-contain mb-4 opacity-80">
                     <span class="text-[8px] font-bold text-blue-600 uppercase tracking-widest">${i.id}</span>
                     <h4 class="serif text-lg text-white italic truncate uppercase leading-tight">${i.title}</h4>
                 </div>`).join('');
@@ -294,7 +301,7 @@
             document.getElementById('curator-spotlight').style.display = featured.length ? 'block' : 'none';
             document.getElementById('featured-grid').innerHTML = featured.map(i => `
                 <div class="display-case p-6 md:p-8 curator-choice group cursor-pointer flex flex-col md:flex-row gap-8 items-center" onclick="openModal('${i.id}')">
-                    <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img src="${i.images[0]}" class="w-full h-full object-contain opacity-90 transition-transform"><div class="absolute top-0 left-0 curator-badge">ESSENTIAL RECORD</div></div>
+                    <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img src="${getThumbnail(i)}" class="w-full h-full object-contain opacity-90 transition-transform"><div class="absolute top-0 left-0 curator-badge">ESSENTIAL RECORD</div></div>
                     <div class="w-full md:w-1/2 text-left"><span class="text-[#c5a059] font-mono text-[10px] uppercase mb-4 block tracking-widest">${i.id}</span><h3 class="serif text-3xl md:text-4xl text-white italic mb-6 leading-tight uppercase tracking-tighter">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 line-clamp-3 leading-relaxed">${i.description}</p></div>
                 </div>`).join('');
 
@@ -303,7 +310,7 @@
                 const items = data.filter(i => i.category === cat);
                 grid.innerHTML = items.map(i => `
                     <div class="display-case p-6 cursor-pointer ${i.verified ? 'verified-record' : ''}" onclick="openModal('${i.id}')">
-                        <div class="aspect-[4/5] bg-black mb-6 relative overflow-hidden"><img src="${i.images[0]}" loading="lazy" class="w-full h-full object-contain opacity-80"></div>
+                        <div class="aspect-[4/5] bg-black mb-6 relative overflow-hidden"><img src="${getThumbnail(i)}" loading="lazy" class="w-full h-full object-contain opacity-80"></div>
                         <div class="flex justify-between mb-2"><span class="text-[9px] font-bold ${i.verified ? 'text-blue-500' : 'text-zinc-600'} uppercase tracking-widest">${i.id}</span><span class="text-[8px] text-zinc-700 font-mono font-bold">${i.year}</span></div>
                         <h4 class="serif text-xl text-white italic truncate uppercase tracking-tighter">${i.title}</h4>
                     </div>`).join('') + '<div class="display-case p-8 flex flex-col items-center justify-center border-dashed border-zinc-800 min-h-[300px] text-center text-zinc-600 serif italic uppercase text-[10px] tracking-widest">Space Reserved</div>';
@@ -324,7 +331,6 @@
             const i = window.museumData.find(a => a.id === id);
             if (!i) return;
 
-            // FIX: Reset any open profile before opening the item
             document.getElementById('profileModal').style.display = 'none';
 
             document.getElementById('modalTitle').innerText = i.title;
@@ -338,21 +344,23 @@
             accDiv.innerHTML = i.verified ? `<span class="verified-label uppercase">Registry Certified</span>` : `<span class="community-label uppercase tracking-widest">Community Entry</span>`;
             document.getElementById('modalStamp').innerHTML = i.verified ? `<div class="certified-stamp">CERTIFIED</div>` : '';
             
+            // Render media (images and YouTube embeds)
             document.getElementById('modalImages').innerHTML = i.media.map(m => {
                 if (m.type === 'youtube') {
-                    return `<div class="aspect-video w-full">
+                    return `<div class="aspect-video w-full bg-black border border-white/5">
                       <iframe src="https://www.youtube.com/embed/${m.url}" 
-                        class="w-full h-full border border-white/5" 
-                        frameborder="0" allowfullscreen>
+                        class="w-full h-full" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
                       </iframe>
                     </div>`;
                 }
-                return `<img src="${m.url}" onclick="openDarkroom('${m.url}')" 
-                    class="w-full h-auto bg-black p-2 border border-white/5 shadow-2xl">`;
+                return `<img src="${m.url}" onclick="openDarkroom('${m.url}')" class="w-full h-auto bg-black p-2 border border-white/5 shadow-2xl cursor-zoom-in">`;
             }).join('');
             
             const related = window.museumData.filter(o => o.id !== i.id && (o.esport === i.esport || (o.tags && i.tags && o.tags.some(t => i.tags.includes(t))))).slice(0, 4);
-            document.getElementById('relatedExhibits').innerHTML = related.length ? `<h4 class="serif text-xl text-white italic mb-6">Related Exhibits</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${related.map(r => `<div onclick="openModal('${r.id}')" class="related-card p-3 cursor-pointer group"><img src="${r.images[0]}" class="h-24 w-full object-contain mb-2 opacity-60 group-hover:opacity-100 transition"><div class="text-[10px] text-zinc-300 font-bold uppercase truncate tracking-tight">${r.title}</div></div>`).join('')}</div>` : '';
+            document.getElementById('relatedExhibits').innerHTML = related.length ? `<h4 class="serif text-xl text-white italic mb-6">Related Exhibits</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${related.map(r => `<div onclick="openModal('${r.id}')" class="related-card p-3 cursor-pointer group"><img src="${getThumbnail(r)}" class="h-24 w-full object-contain mb-2 opacity-60 group-hover:opacity-100 transition"><div class="text-[10px] text-zinc-300 font-bold uppercase truncate tracking-tight">${r.title}</div></div>`).join('')}</div>` : '';
             
             document.getElementById('itemModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -370,7 +378,3 @@
     </script>
 </body>
 </html>
-
-
-
-
