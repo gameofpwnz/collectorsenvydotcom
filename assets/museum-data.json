@@ -11,9 +11,9 @@
     "steward": "poopaboo",
     "stewardLink": "https://x.com/poopaboo",
     "description": "Titan Esports has always been one of my favorite esport org logos with an infamous history in Counter-Strike. These jerseys are extremely rare and almost impossible to find nowadays.  " ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/173jCwsdRx53Zr2sz50rqGfhNFXJqU0P1",
-      "https://lh3.googleusercontent.com/d/19GlAs6k1PTa8qbdiyan_D6AMx2RgkK_S"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/173jCwsdRx53Zr2sz50rqGfhNFXJqU0P1"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/19GlAs6k1PTa8qbdiyan_D6AMx2RgkK_S"}
     ]
   },
   {
@@ -28,9 +28,9 @@
     "steward": "poopaboo",
     "stewardLink": "https://x.com/poopaboo",
     "description": "A rookie eUnited jersey signed and worn by Simp during the 2018-2019 CoD BO4 season. This jersey was either worn at Fort Worth when he won the AM open or during the London event. " ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/17PoEcj93NYdhDE1LOhElI52-zl4pDjI0",
-      "https://lh3.googleusercontent.com/d/12sHABc7j4KtpLcqYxuj-lMAo-F6xFes9"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/17PoEcj93NYdhDE1LOhElI52-zl4pDjI0"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/12sHABc7j4KtpLcqYxuj-lMAo-F6xFes9"}
     ]
   },
   {
@@ -45,9 +45,9 @@
     "steward": "poopaboo",
     "stewardLink": "https://x.com/poopaboo",
     "description": "A 2018 FaZe Clan Jersey signed and worn by Olofmeister during the 2018 season of Counter-Strike: Global Offensive. x2 Major, x1 Major MVP, Best Player of the Year in 2015, Olof is one of the most well-known names in Counter Strike." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1eAl3qXSzAWvTfrkmcNIc15sVLwhTHU66",
-      "https://lh3.googleusercontent.com/d/1wrdHZeM7q6BxgsAKeSeelb2vg3zJ8sh3"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1eAl3qXSzAWvTfrkmcNIc15sVLwhTHU66"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1wrdHZeM7q6BxgsAKeSeelb2vg3zJ8sh3"}
     ]
   },
   {
@@ -62,9 +62,9 @@
     "steward": "poopaboo",
     "stewardLink": "https://x.com/poopaboo",
     "description": "This is a 2014 Team LDLC jersey worn and signed by Richard 'shox' Papillon. This is a special team jersey for myself and shox as this was the team he won his first and only major for. This is the early 2014 design of the jersey. ",
-    "images": [
-      "https://lh3.googleusercontent.com/d/1KIIyQJpC7hfKMgof8Lij2qexuUjjyIw3",
-      "https://lh3.googleusercontent.com/d/1OquL2uX3ufVgxqj_xIIvLEvsYmxWbN1H"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1KIIyQJpC7hfKMgof8Lij2qexuUjjyIw3"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1OquL2uX3ufVgxqj_xIIvLEvsYmxWbN1H"}
     ]
   },
   {
@@ -79,10 +79,10 @@
     "steward": "AARONCREATE",
     "stewardLink": "https://x.com/AARONCREATE",
     "description": "This 1 of 1 OpTic SCUF was created and owned by AaronCreate. Information about the general release can be found here: https://x.com/AARONCREATE/status/1106319125205389312",
-    "images": [
-      "/assets/images/museum_images/SCUF-1.png",
-      "/assets/images/museum_images/SCUF-2.png",
-      "/assets/images/museum_images/SCUF-3.png"
+    "media": [
+      {"type": "image", "url": "/assets/images/museum_images/SCUF-1.png"},
+      {"type": "image", "url": "/assets/images/museum_images/SCUF-2.png"},
+      {"type": "image", "url": "/assets/images/museum_images/SCUF-3.png"}
     ]
   },
   {
@@ -97,10 +97,11 @@
     "steward": "GameOfPWNZ",
     "stewardLink": "https://x.com/pwnzie_09",
     "description": "Verified player-issue with authentic tournament sponsors and signed by Simp.",
-    "images": [
-      "/assets/images/museum_images/JERSEY-ATL-SIMP-SIGNED-FRONT.png",
-      "/assets/images/museum_images/JERSEY-ATL-SIMP-SIGNED-BACK.png",
-      "/assets/images/museum_images/JERSEY-ATL-SIMP-CLOSEUP.jpg"
+    "media": [
+      {"type": "image", "url": "/assets/images/museum_images/JERSEY-ATL-SIMP-SIGNED-FRONT.png"},
+      {"type": "image", "url": "/assets/images/museum_images/JERSEY-ATL-SIMP-SIGNED-BACK.png"},
+      {"type": "image", "url": "/assets/images/museum_images/JERSEY-ATL-SIMP-CLOSEUP.jpg"},
+      {"type": "youtube", "url": "IJyIDgkiHgs"}
     ]
   },
   {
@@ -115,7 +116,7 @@
     "steward": "GameOfPWNZ",
     "stewardLink": "https://x.com/pwnzie_09",
     "description": "OpTic Gaming hockey jersey signed by Hecz, Scump, Diesel, AaronCreate, Hitch, Shotzzy, Dashy, Kenny, Pred, Methodz, TeePee, Karma, Crimsix, MerK, Clayster, Pamaj, Daltoosh, and FormaL",
-    "images": ["/assets/images/museum_images/AUTO-OPTIC-HOCKEY.png"]
+    "media": [{"type": "image", "url": "/assets/images/museum_images/AUTO-OPTIC-HOCKEY.png"}]
   },
   {
     "id": "CE-003",
@@ -129,9 +130,9 @@
     "steward": "musicfiend",
     "stewardLink": "https://x.com/free_thewave",
     "description": "Verified player-issue with authentic tournament sponsors. Includes both the black and white championship variants worn by Lethul during the 2017 season.",
-    "images": [
-      "/assets/images/museum_images/JERSEY-OPTIC-LETHUL-2017.png",
-      "/assets/images/museum_images/JERSEY-OPTIC-LETHUL-2017-FRONT.png"
+    "media": [
+      {"type": "image", "url": "/assets/images/museum_images/JERSEY-OPTIC-LETHUL-2017.png"},
+      {"type": "image", "url": "/assets/images/museum_images/JERSEY-OPTIC-LETHUL-2017-FRONT.png"}
   ]
   },
   {
@@ -146,8 +147,8 @@
     "steward": "charly",
     "stewardLink": "https://x.com/CharlyCJH",
     "description": "Verified autographed custom Team Summertime Gamecube controller. Signed by the entire Team Summertime squad: Hitch, Jorge, and Blake. A unique piece won from the auction during the Off Season event.",
-    "images": [
-      "/assets/images/museum_images/Controller-TST-autographed.png"
+    "media": [
+      {"type": "image", "url": "/assets/images/museum_images/Controller-TST-autographed.png"}
   ]
   },
   {
@@ -162,9 +163,9 @@
     "steward": "Sterling",
     "stewardLink": "https://x.com/AidanSterlingg",
     "description": "Zer0, former Call of Duty professional, was known as one of the best European players. He wore this jersey at the 2017 Call of Duty championship while playing for Splyce. This jersey is known to be 1/4." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1AFeJOfd0JKpFQ_L0afsY-zNEuI6PTKM9",
-      "https://lh3.googleusercontent.com/d/19CWsZyiCX56fxMkzHkzekiBjgvtFSOgg"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1AFeJOfd0JKpFQ_L0afsY-zNEuI6PTKM9"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/19CWsZyiCX56fxMkzHkzekiBjgvtFSOgg"}
     ]
   },
   {
@@ -179,9 +180,9 @@
     "steward": "Sterling",
     "stewardLink": "https://x.com/AidanSterlingg",
     "description": "Zer0, former Call of Duty professional, was known as one of the best European players. He was given this jersey while playing for Splyce, but the jersey was never released." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1VZAVld028zKEexLTBCUF70mElHudMvmP",
-      "https://lh3.googleusercontent.com/d/16zpvaj-WcDF5TbW_kBXeTB4hEx5iOmf7"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1VZAVld028zKEexLTBCUF70mElHudMvmP"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/16zpvaj-WcDF5TbW_kBXeTB4hEx5iOmf7"}
     ]
   },
   {
@@ -196,9 +197,9 @@
     "steward": "Sterling",
     "stewardLink": "https://x.com/AidanSterlingg",
     "description": "Priestahh, often referred to as one of the best flex players in his prime and 1x Call of Duty champion, wore this jersey while playing for 100 Thieves." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1uv3IZDggXq6-g6ZCQ9jiNgD6imoWR6at",
-      "https://lh3.googleusercontent.com/d/1RlFjOjB-XRb8SlwKBPPEmw0LdHycQPOv"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1uv3IZDggXq6-g6ZCQ9jiNgD6imoWR6at"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1RlFjOjB-XRb8SlwKBPPEmw0LdHycQPOv"}
     ]
   },
   {
@@ -213,11 +214,11 @@
     "steward": "mohawk marco",
     "stewardLink": "https://x.com/Markmolina60",
     "description": "Billy MENTAL Putnam was a 22x Gears of War champion. He wore these jerseys while playing for OpTic Gaming. He was part of OpTic Gaming from 2016 - 2019." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1fifQ2iyN3oEBUmX9pndBt_UMKKWfaIUh",
-      "https://lh3.googleusercontent.com/d/1YjpPB4KbxDuVn9Iwa9nL058-k6_Q_c0w",
-      "https://lh3.googleusercontent.com/d/1_8YMyfr7BgC77C1AljOW9vHnUTsTZk_T",
-      "https://lh3.googleusercontent.com/d/1667f19jMFoJlFlG-usxBj21mkpH3axTf"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1fifQ2iyN3oEBUmX9pndBt_UMKKWfaIUh"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1YjpPB4KbxDuVn9Iwa9nL058-k6_Q_c0w"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1_8YMyfr7BgC77C1AljOW9vHnUTsTZk_T"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1667f19jMFoJlFlG-usxBj21mkpH3axTf"}
     ]
   },
   {
@@ -232,9 +233,9 @@
     "steward": "GameOfPWNZ",
     "stewardLink": "https://x.com/pwnzie_09",
     "description": "ABEZY is a Call of Duty professional that played for Atlanta FaZe. This card depicts a moment during Major IV of the 2023 season. It is authenticated by The Upper Deck Company." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1WFh9IOiVn7isf1_oYV0tXfaLXaTawI1V",
-      "https://lh3.googleusercontent.com/d/1sBeaG7EUQQnf_7yfav7D6VE0o_UXpAij"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1WFh9IOiVn7isf1_oYV0tXfaLXaTawI1V"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1sBeaG7EUQQnf_7yfav7D6VE0o_UXpAij"}
     ]
   },
   {
@@ -249,9 +250,9 @@
     "steward": "GameOfPWNZ",
     "stewardLink": "https://x.com/pwnzie_09",
     "description": "HECZ is the owner of OpTic Gaming. He is one of the most active owners in esports and leader of the GREENWALL." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1-8RfxgOx5RAdJzEgijoHHC3b0ezYjTgC",
-      "https://lh3.googleusercontent.com/d/1qYEqZ6m--Ux8y1ihbhTi_R4vM20hlxWX"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1-8RfxgOx5RAdJzEgijoHHC3b0ezYjTgC"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1qYEqZ6m--Ux8y1ihbhTi_R4vM20hlxWX"}
     ]
   },
   {
@@ -266,10 +267,10 @@
     "steward": "GameOfPWNZ",
     "stewardLink": "https://x.com/pwnzie_09",
     "description": "For the first time ever, the Call of Duty League Championship was hosted in Allen, Texas by OpTic Gaming. The badge was for the Suite Level of the Credit Union of Texas Event Center. During the Friday of the event, the digital ticketing system was down during the early morning resulting in the issuance of the physical ticket that is included." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1KT-RYLrgbftS-tJHUh25bsRhEZ7mlMwm",
-      "https://lh3.googleusercontent.com/d/1evElbAiXItDQP6Yab8-rJqwoZ47NWc_P",
-      "https://lh3.googleusercontent.com/d/17Hie_7lx3vaotC9cSttGGGy6KySb2ibD"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1KT-RYLrgbftS-tJHUh25bsRhEZ7mlMwm"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1evElbAiXItDQP6Yab8-rJqwoZ47NWc_P"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/17Hie_7lx3vaotC9cSttGGGy6KySb2ibD"}
     ]
   },
   {
@@ -284,9 +285,9 @@
     "steward": "Colemartin509",
     "stewardLink": "https://x.com/Colemartin509",
     "description": "In 2011, APG, a Halo World Champion, played for Infamous. This was a team that ended up taking down the “God Squad” of Team instinct to win the event as their first time as a squad." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/172yq5WFLcUw4jWMexs1FpgDTyIgSC3n8",
-      "https://lh3.googleusercontent.com/d/16Cei0yXwewuxHkfbN2CbkydA0KX6b6Se"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/172yq5WFLcUw4jWMexs1FpgDTyIgSC3n8"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/16Cei0yXwewuxHkfbN2CbkydA0KX6b6Se"}
     ]
   },
   {
@@ -301,8 +302,8 @@
     "steward": "cqlvo",
     "stewardLink": "https://x.com/TheLifeofCalvo",
     "description": "Upper Deck Call of Duty 2023 Gold Solo Ink Set. Each card within the set is limited to only 30 copies. 69 cards in total. Took around 12 months to obtain all 69. This is one of only 3 known complete sets in the world." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1fZp5zlkCAGEMJeE-0B9jLB0tlTTsjEm3"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1fZp5zlkCAGEMJeE-0B9jLB0tlTTsjEm3"}
     ]
   },
   {
@@ -317,9 +318,9 @@
     "steward": "Disarray",
     "stewardLink": "https://x.com/TacDisarray",
     "description": "In 2019, the Call of Duty League created franchising. Formerly OpTic Gaming, HECZ created the Chicago Huntsmen. Arcitys, a 2x Call of Duty champion, played for the Huntsmen. Sender, a former player, coached the Huntsmen." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1-mzzHLw98xpvkxd3cvaVbKdMWllu3AXO",
-      "https://lh3.googleusercontent.com/d/1DHb3a33ssEacB0z9S9nSWCL_LD2FW641"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1-mzzHLw98xpvkxd3cvaVbKdMWllu3AXO"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1DHb3a33ssEacB0z9S9nSWCL_LD2FW641"}
     ]
   },
   {
@@ -334,9 +335,9 @@
     "steward": "charly",
     "stewardLink": "https://x.com/CharlyCJH",
     "description": "This jersey was owned by Call of Duty legend Robert “ASSASS1N” Walsh and was worn during the 2011 CoD XP tournament. The event was hosted at the Playa Vista Hanger in Los Angeles, California from September 2nd through September 3rd and boasted an impressive million dollar prize pool. Each player was given a CoD XP jersey (with their corresponding team name and gamertag on the back) to be used only during this tournament making this a 1 of 1 ASSASS1N game used jersey." ,
-    "images": [
-      "https://lh3.googleusercontent.com/d/1TvDx6pt34F6spaqqmw78aFlcpyVhKmdl",
-      "https://lh3.googleusercontent.com/d/1jF9Ffg3jROSZaYCreUuJpgOo4VKv0zma"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1TvDx6pt34F6spaqqmw78aFlcpyVhKmdl"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1jF9Ffg3jROSZaYCreUuJpgOo4VKv0zma"}
     ]
   },
   {
@@ -351,10 +352,10 @@
     "steward": "TheOnlyAmplifyy",
     "stewardLink": "https://x.com/TheOnlyAmplifyy",
     "description": "This is the infamous jersey that Ricky was wearing when he alongside Aches and co eliminated OpTic Gaming at Black Ops 3 champs.",
-    "images": [
-      "https://lh3.googleusercontent.com/d/1w8FJTldahAHCatWZ8P7Veapt4v_8pv8Z",
-      "https://lh3.googleusercontent.com/d/1nuGfXKWi2oYHRP7tFQ1BQZDl-wMEkJMG",
-      "https://lh3.googleusercontent.com/d/1G1Hi61f0p7U_uLTur0yXmjgofaSCmJZo"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1w8FJTldahAHCatWZ8P7Veapt4v_8pv8Z"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1nuGfXKWi2oYHRP7tFQ1BQZDl-wMEkJMG"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1G1Hi61f0p7U_uLTur0yXmjgofaSCmJZo"}
     ]
   },
   {
@@ -369,9 +370,9 @@
     "steward": "mohawk marco",
     "stewardLink": "https://x.com/Markmolina60",
     "description": "Arodys Dipre was a professional Gears of War player - 14x champion and MVP. From 2015-2017, Praized played for Team EnvyUs.",
-    "images": [
-      "https://lh3.googleusercontent.com/d/157H1e6fxuHqnfa9DIsb8laEj6lcMBHsy",
-      "https://lh3.googleusercontent.com/d/1j8EYTR_2Nh1ZiYZ7K0P7PD-w7bQQn2D5"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/157H1e6fxuHqnfa9DIsb8laEj6lcMBHsy"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1j8EYTR_2Nh1ZiYZ7K0P7PD-w7bQQn2D5"}
     ]
   },
   {
@@ -386,9 +387,9 @@
     "steward": "mohawk marco",
     "stewardLink": "https://x.com/Markmolina60",
     "description": "Nick 'Ashes' Ridgeway is one of the most winningest coaches in Halo. Coming from a professional career in Gears of War, he coached the 2025 Complexity Gaming roster.",
-    "images": [
-      "https://lh3.googleusercontent.com/d/1VcoNdXx3LNUUiIGUCA1LZD3kqoWVCifq",
-      "https://lh3.googleusercontent.com/d/1UdIxuQQVpZCrW68clx-ptejvZ_C732Rn"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1VcoNdXx3LNUUiIGUCA1LZD3kqoWVCifq"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1UdIxuQQVpZCrW68clx-ptejvZ_C732Rn"}
     ]
   },
   {
@@ -403,9 +404,9 @@
     "steward": "mohawk marco",
     "stewardLink": "https://x.com/Markmolina60",
     "description": "Lethul is known as one of the greatest Halo players in history. He played for OpTic Gaming during 2016-2018 adding to his championships (currently 4x Halo champion with 18 tournament wins).",
-    "images": [
-      "https://lh3.googleusercontent.com/d/17ZwUn7X-K_6hwRUfhMXkujTA96ZI-BEc",
-      "https://lh3.googleusercontent.com/d/1gmQBxuIF4iUdMNqo9QODFeyP4ItHUrAG"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/17ZwUn7X-K_6hwRUfhMXkujTA96ZI-BEc"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1gmQBxuIF4iUdMNqo9QODFeyP4ItHUrAG"}
     ]
   },
   {
@@ -420,9 +421,9 @@
     "steward": "mohawk marco",
     "stewardLink": "https://x.com/Markmolina60",
     "description": " SuMuns played for OpTic Gaming from 2016-2019 on the professional Gears of War team. He is a 16x GoW champion.",
-    "images": [
-      "https://lh3.googleusercontent.com/d/1aKau2qyhhgQE0wOM48cem0jNmCqxcGVQ",
-      "https://lh3.googleusercontent.com/d/1jR044mqB9yTbixo2tdk8oZmsgGLMEVl-"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1aKau2qyhhgQE0wOM48cem0jNmCqxcGVQ"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1jR044mqB9yTbixo2tdk8oZmsgGLMEVl-"}
     ]
   },
   {
@@ -437,9 +438,9 @@
     "steward": "mohawk marco",
     "stewardLink": "https://x.com/Markmolina60",
     "description": "Solurs played Gears of War for OpTic Gaming from 2018 to 2019. He is a 4x Gears of War champion.",
-    "images": [
-      "https://lh3.googleusercontent.com/d/14RK_Mb7laEeJ_ppfmSBrSnS1q2DOsqAL",
-      "https://lh3.googleusercontent.com/d/1hIT-x4u-MTUMp5uNODN84Ui6ljtU_Xbi"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/14RK_Mb7laEeJ_ppfmSBrSnS1q2DOsqAL"},
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1hIT-x4u-MTUMp5uNODN84Ui6ljtU_Xbi"}
     ]
   },
   {
@@ -454,8 +455,8 @@
     "steward": "GameOfPWNZ",
     "stewardLink": "https://x.com/pwnzie_09",
     "description": "AbeZy is a 2x Call of Duty World Champion, winning with eUnited and Atlanta FaZe. Previously half of one of the greatest Call of Duty duos - The Tiny Terrors. This jersey is from the Call of Duty: Modern Warfare 2019 season. #2ez4abezy.",
-    "images": [
-      "https://lh3.googleusercontent.com/d/1fEiqMx0-VM1lDVEtUu2EnfFofHcFITuD"
+    "media": [
+      {"type": "image", "url": "https://lh3.googleusercontent.com/d/1fEiqMx0-VM1lDVEtUu2EnfFofHcFITuD"}
     ]
   }
 ]
