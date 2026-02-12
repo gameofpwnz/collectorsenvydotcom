@@ -611,90 +611,100 @@
 
   <script>
     // =====================================================
-    // 1. DEFINE YOUR EVENTS HERE
+    // 1. LOAD EVENTS FROM GOOGLE SHEET (BY ID + SHEET NAME)
     // =====================================================
-    const events = [
-      {
-        date: "2026-01-29",
-        endDate: "2026-02-01",
-        title: "2026 Call of Duty League OpTic Texas Major I, presented by Monster Energy",
-        time: "All day",
-        location: "Moody Coliseum - Dallas, TX",
-        category: "Tournament",
-        description: "The 2026 CDL Major I, presented by Monster Energy, takes over Moody Coliseum, launching the new season in the heart of Dallas, Texas. OpTic Texas hosts a weekend packed with elite Call of Duty competition, high-energy crowds, and nonstop action in the first Major of the season. Experience every moment live as the journey to the 2026 World Championship begins in Dallas from January 29 - February 1, 2026.",
-        linkUrl: "https://discord.gg/RgnNBhkzUc",
-        linkText: "Discord Channel",
-        ticketsUrl: "https://www.tixr.com/groups/optictexas/events/optic-texas-major-i-presented-by-monster-energy-166248",
-        ticketsText: "Tickets"
-      },
-      {
-        date: "2026-03-06",
-        title: "OpTic Gaming x Dallas Stars Night",
-        time: "7:00PM",
-        location: "American Airlines Center - Dallas, TX",
-        category: "Promotional",
-        description: "OpTic Gaming night as the Dallas Stars take on the Colorado Avalanche.",
-        linkUrl: "https://discord.gg/tgMptqqyzp",
-        linkText: "Discord Channel",
-        ticketsUrl: "https://www.gofevo.com/event/Videogame26",
-        ticketsText: "Tickets"
-      },
-      {
-        date: "2026-03-27",
-        endDate: "2026-03-29",
-        title: "Dreamhack Birmingham",
-        time: "All day",
-        location: "National Exhibition Centre - Birmingham, UK",
-        category: "Tournament",
-        description: "ESL ONE, CDL MAJOR II, EXPO",
-        linkUrl: "https://discord.gg/ahGTZdEKKW",
-        linkText: "Discord Channel",
-        ticketsUrl: "https://dreamhack.com/birmingham/tickets/?utm_source=birmingham&utm_medium=front_button&utm_campaign=ab_test&utm_content=dreamhack",
-        ticketsText: "Tickets"
-      },
-      {
-        date: "2026-05-15",
-        endDate: "2026-05-17",
-        title: "Dreamhack Atlanta",
-        time: "All day",
-        location: "Georgia World Congress Center - Atlanta, GA",
-        category: "Tournament",
-        description: "IEM, CDL MAJOR III, HALO, EXPO",
-        linkUrl: "https://discord.gg/MGYGS5Baex",
-        linkText: "Discord Channel",
-        ticketsUrl: "https://dreamhack.com/atlanta/tickets/",
-        ticketsText: "Tickets"
-      },
-      {
-        date: "2026-06-25",
-        endDate: "2026-06-28",
-        title: "2026 Call of Duty League Major IV",
-        time: "All day",
-        location: "Paris, France",
-        category: "Tournament",
-        description: "CDL Major IV Tourney",
-        linkUrl: "https://discord.gg/F3x2fuR2fW",
-        linkText: "Discord Channel",
-        ticketsUrl: "#",
-        ticketsText: "Tickets"
-      },
-      {
-        date: "2026-07-16",
-        endDate: "2026-07-19",
-        title: "2026 Call of Duty League Championship (Hosted by Vegas FaZe)",
-        time: "All day",
-        location: "Michelob Ultra Arena Mandalay Bay - Las Vegas, NV",
-        category: "Tournament",
-        description: "CDL Champs",
-        linkUrl: "https://discord.gg/2bgN5RVVN6",
-        linkText: "Discord Channel",
-        ticketsUrl: "#",
-        ticketsText: "Tickets"
+    // ✅ Set these two values:
+    const SHEET_ID = "1xaApa29fmBWIs1hJQ5OSeocpepFqpNXN4rx3qMeremw";
+    const SHEET_NAME = "Events"; // <-- your tab name
+
+    // This will be filled from Google Sheets before renderEvents() runs
+    let events = [];
+
+    function buildGvizUrl(sheetId, sheetName) {
+      return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(sheetId)}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+    }
+
+    async function fetchSheetRows(sheetId, sheetName) {
+      const url = buildGvizUrl(sheetId, sheetName);
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(`Sheet fetch failed: ${res.status} ${res.statusText}`);
+      const text = await res.text();
+
+      // Google wraps JSON like: google.visualization.Query.setResponse({...});
+      const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
+      const table = json.table;
+
+      if (!table || !table.cols || !table.rows) return [];
+
+      const headers = table.cols.map(c => (c.label || "").trim());
+      const rows = table.rows.map(r => {
+        const obj = {};
+        headers.forEach((h, i) => {
+          const cell = r.c?.[i];
+          obj[h] = cell ? (cell.v ?? "") : "";
+        });
+        return obj;
+      });
+
+      // Remove totally-empty rows
+      return rows.filter(r => Object.values(r).some(v => String(v ?? "").trim() !== ""));
+    }
+
+    function normalizeEventRow(row) {
+      const get = (...keys) => {
+        for (const k of keys) {
+          if (row[k] !== undefined) return row[k];
+          const foundKey = Object.keys(row).find(x => x.toLowerCase() === k.toLowerCase());
+          if (foundKey) return row[foundKey];
+        }
+        return "";
+      };
+
+      const s = v => String(v ?? "").trim();
+
+      const evt = {
+        date: s(get("date")),
+        endDate: s(get("endDate", "end_date")),
+        title: s(get("title")),
+        time: s(get("time")),
+        location: s(get("location")),
+        category: s(get("category")),
+        description: s(get("description")),
+        linkUrl: s(get("linkUrl", "link_url")),
+        linkText: s(get("linkText", "link_text")),
+        ticketsUrl: s(get("ticketsUrl", "tickets_url")),
+        ticketsText: s(get("ticketsText", "tickets_text"))
+      };
+
+      // Treat "#" or empty as not provided
+      if (!evt.ticketsUrl || evt.ticketsUrl === "#") evt.ticketsUrl = "";
+      if (!evt.linkUrl || evt.linkUrl === "#") evt.linkUrl = "";
+
+      // endDate optional: normalize empty to undefined so your logic works cleanly
+      if (!evt.endDate) delete evt.endDate;
+
+      return evt;
+    }
+
+    async function loadEventsFromSheet() {
+      try {
+        const rows = await fetchSheetRows(SHEET_ID, SHEET_NAME);
+        const mapped = rows
+          .map(normalizeEventRow)
+          .filter(e => e.date && e.title); // require at least date + title
+
+        mapped.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+        events = mapped;
+        return true;
+      } catch (err) {
+        console.error("Failed to load Google Sheet events:", err);
+        events = [];
+        return false;
       }
-    ];
+    }
 
     // =====================================================
-    // 2. HELPERS
+    // 2. HELPERS (UNCHANGED)
     // =====================================================
     function parseDate(dateStr) {
       return new Date(dateStr + "T12:00:00");
@@ -759,7 +769,7 @@
     }
 
     // =====================================================
-    // 3. DOM ELEMENTS
+    // 3. DOM ELEMENTS (UNCHANGED)
     // =====================================================
     const eventsListEl = document.getElementById("eventsList");
     const yearFilterEl = document.getElementById("yearFilter");
@@ -775,7 +785,7 @@
     let sortedAll = [];
 
     // =====================================================
-    // 4. FILTER DROPDOWNS
+    // 4. FILTER DROPDOWNS (UNCHANGED)
     // =====================================================
     function populateYearFilter(allEventsSorted) {
       const years = Array.from(
@@ -808,7 +818,7 @@
     }
 
     // =====================================================
-    // 5. RENDERING
+    // 5. RENDERING (UNCHANGED)
     // =====================================================
     function renderEvents() {
       const searchTerm = searchInputEl.value.trim().toLowerCase();
@@ -1050,7 +1060,12 @@
       yearLabelEl.textContent = years.length === 1 ? years[0] : years[0] + "–" + years[years.length - 1];
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    // =====================================================
+    // 6. INIT (ONLY CHANGE: LOAD SHEET FIRST)
+    // =====================================================
+    document.addEventListener("DOMContentLoaded", async () => {
+      await loadEventsFromSheet();
+
       sortedAll = [...events].sort((a, b) => parseDate(a.date) - parseDate(b.date));
 
       updateYearBadge();
