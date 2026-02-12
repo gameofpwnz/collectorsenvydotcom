@@ -617,91 +617,132 @@
     const SHEET_ID = "1xaApa29fmBWIs1hJQ5OSeocpepFqpNXN4rx3qMeremw";
     const SHEET_NAME = "Events"; // <-- your tab name
 
-    // This will be filled from Google Sheets before renderEvents() runs
-    let events = [];
+let events = [];
 
-    function buildGvizUrl(sheetId, sheetName) {
-      return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(sheetId)}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+function buildGvizUrl(sheetId, sheetName) {
+  return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(sheetId)}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+}
+
+// ---- Date normalization ----
+function pad2(n) { return String(n).padStart(2, "0"); }
+
+// Converts GViz cell value into "YYYY-MM-DD" (or "" if blank)
+function toISODateString(v) {
+  if (v === null || v === undefined || v === "") return "";
+
+  // If Google returns a real Date object (rare in our path, but safe)
+  if (v instanceof Date && !isNaN(v)) {
+    return `${v.getFullYear()}-${pad2(v.getMonth() + 1)}-${pad2(v.getDate())}`;
+  }
+
+  // If already "YYYY-MM-DD"
+  if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v.trim())) {
+    return v.trim();
+  }
+
+  // If GViz returns "Date(2026,2,6)" (month is 0-based!)
+  if (typeof v === "string") {
+    const m = v.match(/Date\((\d{4}),\s*(\d{1,2}),\s*(\d{1,2})\)/);
+    if (m) {
+      const year = Number(m[1]);
+      const month0 = Number(m[2]); // 0-based
+      const day = Number(m[3]);
+      const d = new Date(Date.UTC(year, month0, day));
+      return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth() + 1)}-${pad2(d.getUTCDate())}`;
     }
 
-    async function fetchSheetRows(sheetId, sheetName) {
-      const url = buildGvizUrl(sheetId, sheetName);
-      const res = await fetch(url, { cache: "no-store" });
-      if (!res.ok) throw new Error(`Sheet fetch failed: ${res.status} ${res.statusText}`);
-      const text = await res.text();
-
-      // Google wraps JSON like: google.visualization.Query.setResponse({...});
-      const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
-      const table = json.table;
-
-      if (!table || !table.cols || !table.rows) return [];
-
-      const headers = table.cols.map(c => (c.label || "").trim());
-      const rows = table.rows.map(r => {
-        const obj = {};
-        headers.forEach((h, i) => {
-          const cell = r.c?.[i];
-          obj[h] = cell ? (cell.v ?? "") : "";
-        });
-        return obj;
-      });
-
-      // Remove totally-empty rows
-      return rows.filter(r => Object.values(r).some(v => String(v ?? "").trim() !== ""));
+    // Try a last-resort parse for other date-like strings
+    const d2 = new Date(v);
+    if (!isNaN(d2)) {
+      return `${d2.getFullYear()}-${pad2(d2.getMonth() + 1)}-${pad2(d2.getDate())}`;
     }
+  }
 
-    function normalizeEventRow(row) {
-      const get = (...keys) => {
-        for (const k of keys) {
-          if (row[k] !== undefined) return row[k];
-          const foundKey = Object.keys(row).find(x => x.toLowerCase() === k.toLowerCase());
-          if (foundKey) return row[foundKey];
-        }
-        return "";
-      };
+  // If Google returns a serial date number (e.g., 45200)
+  // Google Sheets serial date is days since 1899-12-30
+  if (typeof v === "number" && isFinite(v)) {
+    const d = new Date(Date.UTC(1899, 11, 30));
+    d.setUTCDate(d.getUTCDate() + Math.floor(v));
+    return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth() + 1)}-${pad2(d.getUTCDate())}`;
+  }
 
-      const s = v => String(v ?? "").trim();
+  // Unknown type → empty
+  return "";
+}
 
-      const evt = {
-        date: s(get("date")),
-        endDate: s(get("endDate", "end_date")),
-        title: s(get("title")),
-        time: s(get("time")),
-        location: s(get("location")),
-        category: s(get("category")),
-        description: s(get("description")),
-        linkUrl: s(get("linkUrl", "link_url")),
-        linkText: s(get("linkText", "link_text")),
-        ticketsUrl: s(get("ticketsUrl", "tickets_url")),
-        ticketsText: s(get("ticketsText", "tickets_text"))
-      };
+async function fetchSheetRows(sheetId, sheetName) {
+  const url = buildGvizUrl(sheetId, sheetName);
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Sheet fetch failed: ${res.status} ${res.statusText}`);
+  const text = await res.text();
 
-      // Treat "#" or empty as not provided
-      if (!evt.ticketsUrl || evt.ticketsUrl === "#") evt.ticketsUrl = "";
-      if (!evt.linkUrl || evt.linkUrl === "#") evt.linkUrl = "";
+  const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
+  const table = json.table;
+  if (!table || !table.cols || !table.rows) return [];
 
-      // endDate optional: normalize empty to undefined so your logic works cleanly
-      if (!evt.endDate) delete evt.endDate;
+  const headers = table.cols.map(c => (c.label || "").trim());
+  const rows = table.rows.map(r => {
+    const obj = {};
+    headers.forEach((h, i) => {
+      const cell = r.c?.[i];
+      // IMPORTANT: prefer formatted string when present, else raw value
+      obj[h] = cell ? (cell.f ?? cell.v ?? "") : "";
+    });
+    return obj;
+  });
 
-      return evt;
+  return rows.filter(r => Object.values(r).some(v => String(v ?? "").trim() !== ""));
+}
+
+function normalizeEventRow(row) {
+  const get = (...keys) => {
+    for (const k of keys) {
+      if (row[k] !== undefined) return row[k];
+      const foundKey = Object.keys(row).find(x => x.toLowerCase() === k.toLowerCase());
+      if (foundKey) return row[foundKey];
     }
+    return "";
+  };
 
-    async function loadEventsFromSheet() {
-      try {
-        const rows = await fetchSheetRows(SHEET_ID, SHEET_NAME);
-        const mapped = rows
-          .map(normalizeEventRow)
-          .filter(e => e.date && e.title); // require at least date + title
+  const s = v => String(v ?? "").trim();
 
-        mapped.sort((a, b) => parseDate(a.date) - parseDate(b.date));
-        events = mapped;
-        return true;
-      } catch (err) {
-        console.error("Failed to load Google Sheet events:", err);
-        events = [];
-        return false;
-      }
-    }
+  const evt = {
+    date: toISODateString(get("date")),
+    endDate: toISODateString(get("endDate", "end_date")),
+    title: s(get("title")),
+    time: s(get("time")),
+    location: s(get("location")),
+    category: s(get("category")),
+    description: s(get("description")),
+    linkUrl: s(get("linkUrl", "link_url")),
+    linkText: s(get("linkText", "link_text")),
+    ticketsUrl: s(get("ticketsUrl", "tickets_url")),
+    ticketsText: s(get("ticketsText", "tickets_text"))
+  };
+
+  if (!evt.endDate) delete evt.endDate;
+  if (!evt.ticketsUrl || evt.ticketsUrl === "#") evt.ticketsUrl = "";
+  if (!evt.linkUrl || evt.linkUrl === "#") evt.linkUrl = "";
+
+  return evt;
+}
+
+async function loadEventsFromSheet() {
+  try {
+    const rows = await fetchSheetRows(SHEET_ID, SHEET_NAME);
+    const mapped = rows
+      .map(normalizeEventRow)
+      .filter(e => e.date && e.title); // require at least date + title
+
+    mapped.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+    events = mapped;
+    return true;
+  } catch (err) {
+    console.error("Failed to load Google Sheet events:", err);
+    events = [];
+    return false;
+  }
+}
 
     // =====================================================
     // 2. HELPERS (UNCHANGED)
