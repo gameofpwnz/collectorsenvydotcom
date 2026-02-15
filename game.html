@@ -102,6 +102,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
 
         .target {
@@ -408,7 +409,7 @@
 
         <div style="background: linear-gradient(145deg, #fff9e6 0%, #fff 100%); border: 2px solid rgba(255, 215, 0, 0.3); border-radius: 12px; padding: 20px; margin: 30px 0; text-align: center;">
             <h3 style="color: #8a2be2; margin-bottom: 10px; font-size: 18px;">🎁 Giveaway Contest</h3>
-            <p style="color: #666; margin-bottom: 8px;">Contest ends: <strong id="cutoffDate">March 1, 2024 at 11:59 PM EST</strong></p>
+            <p style="color: #666; margin-bottom: 8px;">Contest ends: <strong id="cutoffDate">February 16, 2026 at 8 PM Central</strong></p>
             <p style="color: #999; font-size: 14px;">All scores must be submitted before the cutoff time to be eligible.</p>
         </div>
 
@@ -437,7 +438,7 @@
             <h2>🎉 Collection Complete!</h2>
             <div id="modalMessage"></div>
             <div class="input-group">
-                <label for="playerName">Your Discord Name:</label>
+                <label for="playerName">Your Name:</label>
                 <input type="text" id="playerName" placeholder="Enter your name" maxlength="30">
             </div>
             <div class="input-group">
@@ -454,7 +455,7 @@
 
         // Configuration - UPDATE THIS WITH YOUR CLOUDFLARE WORKER URL
         const CONFIG = {
-            workerUrl: 'https://game.ashton-98e.workers.dev/api/scores'
+            workerUrl: 'https://your-worker.your-subdomain.workers.dev/api/scores'
         };
 
         // Game state
@@ -605,6 +606,22 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = 'Submitting<span class="loading"></span>';
 
+            // Check if this is demo mode (Worker URL not configured)
+            if (CONFIG.workerUrl.includes('your-worker') || CONFIG.workerUrl.includes('your-subdomain')) {
+                messageDiv.innerHTML = `
+                    <div class="message error">
+                        <strong>⚠️ Demo Mode</strong><br>
+                        To enable score submission, please:<br>
+                        1. Set up your Cloudflare Worker<br>
+                        2. Update the Worker URL in index.html (line ~287)<br>
+                        3. See SETUP_GUIDE.md for instructions
+                    </div>
+                `;
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Score';
+                return;
+            }
+
             try {
                 const response = await fetch(CONFIG.workerUrl, {
                     method: 'POST',
@@ -634,7 +651,7 @@
                     throw new Error(data.error || 'Failed to submit score');
                 }
             } catch (error) {
-                messageDiv.innerHTML = `<div class="message error">Error: ${error.message}</div>`;
+                messageDiv.innerHTML = `<div class="message error">Error: ${error.message}<br><small>Check that your Worker URL is correct and the Worker is deployed.</small></div>`;
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Score';
@@ -643,6 +660,19 @@
 
         // Load leaderboard
         async function loadLeaderboard() {
+            // Check if this is demo mode
+            if (CONFIG.workerUrl.includes('your-worker') || CONFIG.workerUrl.includes('your-subdomain')) {
+                leaderboardBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 20px;">
+                            <strong style="color: #8a2be2;">Demo Mode</strong><br>
+                            <span style="color: #666;">Configure your Cloudflare Worker to see real scores</span>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
             try {
                 const response = await fetch(CONFIG.workerUrl);
                 const data = await response.json();
@@ -676,7 +706,7 @@
                 }
             } catch (error) {
                 console.error('Error loading leaderboard:', error);
-                leaderboardBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #666;">Failed to load leaderboard</td></tr>';
+                leaderboardBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #666;">Unable to load leaderboard. Check Worker setup.</td></tr>';
             }
         }
 
