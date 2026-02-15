@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collectors Envy - Card Catch Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255, 215, 0, 0.2),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-text {
+            font-size: 36px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .logo-tagline {
+            color: #8a2be2;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .game-area {
+            background: #f7f7f7;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .target {
+            width: 120px;
+            height: 160px;
+            background: linear-gradient(145deg, #ffffff 0%, #f0f0f0 100%);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 
+                0 8px 20px rgba(0,0,0,0.3),
+                0 0 0 3px rgba(255, 215, 0, 0.5),
+                inset 0 2px 5px rgba(255,255,255,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            position: relative;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        .target img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .target::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 70%
+            );
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .target:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 
+                0 12px 30px rgba(0,0,0,0.4),
+                0 0 0 4px rgba(255, 215, 0, 0.8),
+                inset 0 2px 5px rgba(255,255,255,0.9);
+        }
+
+        .target:active {
+            transform: scale(0.95);
+            box-shadow: 
+                0 5px 15px rgba(0,0,0,0.3),
+                0 0 0 3px rgba(255, 215, 0, 0.6);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 
+                0 5px 15px rgba(255, 215, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #ffed4e 0%, #ffd700 50%, #ffed4e 100%);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 20px rgba(255, 215, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 
+                0 4px 10px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        .stat-label {
+            color: #8a2be2;
+            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .leaderboard {
+            margin-top: 30px;
+        }
+
+        .leaderboard h2 {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffd700;
+            padding: 12px;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+        }
+
+        .leaderboard-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .leaderboard-table tr:hover {
+            background: #f7f7f7;
+        }
+
+        .rank-1 { color: #ffd700; font-weight: bold; }
+        .rank-2 { color: #c0c0c0; font-weight: bold; }
+        .rank-3 { color: #cd7f32; font-weight: bold; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content h2 {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-text">COLLECTORS ENVY</div>
+            <div class="logo-tagline">Catch Rare Cards</div>
+        </div>
+        <h1>⚡ Card Catch Challenge</h1>
+        <p class="subtitle">Catch the collectible cards as fast as you can!</p>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">Cards Caught</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Time Left</div>
+                <div class="stat-value" id="time">30s</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Catches</div>
+                <div class="stat-value" id="clicks">0</div>
+            </div>
+        </div>
+
+        <div class="game-area" id="gameArea">
+            <p style="color: #666; font-size: 18px;">Click START to begin!</p>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="btn" id="startBtn">START GAME</button>
+        </div>
+
+        <div style="background: linear-gradient(145deg, #fff9e6 0%, #fff 100%); border: 2px solid rgba(255, 215, 0, 0.3); border-radius: 12px; padding: 20px; margin: 30px 0; text-align: center;">
+            <h3 style="color: #8a2be2; margin-bottom: 10px; font-size: 18px;">🎁 Giveaway Contest</h3>
+            <p style="color: #666; margin-bottom: 8px;">Contest ends: <strong id="cutoffDate">March 1, 2024 at 11:59 PM EST</strong></p>
+            <p style="color: #999; font-size: 14px;">All scores must be submitted before the cutoff time to be eligible.</p>
+        </div>
+
+        <div class="leaderboard">
+            <h2>🏆 Top 10 Leaderboard</h2>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #666;">Loading leaderboard...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal" id="submitModal">
+        <div class="modal-content">
+            <h2>🎉 Collection Complete!</h2>
+            <div id="modalMessage"></div>
+            <div class="input-group">
+                <label for="playerName">Your Discord Name:</label>
+                <input type="text" id="playerName" placeholder="Enter your name" maxlength="30">
+            </div>
+            <div class="input-group">
+                <label for="playerEmail">Your Email:</label>
+                <input type="email" id="playerEmail" placeholder="Enter your email">
+            </div>
+            <button class="btn" id="submitScore" style="width: 100%;">Submit Score</button>
+        </div>
+    </div>
+
+    <script>
+        // Collectors Envy Logo (base64 embedded)
+        const LOGO_BASE64 = 'data:image/png;base64,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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABw5/b/A/d3QAzVjSmBAAAAAElFTkSuQmCC';
+
+        // Configuration - UPDATE THIS WITH YOUR CLOUDFLARE WORKER URL
+        const CONFIG = {
+            workerUrl: 'https://game.ashton-98e.workers.dev/api/scores'
+        };
+
+        // Game state
+        let gameState = {
+            score: 0,
+            clicks: 0,
+            timeLeft: 30,
+            isPlaying: false,
+            timer: null,
+            targetTimer: null
+        };
+
+        // DOM elements
+        const gameArea = document.getElementById('gameArea');
+        const scoreDisplay = document.getElementById('score');
+        const timeDisplay = document.getElementById('time');
+        const clicksDisplay = document.getElementById('clicks');
+        const startBtn = document.getElementById('startBtn');
+        const submitModal = document.getElementById('submitModal');
+        const submitBtn = document.getElementById('submitScore');
+        const leaderboardBody = document.getElementById('leaderboardBody');
+
+        // Start game
+        startBtn.addEventListener('click', startGame);
+
+        function startGame() {
+            gameState = {
+                score: 0,
+                clicks: 0,
+                timeLeft: 30,
+                isPlaying: true,
+                timer: null,
+                targetTimer: null
+            };
+
+            updateDisplay();
+            startBtn.disabled = true;
+            gameArea.innerHTML = '';
+
+            // Start countdown
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                updateDisplay();
+
+                if (gameState.timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            // Spawn targets
+            spawnTarget();
+        }
+
+        function spawnTarget() {
+            if (!gameState.isPlaying) return;
+
+            gameArea.innerHTML = '';
+            
+            const target = document.createElement('div');
+            target.className = 'target';
+            
+            // Random position
+            const maxX = gameArea.clientWidth - 120;
+            const maxY = gameArea.clientHeight - 160;
+            const x = Math.max(0, Math.random() * maxX);
+            const y = Math.max(0, Math.random() * maxY);
+            
+            target.style.position = 'absolute';
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
+
+            // Rarity-based gradient backgrounds
+            const cardColors = [
+                'linear-gradient(145deg, #ffd700 0%, #ffed4e 100%)', // Gold - Legendary
+                'linear-gradient(145deg, #c0c0c0 0%, #e8e8e8 100%)', // Silver - Epic
+                'linear-gradient(145deg, #cd7f32 0%, #e8a87c 100%)', // Bronze - Rare
+                'linear-gradient(145deg, #8a2be2 0%, #a855f7 100%)', // Purple - Uncommon
+                'linear-gradient(145deg, #ff1493 0%, #ff69b4 100%)'  // Pink - Common
+            ];
+            
+            const bgColor = cardColors[Math.floor(Math.random() * cardColors.length)];
+            target.style.background = bgColor;
+
+            // Add Collectors Envy logo to card
+            const logo = document.createElement('img');
+            logo.src = LOGO_BASE64;
+            logo.alt = 'Collectors Envy';
+            target.appendChild(logo);
+
+            target.addEventListener('click', () => {
+                if (!gameState.isPlaying) return;
+                
+                gameState.score += 100;
+                gameState.clicks++;
+                updateDisplay();
+                
+                // Visual feedback - spin and shrink
+                target.style.transform = 'scale(0) rotate(180deg)';
+                setTimeout(spawnTarget, 100);
+            });
+
+            gameArea.appendChild(target);
+
+            // Auto-spawn next target if not clicked
+            clearTimeout(gameState.targetTimer);
+            gameState.targetTimer = setTimeout(spawnTarget, 1500);
+        }
+
+        function endGame() {
+            gameState.isPlaying = false;
+            clearInterval(gameState.timer);
+            clearTimeout(gameState.targetTimer);
+            gameArea.innerHTML = '<p style="color: #666; font-size: 18px;">Collection Complete! Submit your score below.</p>';
+            startBtn.disabled = false;
+            
+            // Show submit modal
+            document.getElementById('modalMessage').innerHTML = `
+                <div class="message success">
+                    <strong>Cards Caught: ${gameState.score}</strong><br>
+                    Total Catches: ${gameState.clicks}
+                </div>
+            `;
+            submitModal.classList.add('active');
+        }
+
+        function updateDisplay() {
+            scoreDisplay.textContent = gameState.score;
+            timeDisplay.textContent = gameState.timeLeft + 's';
+            clicksDisplay.textContent = gameState.clicks;
+        }
+
+        // Submit score
+        submitBtn.addEventListener('click', async () => {
+            const name = document.getElementById('playerName').value.trim();
+            const email = document.getElementById('playerEmail').value.trim();
+            const messageDiv = document.getElementById('modalMessage');
+
+            if (!name || !email) {
+                messageDiv.innerHTML = '<div class="message error">Please fill in all fields!</div>';
+                return;
+            }
+
+            if (!email.includes('@')) {
+                messageDiv.innerHTML = '<div class="message error">Please enter a valid email!</div>';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Submitting<span class="loading"></span>';
+
+            try {
+                const response = await fetch(CONFIG.workerUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        score: gameState.score,
+                        clicks: gameState.clicks,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.innerHTML = '<div class="message success">Score submitted successfully! 🎉</div>';
+                    setTimeout(() => {
+                        submitModal.classList.remove('active');
+                        document.getElementById('playerName').value = '';
+                        document.getElementById('playerEmail').value = '';
+                    }, 2000);
+                    loadLeaderboard();
+                } else {
+                    throw new Error(data.error || 'Failed to submit score');
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="message error">Error: ${error.message}</div>`;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Score';
+            }
+        });
+
+        // Load leaderboard
+        async function loadLeaderboard() {
+            try {
+                const response = await fetch(CONFIG.workerUrl);
+                const data = await response.json();
+
+                if (data.scores && data.scores.length > 0) {
+                    leaderboardBody.innerHTML = data.scores.slice(0, 10).map((entry, index) => {
+                        const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+                        // Format timestamp to show both date and time
+                        const timestamp = new Date(entry.timestamp);
+                        const dateStr = timestamp.toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric',
+                            year: 'numeric'
+                        });
+                        const timeStr = timestamp.toLocaleTimeString('en-US', { 
+                            hour: 'numeric', 
+                            minute: '2-digit',
+                            hour12: true 
+                        });
+                        return `
+                            <tr>
+                                <td class="${rankClass}">#${index + 1}</td>
+                                <td>${escapeHtml(entry.name)}</td>
+                                <td><strong>${entry.score}</strong></td>
+                                <td>${dateStr}<br><small style="color: #999;">${timeStr}</small></td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    leaderboardBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #666;">No scores yet. Be the first!</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+                leaderboardBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #666;">Failed to load leaderboard</td></tr>';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load leaderboard on page load
+        loadLeaderboard();
+    </script>
+</body>
+</html>
