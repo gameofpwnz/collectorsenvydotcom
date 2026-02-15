@@ -480,6 +480,50 @@
             workerUrl: 'https://game.ashton-98e.workers.dev/api/scores'
         };
 
+        // HMAC Signing for score verification
+        async function generateHMAC(message, secret) {
+            const encoder = new TextEncoder();
+            const keyData = encoder.encode(secret);
+            const messageData = encoder.encode(message);
+            
+            const key = await crypto.subtle.importKey(
+                'raw',
+                keyData,
+                { name: 'HMAC', hash: 'SHA-256' },
+                false,
+                ['sign']
+            );
+            
+            const signature = await crypto.subtle.sign(
+                'HMAC',
+                key,
+                messageData
+            );
+            
+            return Array.from(new Uint8Array(signature))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        // Get a challenge from the server
+        async function getChallenge() {
+            try {
+                const response = await fetch(CONFIG.workerUrl.replace('/scores', '/challenge'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to get challenge');
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Challenge error:', error);
+                return null;
+            }
+        }
+
         // Game state
         let gameState = {
             score: 0,
@@ -487,7 +531,10 @@
             timeLeft: 30,
             isPlaying: false,
             timer: null,
-            targetTimer: null
+            targetTimer: null,
+            challenge: null,
+            gameStartTime: null,
+            clientSecret: null // Will be derived from challenge
         };
 
         // DOM elements
@@ -501,16 +548,29 @@
         const leaderboardBody = document.getElementById('leaderboardBody');
 
         // Start game
-        startBtn.addEventListener('click', startGame);
+        startBtn.addEventListener('click', async () => {
+            // Get challenge from server before starting
+            const challengeData = await getChallenge();
+            
+            if (!challengeData) {
+                alert('Failed to start game. Please try again.');
+                return;
+            }
 
-        function startGame() {
+            startGame(challengeData);
+        });
+
+        async function startGame(challengeData) {
             gameState = {
                 score: 0,
                 clicks: 0,
                 timeLeft: 30,
                 isPlaying: true,
                 timer: null,
-                targetTimer: null
+                targetTimer: null,
+                challenge: challengeData.challenge,
+                gameStartTime: Date.now(),
+                clientSecret: challengeData.challenge // Use challenge as secret
             };
 
             updateDisplay();
@@ -676,6 +736,12 @@
             }
 
             try {
+                const timestamp = new Date().toISOString();
+                
+                // Generate HMAC signature
+                const signatureData = `${gameState.challenge}:${gameState.score}:${gameState.clicks}:${timestamp}`;
+                const signature = await generateHMAC(signatureData, gameState.clientSecret);
+
                 const response = await fetch(CONFIG.workerUrl, {
                     method: 'POST',
                     headers: {
@@ -686,7 +752,10 @@
                         email: email,
                         score: gameState.score,
                         clicks: gameState.clicks,
-                        timestamp: new Date().toISOString()
+                        timestamp: timestamp,
+                        challenge: gameState.challenge,
+                        signature: signature,
+                        gameStartTime: gameState.gameStartTime
                     })
                 });
 
