@@ -20,7 +20,9 @@
             align-items: center;
             padding: 20px;
             position: relative;
-            overflow: hidden;
+            overflow: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         body::before {
@@ -48,6 +50,7 @@
                 inset 0 1px 0 rgba(255,255,255,0.8);
             position: relative;
             z-index: 1;
+            touch-action: pan-y;
         }
 
         .logo {
@@ -103,6 +106,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            touch-action: none;
         }
 
         .target {
@@ -431,7 +435,7 @@
 
         <div style="background: linear-gradient(145deg, #fff9e6 0%, #fff 100%); border: 2px solid rgba(255, 215, 0, 0.3); border-radius: 12px; padding: 20px; margin: 30px 0; text-align: center;">
             <h3 style="color: #8a2be2; margin-bottom: 10px; font-size: 18px;">🎁 Giveaway Contest</h3>
-            <p style="color: #666; margin-bottom: 8px;">Contest ends: <strong id="cutoffDate">February 16, 2026 at 8 PM EST</strong></p>
+            <p style="color: #666; margin-bottom: 8px;">Contest ends: <strong id="cutoffDate">February 17, 2026 at 8 PM EST</strong></p>
             <p style="color: #999; font-size: 14px;">All scores must be submitted before the cutoff time to be eligible.</p>
         </div>
 
@@ -581,7 +585,10 @@
 
             // Add click handler to the target
             const handleClick = (e) => {
-                e.preventDefault();
+                // Only prevent default for touch events ON the card itself
+                if (e.type === 'touchstart') {
+                    e.preventDefault();
+                }
                 e.stopPropagation();
                 e.stopImmediatePropagation();
                 
@@ -608,7 +615,8 @@
                 return false;
             };
 
-            // Support both mouse and touch with capture phase
+            // Support both mouse and touch
+            // Use passive: false only for touch on the card to allow preventDefault
             target.addEventListener('click', handleClick, { capture: true });
             target.addEventListener('touchstart', handleClick, { passive: false, capture: true });
 
