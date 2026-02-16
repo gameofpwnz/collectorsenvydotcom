@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collectors Envy - Memory Match Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255, 215, 0, 0.2),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+            position: relative;
+            z-index: 1;
+            touch-action: pan-y;
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #8a2be2;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: linear-gradient(145deg, #f0f0f0, #ffffff);
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .info-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #8a2be2, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 768px) {
+            .game-board {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-board {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+        }
+
+        .card {
+            aspect-ratio: 3/4;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .card:hover:not(.flipped):not(.matched) {
+            transform: scale(1.05);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            opacity: 0.6;
+            cursor: default;
+            animation: matchPulse 0.5s ease-out;
+        }
+
+        @keyframes matchPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .card-back {
+            background: linear-gradient(145deg, #8a2be2, #ff1493);
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.3);
+        }
+
+        .card-back::before {
+            content: '?';
+            font-size: 3em;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .card-front {
+            background: white;
+            transform: rotateY(180deg);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .card-front img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s;
+            color: #1a1a2e;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .instructions {
+            background: linear-gradient(145deg, #f8f9fa, #ffffff);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .instructions h3 {
+            color: #8a2be2;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #666;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+
+        .game-message {
+            text-align: center;
+            font-size: 1.5em;
+            color: #8a2be2;
+            margin: 20px 0;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .modal-content h2 {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #8a2be2;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .leaderboard {
+            margin-top: 30px;
+        }
+
+        .leaderboard h3 {
+            color: #8a2be2;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .leaderboard-item {
+            background: linear-gradient(145deg, #f8f9fa, #ffffff);
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .leaderboard-item.top-1 {
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+        }
+
+        .leaderboard-item.top-2 {
+            background: linear-gradient(145deg, #c0c0c0, #e8e8e8);
+        }
+
+        .leaderboard-item.top-3 {
+            background: linear-gradient(145deg, #cd7f32, #e8a87c);
+        }
+
+        .rank {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .score-display {
+            font-weight: bold;
+            color: #8a2be2;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎴 Memory Match Challenge</h1>
+        <p class="subtitle">Collectors Envy Giveaway</p>
+
+        <div class="instructions">
+            <h3>How to Play:</h3>
+            <ol>
+                <li>Click START to begin - all cards will show for 3 seconds</li>
+                <li>Memorize the positions!</li>
+                <li>Match all 12 pairs as fast as you can</li>
+                <li>Score = Matches × 100 + Time Bonus (faster = more points)</li>
+            </ol>
+        </div>
+
+        <div class="game-info">
+            <div class="info-box">
+                <div class="info-label">Matches</div>
+                <div class="info-value" id="matchesDisplay">0 / 12</div>
+            </div>
+            <div class="info-box">
+                <div class="info-label">Time</div>
+                <div class="info-value" id="timeDisplay">0s</div>
+            </div>
+            <div class="info-box">
+                <div class="info-label">Score</div>
+                <div class="info-value" id="scoreDisplay">0</div>
+            </div>
+        </div>
+
+        <div class="game-message" id="gameMessage"></div>
+
+        <div class="controls">
+            <button class="btn" id="startBtn">START GAME</button>
+        </div>
+
+        <div class="game-board" id="gameBoard"></div>
+
+        <div class="leaderboard">
+            <h3>🏆 Top Scores</h3>
+            <div id="leaderboardList">
+                <p style="text-align: center; color: #666;">Play to see the leaderboard!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Score Modal -->
+    <div class="modal" id="submitModal">
+        <div class="modal-content">
+            <h2>🎉 Game Complete!</h2>
+            <div id="modalMessage"></div>
+            <div class="input-group">
+                <label for="playerName">Your Name:</label>
+                <input type="text" id="playerName" placeholder="Enter your name" maxlength="50">
+            </div>
+            <div class="input-group">
+                <label for="playerEmail">Your Email:</label>
+                <input type="email" id="playerEmail" placeholder="your@email.com" maxlength="100">
+            </div>
+            <button class="btn" id="submitBtn">SUBMIT SCORE</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // 🎨 CARD IMAGES CONFIGURATION
+        // ============================================
+        // Replace these URLs with your own card images
+        // You need 12 different images (one for each pair)
+        
+        const CARD_IMAGES = [
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/blt69dd80f51295ea0a/61e09af0a408793a37adc7a4/cdl-boston-breach-icon-color-dark-padding.svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/bltc1ddba2549587194/64f74317af49494ad8926c37/ravens-icon-color.svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/blt73e8f6f2194e9370/6719383cef12165a22bf678c/C9NY_Icon_White_NY_(1).svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/bltdea71ea67a2999d7/68cc24e4e6f87a2d6e27a6c6/Asset_14.svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/blt8f87f7107e1658cc/6732a3d2ac6f71ab1c541288/ROKKR_ICON_MAIN_Red_(1).svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/blt4ae7c1816b4ffc52/5fa5a10ea9e913483b74d191/cdl_la_thieves_primary_logo_padding.svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/blt46e2a57928dfcb39/64e77a7ff3415dce8124716b/heretics-icon-color.svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/blt4bee833057845797/618af2431bb8c23cf8bbede5/cdl_optic_texas_icon_light.svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/blt68118b0f6e452b79/6925d17d521fe6a55224502c/Paris_Gentle_Mates_block.svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/blt10cfdbbd775958c4/68c05db642e3074f5b293148/Riyadh_Falcons_Mark_Green_Icon_No_Crop.svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/blt7cfe2b2dd1a274d5/690b774337ded4045fe74dfa/koi_frame_(1).svg?auto=webp',
+            'https://images.blz-contentstack.com/v3/assets/blta7b34f1f894a2422/bltbe8507a1cef478bb/5dba15def9bc554996993cd0/SEA_-_Surge.svg?auto=webp'
+        ];
+
+        // ============================================
+        // 📡 WORKER CONFIGURATION
+        // ============================================
+        // UPDATE THIS with your Cloudflare Worker URL
+        
+        const CONFIG = {
+            workerUrl: 'https://memory.ashton-98e.workers.dev/api/scores'
+        };
+
+        // ============================================
+        // 🎮 GAME STATE
+        // ============================================
+        
+        let gameState = {
+            cards: [],
+            flippedCards: [],
+            matchedPairs: 0,
+            moves: 0,
+            score: 0,
+            isPlaying: false,
+            canFlip: false,
+            timer: null,
+            startTime: null,
+            elapsedTime: 0,
+            cardSequence: [], // Track flip order for anti-cheat
+            challengeData: null
+        };
+
+        // DOM Elements
+        const gameBoard = document.getElementById('gameBoard');
+        const startBtn = document.getElementById('startBtn');
+        const matchesDisplay = document.getElementById('matchesDisplay');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const gameMessage = document.getElementById('gameMessage');
+        const submitModal = document.getElementById('submitModal');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // ============================================
+        // 🎲 GAME FUNCTIONS
+        // ============================================
+
+        // Get challenge from server
+        async function getChallenge() {
+            try {
+                const response = await fetch(CONFIG.workerUrl.replace('/scores', '/challenge'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (!response.ok) return null;
+                return await response.json();
+            } catch (error) {
+                console.error('Challenge error:', error);
+                return null;
+            }
+        }
+
+        // Initialize game
+        async function initGame() {
+            // Get challenge from server
+            const challengeData = await getChallenge();
+            if (!challengeData) {
+                gameMessage.textContent = '⚠️ Connection error. Please try again.';
+                return;
+            }
+
+            gameState = {
+                cards: [],
+                flippedCards: [],
+                matchedPairs: 0,
+                moves: 0,
+                score: 0,
+                isPlaying: true,
+                canFlip: false,
+                timer: null,
+                startTime: Date.now(),
+                elapsedTime: 0,
+                cardSequence: [],
+                challengeData: challengeData
+            };
+
+            // Create card pairs
+            const cardPairs = [];
+            for (let i = 0; i < CARD_IMAGES.length; i++) {
+                cardPairs.push({ id: i, image: CARD_IMAGES[i] });
+                cardPairs.push({ id: i, image: CARD_IMAGES[i] });
+            }
+
+            // Shuffle cards using server-provided seed for verification
+            gameState.cards = shuffleArray(cardPairs);
+
+            renderBoard();
+            showAllCards();
+            updateDisplay();
+
+            // Start timer
+            gameState.timer = setInterval(() => {
+                gameState.elapsedTime = Math.floor((Date.now() - gameState.startTime) / 1000);
+                updateDisplay();
+            }, 100);
+
+            startBtn.disabled = true;
+        }
+
+        // Shuffle array
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Render game board
+        function renderBoard() {
+            gameBoard.innerHTML = '';
+            gameState.cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.dataset.index = index;
+                cardElement.dataset.id = card.id;
+
+                cardElement.innerHTML = `
+                    <div class="card-face card-back"></div>
+                    <div class="card-face card-front">
+                        <img src="${card.image}" alt="Card ${card.id}">
+                    </div>
+                `;
+
+                cardElement.addEventListener('click', () => handleCardClick(index));
+                gameBoard.appendChild(cardElement);
+            });
+        }
+
+        // Show all cards initially
+        function showAllCards() {
+            gameMessage.textContent = '👀 Memorize the cards!';
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => card.classList.add('flipped'));
+
+            setTimeout(() => {
+                cards.forEach(card => card.classList.remove('flipped'));
+                gameState.canFlip = true;
+                gameMessage.textContent = '🎯 Find the matches!';
+            }, 3000);
+        }
+
+        // Handle card click
+        function handleCardClick(index) {
+            if (!gameState.canFlip || !gameState.isPlaying) return;
+
+            const cardElement = document.querySelectorAll('.card')[index];
+            if (cardElement.classList.contains('flipped') || 
+                cardElement.classList.contains('matched')) return;
+
+            // Flip card
+            cardElement.classList.add('flipped');
+            gameState.flippedCards.push(index);
+            gameState.cardSequence.push({
+                index: index,
+                cardId: gameState.cards[index].id,
+                timestamp: Date.now()
+            });
+
+            // Check for match when 2 cards are flipped
+            if (gameState.flippedCards.length === 2) {
+                gameState.canFlip = false;
+                gameState.moves++;
+                checkMatch();
+            }
+        }
+
+        // Check if cards match
+        function checkMatch() {
+            const [index1, index2] = gameState.flippedCards;
+            const card1 = gameState.cards[index1];
+            const card2 = gameState.cards[index2];
+
+            const cardElements = document.querySelectorAll('.card');
+
+            if (card1.id === card2.id) {
+                // Match found!
+                setTimeout(() => {
+                    cardElements[index1].classList.add('matched');
+                    cardElements[index2].classList.add('matched');
+                    gameState.matchedPairs++;
+                    gameState.flippedCards = [];
+                    gameState.canFlip = true;
+                    updateDisplay();
+
+                    // Check if game is complete
+                    if (gameState.matchedPairs === CARD_IMAGES.length) {
+                        endGame();
+                    }
+                }, 500);
+            } else {
+                // No match
+                setTimeout(() => {
+                    cardElements[index1].classList.remove('flipped');
+                    cardElements[index2].classList.remove('flipped');
+                    gameState.flippedCards = [];
+                    gameState.canFlip = true;
+                }, 1000);
+            }
+        }
+
+        // Update display
+        function updateDisplay() {
+            matchesDisplay.textContent = `${gameState.matchedPairs} / ${CARD_IMAGES.length}`;
+            timeDisplay.textContent = `${gameState.elapsedTime}s`;
+
+            // Calculate score: 100 points per match + time bonus
+            // Time bonus: max 1000 points, decreases over time
+            const matchPoints = gameState.matchedPairs * 100;
+            const timeBonus = Math.max(0, 1000 - (gameState.elapsedTime * 10));
+            gameState.score = matchPoints + Math.floor(timeBonus);
+            
+            scoreDisplay.textContent = gameState.score;
+        }
+
+        // End game
+        function endGame() {
+            gameState.isPlaying = false;
+            clearInterval(gameState.timer);
+            gameMessage.textContent = '🎉 Complete! Submit your score!';
+            startBtn.disabled = false;
+
+            // Show submit modal
+            document.getElementById('modalMessage').innerHTML = `
+                <div class="message success">
+                    <strong>Final Score: ${gameState.score}</strong><br>
+                    Matches: ${gameState.matchedPairs}<br>
+                    Time: ${gameState.elapsedTime}s
+                </div>
+            `;
+            submitModal.classList.add('active');
+        }
+
+        // Submit score
+        submitBtn.addEventListener('click', async () => {
+            const name = document.getElementById('playerName').value.trim();
+            const email = document.getElementById('playerEmail').value.trim();
+            const messageDiv = document.getElementById('modalMessage');
+
+            if (!name || !email) {
+                messageDiv.innerHTML = '<div class="message error">Please fill in all fields</div>';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            // Check demo mode
+            if (CONFIG.workerUrl.includes('your-worker') || CONFIG.workerUrl.includes('your-subdomain')) {
+                messageDiv.innerHTML = `
+                    <div class="message error">
+                        <strong>⚠️ Demo Mode</strong><br>
+                        Configure your Cloudflare Worker URL to enable score submission.
+                    </div>
+                `;
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'SUBMIT SCORE';
+                return;
+            }
+
+            try {
+                const response = await fetch(CONFIG.workerUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        score: gameState.score,
+                        matches: gameState.matchedPairs,
+                        time: gameState.elapsedTime,
+                        moves: gameState.moves,
+                        timestamp: new Date().toISOString(),
+                        gameStartTime: gameState.startTime,
+                        cardSequence: gameState.cardSequence,
+                        challenge: gameState.challengeData?.challenge,
+                        challengeTimestamp: gameState.challengeData?.timestamp,
+                        serverSignature: gameState.challengeData?.signature
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.innerHTML = '<div class="message success">Score submitted! 🎉</div>';
+                    setTimeout(() => {
+                        submitModal.classList.remove('active');
+                        document.getElementById('playerName').value = '';
+                        document.getElementById('playerEmail').value = '';
+                    }, 2000);
+                    loadLeaderboard();
+                } else {
+                    messageDiv.innerHTML = `<div class="message error">Error: ${data.error || 'Submission failed'}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<div class="message error">Network error. Please try again.</div>';
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'SUBMIT SCORE';
+        });
+
+        // Load leaderboard
+        async function loadLeaderboard() {
+            try {
+                const response = await fetch(CONFIG.workerUrl);
+                const data = await response.json();
+
+                if (data.scores && data.scores.length > 0) {
+                    const list = document.getElementById('leaderboardList');
+                    list.innerHTML = data.scores.slice(0, 10).map((score, index) => `
+                        <div class="leaderboard-item ${index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : ''}">
+                            <span class="rank">#${index + 1}</span>
+                            <span class="player-info">${score.name}</span>
+                            <span class="score-display">${score.score}</span>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Failed to load leaderboard:', error);
+            }
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', initGame);
+
+        // Load leaderboard on page load
+        loadLeaderboard();
+    </script>
+</body>
+</html>
