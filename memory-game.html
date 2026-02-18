@@ -434,7 +434,7 @@
             <h2>🎉 Game Complete!</h2>
             <div id="modalMessage"></div>
             <div class="input-group">
-                <label for="playerName">Your Name:</label>
+                <label for="playerName">Your Discord Name:</label>
                 <input type="text" id="playerName" placeholder="Enter your name" maxlength="50">
             </div>
             <div class="input-group">
@@ -692,6 +692,7 @@
         // End game
         function endGame() {
             gameState.isPlaying = false;
+            gameState.endTime = Date.now(); // Track when game actually ended
             clearInterval(gameState.timer);
             gameMessage.textContent = '🎉 Complete! Submit your score!';
             startBtn.disabled = false;
@@ -747,6 +748,7 @@
                         moves: gameState.moves,
                         timestamp: new Date().toISOString(),
                         gameStartTime: gameState.startTime,
+                        gameEndTime: gameState.endTime, // Actual game end, not submission time
                         cardSequence: gameState.cardSequence,
                         challenge: gameState.challengeData?.challenge,
                         challengeTimestamp: gameState.challengeData?.timestamp,
