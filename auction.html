@@ -508,7 +508,8 @@
             try {
                 const response = await fetch(url);
                 const data = await response.text();
-                const rows = data.split('\n').slice(1);
+                // Sheet is oldest-first; show newest first
+                const rows = data.split('\n').slice(1).reverse();
                 const grid = document.getElementById('past-grid');
 
                 rows.forEach(row => {
