@@ -1339,3 +1339,32 @@ p.text-component { color: #a1a1a1; font-weight: 400; }
 body::before { background-image: none; }
 .ce-stats, .ce-grid, .ce-tiles, .discord-widget { font-family: 'Inter', sans-serif; }
 .slideshow-component.instance-1 { border-radius: 12px; overflow: hidden; }
+
+/* --- BRAND TYPOGRAPHY (beat the generated per-instance text rules) --- */
+html { font-size: 16px; }
+body, .site-wrapper { font-family: 'Inter', sans-serif; }
+h2.text-component.text-component[class*="instance-"] {
+	font-family: 'Inter', sans-serif;
+	font-size: clamp(1.5rem, 3vw, 1.8rem);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.2;
+	text-transform: uppercase;
+	width: 100%;
+	color: #ffffff;
+}
+p.text-component.text-component[class*="instance-"] {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+	letter-spacing: 0;
+	line-height: 1.6;
+	width: 100%;
+	color: #a1a1a1;
+}
+p#text01 { max-width: 760px; margin-left: auto; margin-right: auto; }
+p#text08 { font-size: 0.9rem; }
+.buttons-component.instance-1 > li > a { font-size: 0.85rem; letter-spacing: 0; }
+.ce-stat-number { font-family: 'Inter', sans-serif; font-weight: 800; letter-spacing: -0.02em !important; }
+.ce-stat-label { font-family: 'Inter', sans-serif; font-weight: 600; }
+.ce-caption, .ce-tile-title { font-family: 'Inter', sans-serif !important; }
