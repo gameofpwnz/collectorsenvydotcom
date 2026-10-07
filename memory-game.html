@@ -29,10 +29,7 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 2rem 20px;
+            padding: 0;
             overflow: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
@@ -43,7 +40,8 @@
             border: 1px solid var(--ce-border);
             border-radius: 12px;
             padding: 2.5rem;
-            width: 100%;
+            width: calc(100% - 40px);
+            margin: 2rem auto;
             position: relative;
             touch-action: pan-y;
         }
@@ -224,6 +222,7 @@
     </style>
 </head>
 <body>
+<script src="/assets/nav.js"></script>
     <div class="container">
         <h1>Memory Match Challenge</h1>
         <p class="subtitle">Collectors Envy Giveaway</p>
