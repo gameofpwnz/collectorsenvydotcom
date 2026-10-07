@@ -55,6 +55,7 @@
 }';
 
   function item(l) {
+    var ext = /^https?:/.test(l.href) ? ' target="_blank" rel="noopener"' : '';
     var cur = isActive(l) ? ' aria-current="page"' : '';
     var sub = '';
     if (l.children) {
@@ -64,7 +65,7 @@
       // Parent of a dropdown only highlights; the children are the destinations.
       return '<li><a href="' + l.href + '"' + cur + '>' + l.label + '</a>' + sub + '</li>';
     }
-    return '<li><a href="' + l.href + '"' + cur + '>' + l.label + '</a></li>';
+    return '<li><a href="' + l.href + '"' + cur + ext + '>' + l.label + '</a></li>';
   }
 
   var html = '<nav class="ce-nav" aria-label="Main"><div class="ce-nav-inner">' +
