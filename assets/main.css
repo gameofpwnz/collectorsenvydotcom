@@ -495,7 +495,7 @@ body.is-instant::after {
 	line-height: calc(2rem - 4px);
 	padding: 0 1rem;
 	vertical-align: middle;
-	font-family: 'Audiowide', sans-serif;
+	font-family: 'Inter', sans-serif;
 	letter-spacing: 0.075rem;
 	padding-left: calc(0.075rem + 1rem);
 	font-size: 0.75em;
@@ -676,7 +676,7 @@ body.is-instant::after {
 
 .text-component.instance-1 {
 	color: #FFFFFF;
-	font-family: 'Archivo', sans-serif;
+	font-family: 'Inter', sans-serif;
 	letter-spacing: 0.075rem;
 	width: calc(100% + 0.075rem);
 	font-size: 0.75em;
@@ -685,7 +685,7 @@ body.is-instant::after {
 }
 
 .text-component.instance-1 mark {
-	color: #00F0FF;
+	color: #00ff88;
 	background-color: transparent;
 }
 
@@ -703,7 +703,7 @@ body.is-instant::after {
 
 .text-component.instance-2 {
 	color: #FFFFFF;
-	font-family: 'Archivo', sans-serif;
+	font-family: 'Inter', sans-serif;
 	letter-spacing: 0.075rem;
 	width: calc(100% + 0.075rem);
 	font-size: 1.875em;
@@ -712,7 +712,7 @@ body.is-instant::after {
 }
 
 .text-component.instance-2 mark {
-	color: #00F0FF;
+	color: #00ff88;
 	background-color: transparent;
 }
 
@@ -730,7 +730,7 @@ body.is-instant::after {
 
 .text-component.instance-8 {
 	color: #FFFFFF;
-	font-family: 'Archivo', sans-serif;
+	font-family: 'Inter', sans-serif;
 	letter-spacing: 0.075rem;
 	width: calc(100% + 0.075rem);
 	font-size: 0.625em;
@@ -739,7 +739,7 @@ body.is-instant::after {
 }
 
 .text-component.instance-8 mark {
-	color: #00F0FF;
+	color: #00ff88;
 	background-color: transparent;
 }
 
@@ -757,7 +757,7 @@ body.is-instant::after {
 
 .text-component.instance-6 {
 	color: #FFFFFF;
-	font-family: 'Archivo', sans-serif;
+	font-family: 'Inter', sans-serif;
 	letter-spacing: 0.075rem;
 	width: calc(100% + 0.075rem);
 	font-size: 1.875em;
@@ -766,7 +766,7 @@ body.is-instant::after {
 }
 
 .text-component.instance-6 mark {
-	color: #00F0FF;
+	color: #00ff88;
 	background-color: transparent;
 }
 
@@ -784,7 +784,7 @@ body.is-instant::after {
 
 .text-component.instance-4 {
 	color: #FFFFFF;
-	font-family: 'Archivo', sans-serif;
+	font-family: 'Inter', sans-serif;
 	letter-spacing: 0.075rem;
 	width: calc(100% + 0.075rem);
 	font-size: 1.875em;
@@ -793,7 +793,7 @@ body.is-instant::after {
 }
 
 .text-component.instance-4 mark {
-	color: #00F0FF;
+	color: #00ff88;
 	background-color: transparent;
 }
 
@@ -811,7 +811,7 @@ body.is-instant::after {
 
 .text-component.instance-7 {
 	color: #FFFFFF;
-	font-family: 'Archivo', sans-serif;
+	font-family: 'Inter', sans-serif;
 	letter-spacing: 0.075rem;
 	width: calc(100% + 0.075rem);
 	font-size: 1.875em;
@@ -820,7 +820,7 @@ body.is-instant::after {
 }
 
 .text-component.instance-7 mark {
-	color: #00F0FF;
+	color: #00ff88;
 	background-color: transparent;
 }
 
@@ -838,7 +838,7 @@ body.is-instant::after {
 
 .text-component.instance-5 {
 	color: #FFFFFF;
-	font-family: 'Archivo', sans-serif;
+	font-family: 'Inter', sans-serif;
 	letter-spacing: 0.075rem;
 	width: calc(100% + 0.075rem);
 	font-size: 1.875em;
@@ -847,7 +847,7 @@ body.is-instant::after {
 }
 
 .text-component.instance-5 mark {
-	color: #00F0FF;
+	color: #00ff88;
 	background-color: transparent;
 }
 
@@ -865,7 +865,7 @@ body.is-instant::after {
 
 .text-component.instance-3 {
 	color: #FFFFFF;
-	font-family: 'Archivo', sans-serif;
+	font-family: 'Inter', sans-serif;
 	letter-spacing: 0.075rem;
 	width: calc(100% + 0.075rem);
 	font-size: 0.5em;
@@ -874,7 +874,7 @@ body.is-instant::after {
 }
 
 .text-component.instance-3 mark {
-	color: #00F0FF;
+	color: #00ff88;
 	background-color: transparent;
 }
 
@@ -1008,7 +1008,7 @@ body.is-instant::after {
 }
 
 .icons-component.instance-2 > li > a:hover > svg {
-	fill: #00F0FF !important;
+	fill: #00ff88 !important;
 }
 
 .icons-component.instance-2 > li > a + svg {
@@ -1308,3 +1308,34 @@ body.is-instant::after {
     color: #fff;
 }
 
+
+/* --- BRAND OVERRIDES (match brand.html) --- */
+body { background-color: #000000; -webkit-font-smoothing: antialiased; }
+
+.buttons-component.instance-1 > li > a {
+	border-radius: 6px;
+	border-width: 1px;
+	border-color: #222222;
+	background-color: #0a0a0a;
+	font-weight: 600;
+	letter-spacing: 0;
+	padding-left: 1rem;
+}
+.buttons-component.instance-1 > li > a:hover {
+	background-color: #ffffff;
+	border-color: #ffffff;
+	color: #000000;
+}
+.buttons-component.instance-1 > li > a:hover > svg { fill: #000000; }
+
+h2.text-component {
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: -0.02em;
+}
+.text-component { letter-spacing: 0; }
+p.text-component { color: #a1a1a1; font-weight: 400; }
+.divider-component[class*="instance-"]::before { background-color: #222222; }
+body::before { background-image: none; }
+.ce-stats, .ce-grid, .ce-tiles, .discord-widget { font-family: 'Inter', sans-serif; }
+.slideshow-component.instance-1 { border-radius: 12px; overflow: hidden; }

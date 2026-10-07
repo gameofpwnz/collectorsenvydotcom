@@ -4,13 +4,13 @@
 		<title>Collector&#039;s Envy</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<meta name="color-scheme" content="light only" />
+		<meta name="color-scheme" content="dark" />
 		<meta name="description" content="Esports Collectors" />
 		<meta property="og:site_name" content="Collector&#039;s Envy" />
 		<meta property="og:title" content="Collector&#039;s Envy" />
 		<meta property="og:type" content="website" />
 		<meta property="og:description" content="Esports Collectors" />
-		<link href="https://fonts.googleapis.com/css2?display=swap&family=Audiowide:ital,wght@0,400;1,400&family=Archivo:ital,wght@0,600;1,600" rel="stylesheet" type="text/css" />
+		<link href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;600;700;800" rel="stylesheet" type="text/css" />
 		<link rel="icon" type="image/png" href="assets/images/favicon.png" />
 		<link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
 		<link rel="stylesheet" href="assets/main.css" />
@@ -60,18 +60,18 @@
 						--bg: #000000;
 						
 						/* DARKER than homepage panels */
-						--panel: rgba(255,255,255,0.025);
-						--panel-2: rgba(255,255,255,0.035);
+						--panel: #0a0a0a;
+						--panel-2: #0a0a0a;
 						
-						--line: rgba(255,255,255,0.12);
-						--line-2: rgba(255,255,255,0.20);
+						--line: #222222;
+						--line-2: #444444;
 						
 						--text: rgba(255,255,255,0.92);
 						--muted: rgba(255,255,255,0.62);
 						
 						/* CE accent */
-						--accent: #00F0FF;
-						--accent-soft: rgba(0,240,255,0.22);
+						--accent: #00ff88;
+						--accent-soft: rgba(0,255,136,0.22);
 						
 						max-width: 1200px;
 						margin: 0 auto;
@@ -87,56 +87,36 @@
 						
 						/* CARD */
 						.ce-stat-card{
-						background:
-						linear-gradient(
-						180deg,
-						rgba(255,255,255,0.04),
-						rgba(255,255,255,0.01)
-						),
-						var(--panel);
-						border: 1px solid var(--line);
-						border-radius: 18px;
+						background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
 						padding: 26px 22px 24px;
 						text-align: center;
 						
 						/* Stronger separation */
-						box-shadow:
-						0 14px 30px rgba(0,0,0,0.75),
-						inset 0 1px 0 rgba(255,255,255,0.05);
 						
-						backdrop-filter: blur(6px);
 						}
 						
 						/* HOVER */
 						.ce-stat-card:hover{
 						border-color: var(--line-2);
-						box-shadow:
-						0 16px 34px rgba(0,0,0,0.8),
-						0 0 0 1px var(--accent-soft);
+						
 						}
 						
 						/* NUMBER */
 						.ce-stat-number{
-						font-weight: 900;
-						font-size: clamp(34px, 3.4vw, 56px);
+						font-weight: 800; font-size: clamp(34px, 3.4vw, 56px);
 						line-height: 1.05;
 						letter-spacing: 0.03em;
-						color: var(--accent);
-						
-						white-space: nowrap;
+						color: #ffffff; white-space: nowrap;
 						font-variant-numeric: tabular-nums;
 						
-						text-shadow:
-						0 0 24px rgba(0,240,255,0.14);
+						
 						}
 						
 						/* LABEL */
 						.ce-stat-label{
 						margin-top: 12px;
 						font-size: 12px;
-						letter-spacing: 0.22em;
-						text-transform: uppercase;
-						color: var(--muted);
+						letter-spacing: 0.12em; text-transform: uppercase; color: #a1a1a1;
 						}
 						
 						/* MOBILE */
@@ -236,8 +216,7 @@
 						.ce-frame{
 						width:100%;
 						aspect-ratio:1 / 1; /* change to 4 / 5 if you want portrait */
-						background:#111;
-						border-radius:14px;
+						background:#0a0a0a; border:1px solid #222222; border-radius:12px;
 						overflow:hidden;
 						}
 						
@@ -252,14 +231,11 @@
 						margin-top:10px;
 						text-align:center;
 						font-size:1rem;
-						font-weight:600;
-						letter-spacing:0.03em;
-						}
+						font-weight:600; color:#a1a1a1; }
 						
-						.ce-tile:hover .ce-caption{
-						text-decoration:underline;
-						}
-						</style>
+						.ce-tile:hover .ce-caption{ color:#ffffff;
+						text-decoration:underline; }
+							</style>
 						
 						<div class="ce-grid">
 						
@@ -322,13 +298,7 @@
 						width:100%;
 						margin:0 0 18px;
 						
-						border:1px solid rgba(255,255,255,0.14);
-						border-radius:16px;
-						padding:14px;
-						background:rgba(255,255,255,0.035);
-						box-shadow:
-						0 14px 30px rgba(0,0,0,0.75),
-						inset 0 1px 0 rgba(255,255,255,0.05);
+						border:1px solid #222222; border-radius:12px; padding:14px; background:#0a0a0a;
 						overflow:hidden;
 						
 						/* prevent breaking across columns */
@@ -339,9 +309,7 @@
 						
 						/* TITLE */
 						.ce-tile-title{
-						font:600 14px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial;
-						letter-spacing:0.2px;
-						color:rgba(255,255,255,0.92);
+						font:700 14px/1.2 'Inter',sans-serif; color:#ffffff;
 						margin:0 0 10px 0;
 						}
 						
@@ -356,10 +324,7 @@
 						/* IMAGE CARD */
 						.ce-image-link{
 						display:block;
-						border-radius:12px;
-						overflow:hidden;
-						background:rgba(0,0,0,0.35);
-						border:1px solid rgba(255,255,255,0.10);
+						border-radius:8px; overflow:hidden; background:#111; border:1px solid #222222;
 						}
 						.ce-image-link img{
 						width:100%;

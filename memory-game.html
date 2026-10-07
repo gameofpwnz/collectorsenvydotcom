@@ -4,387 +4,228 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Collectors Envy - Memory Match Challenge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --ce-bg: #000000;
+            --ce-card-bg: #0a0a0a;
+            --ce-accent: #ffffff;
+            --ce-green: #00ff88;
+            --ce-text-main: #ffffff;
+            --ce-text-dim: #a1a1a1;
+            --ce-border: #222222;
+            --ce-font: 'Inter', sans-serif;
+            color-scheme: dark;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: var(--ce-font);
+            background: var(--ce-bg);
+            color: var(--ce-text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            align-items: flex-start;
+            padding: 2rem 20px;
             overflow: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
         .container {
-            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 1000px;
+            background: var(--ce-card-bg);
+            border: 1px solid var(--ce-border);
+            border-radius: 12px;
+            padding: 2.5rem;
             width: 100%;
-            box-shadow: 
-                0 20px 60px rgba(0,0,0,0.4),
-                0 0 0 1px rgba(255, 215, 0, 0.2),
-                inset 0 1px 0 rgba(255,255,255,0.8);
             position: relative;
-            z-index: 1;
             touch-action: pan-y;
         }
 
         h1 {
             text-align: center;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            font-weight: 800;
+            font-size: clamp(1.6rem, 5vw, 2.5rem);
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
         }
 
         .subtitle {
             text-align: center;
-            color: #8a2be2;
-            margin-bottom: 30px;
-            font-size: 1.2em;
-            font-weight: bold;
+            color: var(--ce-text-dim);
+            margin-bottom: 2rem;
         }
 
-        .game-info {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
+        .btn {
+            background: var(--ce-accent);
+            color: #000;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-family: var(--ce-font);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
 
-        .info-box {
-            background: linear-gradient(145deg, #f0f0f0, #ffffff);
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .btn:hover:not(:disabled) { opacity: 0.85; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: var(--ce-card-bg);
+            border: 1px solid var(--ce-border);
+            padding: 2.5rem;
+            border-radius: 12px;
+            width: 90%;
+        }
+
+        .modal-content h2 {
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.25rem;
             text-align: center;
-            min-width: 120px;
         }
 
-        .info-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 5px;
+        .input-group { margin-bottom: 1.25rem; }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--ce-text-dim);
+            font-size: 0.85rem;
+            font-weight: 600;
         }
 
-        .info-value {
-            font-size: 1.8em;
-            font-weight: bold;
-            background: linear-gradient(135deg, #8a2be2, #ff1493);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            color: var(--ce-text-main);
+            border: 1px solid var(--ce-border);
+            border-radius: 6px;
+            font-family: var(--ce-font);
+            font-size: 1rem;
         }
+
+        .input-group input:focus { outline: none; border-color: var(--ce-accent); }
+
+        .message {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 1.25rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .message.success { background: rgba(0,255,136,0.1); border: 1px solid var(--ce-green); color: var(--ce-green); }
+        .message.error { background: rgba(255,68,68,0.1); border: 1px solid #ff4444; color: #ff4444; }
+
+        .leaderboard { margin-top: 2rem; }
+
+        .container { max-width: 1000px; }
+
+        .instructions { background: #000; border: 1px solid var(--ce-border); padding: 1.25rem 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; }
+        .instructions h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .instructions ol { margin-left: 20px; color: var(--ce-text-dim); font-size: 0.9rem; }
+        .instructions li { margin-bottom: 5px; }
+
+        .game-info { display: flex; justify-content: space-around; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+        .info-box { background: #000; border: 1px solid var(--ce-border); padding: 1rem 1.5rem; border-radius: 12px; text-align: center; min-width: 120px; }
+        .info-label { font-size: 0.75rem; color: var(--ce-text-dim); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .info-value { font-size: 1.8rem; font-weight: 800; color: var(--ce-text-main); }
+
+        .game-message { text-align: center; font-size: 1.2rem; color: var(--ce-green); margin: 1.25rem 0; font-weight: 700; min-height: 30px; }
+        .controls { text-align: center; margin-bottom: 1.25rem; }
 
         .game-board {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin: 0 auto 2rem;
             max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        @media (max-width: 768px) {
-            .game-board {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .game-board {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
-            }
-        }
+        @media (max-width: 768px) { .game-board { grid-template-columns: repeat(4, 1fr); gap: 10px; } }
+        @media (max-width: 480px) { .game-board { grid-template-columns: repeat(3, 1fr); gap: 8px; } .container { padding: 1.5rem 1rem; } }
 
         .card {
             aspect-ratio: 3/4;
-            background: linear-gradient(145deg, #ffffff, #f0f0f0);
-            border-radius: 10px;
+            background: transparent;
+            border-radius: 12px;
             cursor: pointer;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             user-select: none;
             -webkit-user-select: none;
         }
 
-        .card:hover:not(.flipped):not(.matched) {
-            transform: scale(1.05);
-        }
+        .card:hover:not(.flipped):not(.matched) { transform: scale(1.05); }
+        .card.flipped { transform: rotateY(180deg); }
+        .card.matched { opacity: 0.6; cursor: default; animation: matchPulse 0.5s ease-out; }
 
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
+        @keyframes matchPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-        .card.matched {
-            opacity: 0.6;
-            cursor: default;
-            animation: matchPulse 0.5s ease-out;
-        }
-
-        @keyframes matchPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+        .card.matched .card-front { border-color: var(--ce-green); }
 
         .card-face {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 10px;
         }
 
-        .card-back {
-            background: linear-gradient(145deg, #8a2be2, #ff1493);
-            box-shadow: inset 0 2px 5px rgba(255,255,255,0.3);
-        }
+        .card-back { background: #111; border: 1px solid var(--ce-border); }
+        .card-back::before { content: '?'; font-size: 2.5em; color: #444; font-weight: 800; }
+        .card:hover:not(.flipped):not(.matched) .card-back { border-color: #444; }
 
-        .card-back::before {
-            content: '?';
-            font-size: 3em;
-            color: white;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+        .card-front { background: #fff; border: 1px solid var(--ce-border); transform: rotateY(180deg); }
+        .card-front img { max-width: 90%; max-height: 90%; object-fit: contain; pointer-events: none; }
 
-        .card-front {
-            background: white;
-            transform: rotateY(180deg);
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-        }
+        .modal-content { max-width: 500px; }
 
-        .card-front img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-            pointer-events: none;
-        }
-
-        .controls {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2em;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-            transition: all 0.3s;
-            color: #1a1a2e;
-        }
-
-        .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .instructions {
-            background: linear-gradient(145deg, #f8f9fa, #ffffff);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .instructions h3 {
-            color: #8a2be2;
-            margin-bottom: 10px;
-        }
-
-        .instructions ol {
-            margin-left: 20px;
-            color: #666;
-        }
-
-        .instructions li {
-            margin-bottom: 5px;
-        }
-
-        .game-message {
-            text-align: center;
-            font-size: 1.5em;
-            color: #8a2be2;
-            margin: 20px 0;
-            font-weight: bold;
-            min-height: 30px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-        }
-
-        .modal-content h2 {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: #8a2be2;
-        }
-
-        .message {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .leaderboard {
-            margin-top: 30px;
-        }
-
-        .leaderboard h3 {
-            color: #8a2be2;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .leaderboard-item {
-            background: linear-gradient(145deg, #f8f9fa, #ffffff);
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .leaderboard-item.top-1 {
-            background: linear-gradient(145deg, #ffd700, #ffed4e);
-        }
-
-        .leaderboard-item.top-2 {
-            background: linear-gradient(145deg, #c0c0c0, #e8e8e8);
-        }
-
-        .leaderboard-item.top-3 {
-            background: linear-gradient(145deg, #cd7f32, #e8a87c);
-        }
-
-        .rank {
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-right: 15px;
-        }
-
-        .player-info {
-            flex: 1;
-        }
-
-        .score-display {
-            font-weight: bold;
-            color: #8a2be2;
-            font-size: 1.1em;
-        }
+        .leaderboard h3 { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 1rem; text-align: center; }
+        .leaderboard-item { background: #000; border: 1px solid var(--ce-border); padding: 12px 16px; margin-bottom: 8px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .leaderboard-item.top-1 { border-color: #ffd700; }
+        .leaderboard-item.top-2 { border-color: #c0c0c0; }
+        .leaderboard-item.top-3 { border-color: #cd7f32; }
+        .rank { font-weight: 800; font-size: 1.1rem; margin-right: 15px; }
+        .player-info { flex: 1; }
+        .score-display { font-weight: 800; color: var(--ce-green); font-size: 1.1rem; }
+        .muted-note { text-align: center; color: var(--ce-text-dim); }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎴 Memory Match Challenge</h1>
+        <h1>Memory Match Challenge</h1>
         <p class="subtitle">Collectors Envy Giveaway</p>
 
         <div class="instructions">
@@ -423,7 +264,7 @@
         <div class="leaderboard">
             <h3>🏆 Top Scores</h3>
             <div id="leaderboardList">
-                <p style="text-align: center; color: #666;">Play to see the leaderboard!</p>
+                <p class="muted-note">Play to see the leaderboard!</p>
             </div>
         </div>
     </div>
