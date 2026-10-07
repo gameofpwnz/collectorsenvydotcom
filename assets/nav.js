@@ -10,10 +10,6 @@
     { label: 'Auctions', href: '/auction.html' },
     { label: 'Museum', href: '/museum.html' },
     { label: 'Proxy', href: '/proxy.html' },
-    { label: 'Games', href: '/game.html', children: [
-      { label: 'Card Catch', href: '/game.html' },
-      { label: 'Memory Match', href: '/memory-game.html' }
-    ] },
     { label: 'Brand', href: '/brand.html' }
   ];
   var DISCORD = 'https://discord.gg/DyHTs5GDkc';
