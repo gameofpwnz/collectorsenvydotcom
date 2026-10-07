@@ -543,19 +543,8 @@
                 <h2>Upcoming Events</h2>
                 <p class="section-subtitle">Sign up for proxy services at these events. Don't see an event here? Fill out <a href="https://forms.gle/nrwGPuzxMBM7rR9L6" target="_blank">this form</a></p>
             </div>
-            <div class="events-grid">
-                <div class="event-card">
-                    <div class="event-header">
-                        <h3>2026 OpTic Gaming x Texas Rangers Theme Night</h3>
-                        <p class="event-date">9/5/2026 • Arlington, TX</p>
-                    </div>
-                    <div class="event-body">
-                        <p class="event-description">
-                            OpTic Gaming x Texas Rangers Theme Night is back. Get your jersey with promotional ticket.
-                        </p>
-                        <a href="https://forms.gle/osPZp8BvDPNNtVpJ9" target="_blank" class="btn-signup">Request A Proxy</a>
-                    </div>
-                </div>
+            <div class="events-grid" id="events-grid">
+                <div class="rating-loading">Loading events...</div>
             </div>
         </section>
 
@@ -795,6 +784,82 @@
 
         // Load ratings when page loads
         document.addEventListener('DOMContentLoaded', loadRatings);
+
+        // --- UPCOMING EVENTS (Google Sheets) ---
+        const EVENTS_SHEET_ID = '1LyTBnhI7kKFn6tmlSWmeqgohlJnb43zfb_oTBJiYabc';
+        const EVENTS_SHEET_NAME = 'Upcoming Events';
+
+        // Minimal CSV parser: handles quoted fields, escaped quotes, commas and newlines inside quotes
+        function parseCSV(text) {
+            const rows = [];
+            let row = [], field = '', inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                if (inQuotes) {
+                    if (c === '"' && text[i + 1] === '"') { field += '"'; i++; }
+                    else if (c === '"') inQuotes = false;
+                    else field += c;
+                } else if (c === '"') inQuotes = true;
+                else if (c === ',') { row.push(field); field = ''; }
+                else if (c === '\n' || c === '\r') {
+                    if (c === '\r' && text[i + 1] === '\n') i++;
+                    row.push(field); field = '';
+                    rows.push(row); row = [];
+                } else field += c;
+            }
+            if (field !== '' || row.length) { row.push(field); rows.push(row); }
+            return rows;
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, ch => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[ch]));
+        }
+
+        async function loadEvents() {
+            const grid = document.getElementById('events-grid');
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${EVENTS_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(EVENTS_SHEET_NAME)}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const rows = parseCSV(await response.text());
+                const header = (rows.shift() || []).map(h => h.trim().toLowerCase());
+                const col = name => header.indexOf(name);
+                const idx = {
+                    name: col('event name'), date: col('date'), location: col('location'),
+                    description: col('description'), link: col('link')
+                };
+
+                const cards = rows.map(r => {
+                    const get = i => (i >= 0 && r[i] ? r[i].trim() : '');
+                    const name = get(idx.name);
+                    if (!name) return '';
+                    const meta = [get(idx.date), get(idx.location)].filter(Boolean).map(escapeHtml).join(' \u2022 ');
+                    const desc = get(idx.description);
+                    const link = get(idx.link);
+                    const safeLink = /^https?:\/\//i.test(link) ? escapeHtml(link) : '';
+                    return `
+                <div class="event-card">
+                    <div class="event-header">
+                        <h3>${escapeHtml(name)}</h3>
+                        ${meta ? `<p class="event-date">${meta}</p>` : ''}
+                    </div>
+                    <div class="event-body">
+                        ${desc ? `<p class="event-description">${escapeHtml(desc)}</p>` : ''}
+                        ${safeLink ? `<a href="${safeLink}" target="_blank" rel="noopener" class="btn-signup">Request A Proxy</a>` : ''}
+                    </div>
+                </div>`;
+                }).filter(Boolean);
+
+                grid.innerHTML = cards.length
+                    ? cards.join('')
+                    : '<div class="rating-loading">No upcoming events right now.</div>';
+            } catch (e) {
+                console.error('Error loading events:', e);
+                grid.innerHTML = '<div class="rating-loading">Events unavailable right now.</div>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadEvents);
     </script>
 
 <script src="/assets/footer.js"></script>
