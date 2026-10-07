@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auction Archive | Collectors Envy</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #000000;
-            --card-bg: #0d0d0d;
-            --card-border: #1a1a1a;
+            --card-bg: #0a0a0a;
+            --card-border: #222222;
             --text-primary: #ffffff;
-            --text-secondary: #666666;
+            --text-secondary: #a1a1a1;
             --accent-white: #ffffff;
             --nav-border: #222222;
-            --accent-live: #00ff00;
+            --accent-live: #00ff88;
         }
 
         body {
@@ -47,7 +47,7 @@
 
         .nav-logo {
             font-size: 11px;
-            font-weight: 900;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 5px;
             text-decoration: none;
@@ -85,7 +85,7 @@
 
         .header h1 {
             font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 900;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: -2px;
             margin: 0 0 30px 0;
@@ -146,7 +146,7 @@
 
         .section-header h2 {
             font-size: 2rem;
-            font-weight: 900;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: -1px;
             margin: 0;
@@ -167,7 +167,7 @@
 
         .archive-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
             gap: 30px;
         }
 
@@ -259,7 +259,7 @@
             color: #000;
             text-align: center;
             text-decoration: none;
-            font-weight: 900;
+            font-weight: 800;
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -275,7 +275,7 @@
         }
 
         .live-card .btn-view:hover {
-            background: #00dd00;
+            background: #00e67a;
         }
 
         .card-dns { opacity: 0.6; }
@@ -283,7 +283,7 @@
         #loading { 
             padding: 100px; 
             text-align: center; 
-            font-weight: 900; 
+            font-weight: 800; 
             color: #333; 
         }
 
@@ -299,23 +299,35 @@
             text-transform: uppercase;
             letter-spacing: 2px;
         }
+    
+        /* --- BRAND ALIGNMENT (brand.html) --- */
+        * { box-sizing: border-box; }
+        body { line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        .global-nav { background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px); padding: 1rem 2rem; }
+        .nav-inner { padding: 0; }
+        .nav-logo { font-size: 1.2rem; font-weight: 800; letter-spacing: -1px; }
+        .nav-links a { font-size: 0.85rem; font-weight: 600; letter-spacing: 0; text-transform: none; }
+        .header h1 { font-weight: 800; letter-spacing: -0.04em; }
+        .section-header h2 { letter-spacing: -0.02em; }
+        .auction-card, .rules-card, .event-card, .proxy-card, .proxies-intro { border-radius: 12px; overflow: hidden; }
+        .btn-view, .btn-signup, .become-proxy-btn, .btn-review { border-radius: 6px; letter-spacing: 1px; }
+        .btn-view { margin: 25px 0 0; }
+        .filter-tab { font-family: 'Inter', sans-serif; }
+        a { color: #ffffff; }
+        .btn-view, .btn-signup, .become-proxy-btn, .btn-review, .nav-logo, .nav-links a { text-decoration: none; }
+        .btn-view, .btn-signup { color: #000; }
+        .nav-links a { color: var(--text-secondary); }
+        .nav-links a:hover, .nav-links a.active { color: #fff; }
+        .become-proxy-btn, .btn-review { color: #000; }
+        @media (max-width: 768px) { .global-nav { padding: 1rem; } .filter-tabs { overflow-x: auto; gap: 0; } .filter-tab { white-space: nowrap; padding: 10px 14px; } }
     </style>
 </head>
 <body>
-
-    <nav class="global-nav">
-        <div class="nav-inner">
-            <a href="/" class="nav-logo">Collectors Envy</a>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="https://forms.gle/6LhpWQfCKn6NwXiv5">Request An Auction</a>
-            </div>
-        </div>
-    </nav>
-
+<script src="/assets/nav.js"></script>
     <div class="container">
         <div class="header">
             <h1>Auction Archive</h1>
+            <a href="https://forms.gle/6LhpWQfCKn6NwXiv5" target="_blank" class="btn-view" style="display:inline-block;margin:0 0 30px;padding:12px 24px;">Request An Auction</a>
             <div class="filter-tabs">
                 <button class="filter-tab active" data-filter="all">All Auctions</button>
                 <button class="filter-tab" data-filter="current">Current Auctions</button>
@@ -542,5 +554,6 @@
 
         initArchive();
     </script>
+<script src="/assets/footer.js"></script>
 </body>
 </html>
