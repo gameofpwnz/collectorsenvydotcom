@@ -9,7 +9,10 @@
     { label: 'Events', href: '/events.html' },
     { label: 'Auctions', href: '/auction.html' },
     { label: 'Bounties', href: '/bounties.html' },
-    { label: 'Matchmaking', href: '/matchmaking.html' },
+    { label: 'Matchmaking', href: '/matchmaking/rings.html', children: [
+      { label: 'OpTic Rings', href: '/matchmaking/rings.html' },
+      { label: 'Vision Episodes', href: '/matchmaking/vision.html' }
+    ] },
     { label: 'Museum', href: '/museum.html' },
     { label: 'Proxy', href: '/proxy.html' },
     { label: 'Brand', href: '/brand.html' },
