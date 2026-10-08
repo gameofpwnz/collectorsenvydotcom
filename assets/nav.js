@@ -8,6 +8,7 @@
     { label: 'Home', href: '/' },
     { label: 'Events', href: '/events.html' },
     { label: 'Auctions', href: '/auction.html' },
+    { label: 'Bounties', href: '/bounties.html' },
     { label: 'Museum', href: '/museum.html' },
     { label: 'Proxy', href: '/proxy.html' },
     { label: 'Brand', href: '/brand.html' },

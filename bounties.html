@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bounty Board | Collectors Envy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #0a0a0a;
+            --card-border: #222222;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1a1;
+            --accent-white: #ffffff;
+            --accent-live: #00ff88;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: #ffffff; }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .header { margin-bottom: 60px; }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            margin: 0 0 15px 0;
+            line-height: 1.1;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            max-width: 640px;
+            margin: 0 0 30px 0;
+        }
+
+        /* --- FILTER TABS --- */
+        .filter-tabs {
+            display: flex;
+            gap: 15px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 15px;
+        }
+
+        .filter-tab {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .filter-tab:hover, .filter-tab.active { color: #fff; }
+
+        .filter-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -16px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #fff;
+        }
+
+        /* --- SECTIONS --- */
+        .section { margin-bottom: 80px; }
+
+        .section-header {
+            margin: 60px 0 40px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .live-indicator {
+            width: 12px;
+            height: 12px;
+            background: var(--accent-live);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .bounty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
+            gap: 30px;
+        }
+
+        /* --- CARD --- */
+        .bounty-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bounty-card:hover { border-color: #444; }
+        .bounty-card.open-card { border-color: var(--accent-live); }
+        .bounty-card.closed-card { opacity: 0.6; }
+
+        .image-viewport {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #050505;
+        }
+
+        .main-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .no-image {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            border: 1px solid var(--card-border);
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+        }
+
+        .open-card .status-badge { color: var(--accent-live); border-color: var(--accent-live); }
+
+        .gallery-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            z-index: 10;
+        }
+
+        /* padded button = comfortable tap target around a 6px dot */
+        .dot {
+            background: none;
+            border: none;
+            padding: 8px 5px;
+            cursor: pointer;
+        }
+
+        .dot::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: background 0.2s ease;
+        }
+
+        .dot.active::before { background: #fff; }
+
+        .card-info {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .fee-line { margin-bottom: 20px; }
+
+        .fee-label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .fee { font-size: 1.8rem; font-weight: 800; line-height: 1.2; }
+
+        .title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 0 6px 0;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 0 20px 0;
+        }
+
+        .meta {
+            border-top: 1px solid var(--card-border);
+            padding-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px 10px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .meta b { color: #fff; display: block; margin-bottom: 3px; }
+        .meta .full { grid-column: 1 / -1; }
+        .meta .wrap { text-transform: none; letter-spacing: 0; font-size: 0.85rem; line-height: 1.5; overflow-wrap: anywhere; }
+
+        .btn-view {
+            display: block;
+            margin: auto 0 0;
+            padding: 15px;
+            background: var(--accent-white);
+            color: #000;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .meta + .btn-view { margin-top: 25px; }
+        .btn-view:hover { background: #e0e0e0; }
+        .open-card .btn-view { background: var(--accent-live); }
+        .open-card .btn-view:hover { background: #00e67a; }
+
+        #loading {
+            padding: 100px;
+            text-align: center;
+            font-weight: 800;
+            color: #333;
+        }
+
+        .hidden { display: none; }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .filter-tabs { overflow-x: auto; gap: 0; }
+            .filter-tab { white-space: nowrap; padding: 10px 14px; }
+        }
+    </style>
+</head>
+<body>
+<script src="/assets/nav.js"></script>
+    <div class="container">
+        <div class="header">
+            <h1>Bounty Board</h1>
+            <p>Collectors looking for specific pieces. Got one, or know where to find it? Open the post and let the buyer know.</p>
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All Bounties</button>
+                <button class="filter-tab" data-filter="open">Open</button>
+                <button class="filter-tab" data-filter="closed">Closed</button>
+            </div>
+        </div>
+
+        <div id="loading">LOADING BOUNTIES...</div>
+
+        <div id="open-section" class="section">
+            <div class="section-header">
+                <h2>Open Bounties</h2>
+                <div class="live-indicator"></div>
+            </div>
+            <div id="open-grid" class="bounty-grid"></div>
+        </div>
+
+        <div id="closed-section" class="section">
+            <div class="section-header">
+                <h2>Closed Bounties</h2>
+            </div>
+            <div id="closed-grid" class="bounty-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const SHEET_ID = '18AjaXsrZa9rTi3U7F7oItAlFFrkFDbSP-0eXGWnpcJQ';
+        const SHEET_NAME = 'website';
+
+        // --- Filter tabs ---
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const openSection = document.getElementById('open-section');
+        const closedSection = document.getElementById('closed-section');
+
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const filter = tab.dataset.filter;
+                openSection.classList.toggle('hidden', filter === 'closed');
+                closedSection.classList.toggle('hidden', filter === 'open');
+            });
+        });
+
+        // --- Helpers ---
+        // Minimal CSV parser: quoted fields, escaped quotes, commas/newlines inside quotes
+        function parseCSV(text) {
+            const rows = [];
+            let row = [], field = '', inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                if (inQuotes) {
+                    if (c === '"' && text[i + 1] === '"') { field += '"'; i++; }
+                    else if (c === '"') inQuotes = false;
+                    else field += c;
+                } else if (c === '"') inQuotes = true;
+                else if (c === ',') { row.push(field); field = ''; }
+                else if (c === '\n' || c === '\r') {
+                    if (c === '\r' && text[i + 1] === '\n') i++;
+                    row.push(field); field = '';
+                    rows.push(row); row = [];
+                } else field += c;
+            }
+            if (field !== '' || row.length) { row.push(field); rows.push(row); }
+            return rows;
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, ch => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[ch]));
+        }
+
+        const isUrl = u => /^https?:\/\//i.test(u);
+
+        // A bounty is open if the deadline is blank, "Open", or a date that hasn't passed.
+        // Anything else (e.g. "Closed", "Filled", a past date) is closed.
+        function isOpen(deadline) {
+            const d = deadline.trim();
+            if (!d || /^open/i.test(d)) return true;
+            const t = Date.parse(d);
+            if (!isNaN(t)) {
+                const end = new Date(t);
+                end.setHours(23, 59, 59, 999);
+                return end >= new Date();
+            }
+            return false;
+        }
+
+        function setupGallery(card, images) {
+            const img = card.querySelector('.main-img');
+            const dots = card.querySelectorAll('.dot');
+            let current = 0;
+            let timer;
+
+            function show(i) {
+                current = i;
+                img.src = images[i];
+                dots.forEach((d, n) => d.classList.toggle('active', n === i));
+            }
+
+            dots.forEach((d, n) => d.addEventListener('click', () => { clearInterval(timer); show(n); }));
+
+            if (images.length > 1) {
+                card.addEventListener('mouseenter', () => {
+                    timer = setInterval(() => show((current + 1) % images.length), 1500);
+                });
+                card.addEventListener('mouseleave', () => { clearInterval(timer); show(0); });
+            }
+        }
+
+        function createBountyCard(b) {
+            const open = isOpen(b.deadline);
+            const card = document.createElement('div');
+            card.className = `bounty-card ${open ? 'open-card' : 'closed-card'}`;
+
+            const images = b.images.filter(isUrl);
+            const subtitle = [b.team, b.year].filter(Boolean).map(escapeHtml).join(' • ');
+
+            const viewport = images.length
+                ? `<img src="${escapeHtml(images[0])}" class="main-img" alt="${escapeHtml(b.item)}" loading="lazy">` +
+                  (images.length > 1
+                      ? `<div class="gallery-dots">${images.map((_, i) =>
+                            `<button type="button" class="dot${i === 0 ? ' active' : ''}" aria-label="Show image ${i + 1}"></button>`).join('')}</div>`
+                      : '')
+                : '<div class="no-image">No Photo</div>';
+
+            const metaItems = [
+                b.buyer && `<div><b>Buyer</b>${escapeHtml(b.buyer)}</div>`,
+                b.deadline && `<div><b>Deadline</b>${escapeHtml(b.deadline)}</div>`,
+                b.payment && `<div class="full"><b>Fee Paid Via</b>${escapeHtml(b.payment)}</div>`,
+                b.requirements && `<div class="full"><b>Requirements</b><span class="wrap">${escapeHtml(b.requirements)}</span></div>`,
+                b.notes && `<div class="full"><b>Notes</b><span class="wrap">${escapeHtml(b.notes)}</span></div>`
+            ].filter(Boolean).join('');
+
+            card.innerHTML = `
+                <div class="image-viewport">
+                    <div class="status-badge">${open ? 'Open' : 'Closed'}</div>
+                    ${viewport}
+                </div>
+                <div class="card-info">
+                    ${b.fee ? `<div class="fee-line"><span class="fee-label">Finders Fee</span><div class="fee">${escapeHtml(b.fee)}</div></div>` : ''}
+                    <h3 class="title">${escapeHtml(b.item)}</h3>
+                    ${subtitle ? `<p class="subtitle">${subtitle}</p>` : ''}
+                    ${metaItems ? `<div class="meta">${metaItems}</div>` : ''}
+                    ${isUrl(b.link) ? `<a href="${escapeHtml(b.link)}" target="_blank" rel="noopener" class="btn-view">View Bounty Post</a>` : ''}
+                </div>
+            `;
+
+            if (images.length) {
+                // Discord CDN image links expire; fall back to the placeholder instead of a broken image
+                const imgEl = card.querySelector('.main-img');
+                imgEl.addEventListener('error', () => {
+                    const vp = card.querySelector('.image-viewport');
+                    imgEl.remove();
+                    card.querySelector('.gallery-dots')?.remove();
+                    vp.insertAdjacentHTML('beforeend', '<div class="no-image">No Photo</div>');
+                });
+                setupGallery(card, images);
+            }
+
+            return { card, open };
+        }
+
+        async function loadBounties() {
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
+            const openGrid = document.getElementById('open-grid');
+            const closedGrid = document.getElementById('closed-grid');
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+
+            const rows = parseCSV(await response.text());
+            const header = (rows.shift() || []).map(h => h.trim().toLowerCase());
+            const col = name => header.indexOf(name);
+            const idx = {
+                buyer: col('buyer'), item: col('item'), team: col('team/player'), year: col('year/event'),
+                requirements: col('requirements'), fee: col('finders fee'), payment: col('fee payment method'),
+                deadline: col('deadline'), notes: col('notes'),
+                img1: col('image 1'), img2: col('image 2'), img3: col('image 3'), link: col('post link')
+            };
+
+            // Sheet is oldest-first; show newest first
+            rows.reverse().forEach(r => {
+                const get = i => (i >= 0 && r[i] ? r[i].trim() : '');
+                const item = get(idx.item);
+                if (!item) return;
+
+                const { card, open } = createBountyCard({
+                    buyer: get(idx.buyer), item, team: get(idx.team), year: get(idx.year),
+                    requirements: get(idx.requirements), fee: get(idx.fee), payment: get(idx.payment),
+                    deadline: get(idx.deadline), notes: get(idx.notes),
+                    images: [get(idx.img1), get(idx.img2), get(idx.img3)],
+                    link: get(idx.link)
+                });
+                (open ? openGrid : closedGrid).appendChild(card);
+            });
+
+            if (!openGrid.children.length) openGrid.innerHTML = '<div class="empty-state">No open bounties at this time</div>';
+            if (!closedGrid.children.length) closedGrid.innerHTML = '<div class="empty-state">No closed bounties yet</div>';
+        }
+
+        async function init() {
+            try {
+                await loadBounties();
+            } catch (e) {
+                console.error('Error loading bounties:', e);
+                document.getElementById('loading').innerText = 'ERROR LOADING BOUNTIES';
+                return;
+            }
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        init();
+    </script>
+<script src="/assets/footer.js"></script>
+</body>
+</html>
