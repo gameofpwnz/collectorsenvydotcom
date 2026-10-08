@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merch - Collectors Envy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ce-bg: #000000;
+            --ce-card-bg: #0a0a0a;
+            --ce-text-main: #ffffff;
+            --ce-text-dim: #a1a1a1;
+            --ce-border: #222222;
+            --ce-font: 'Inter', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--ce-font); background: var(--ce-bg); color: var(--ce-text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        main { max-width: 1400px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+        h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
+        .sub { color: var(--ce-text-dim); margin: .5rem 0 2.5rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; }
+        .card { display: block; text-decoration: none; color: inherit; }
+        .frame { aspect-ratio: 1 / 1; background: var(--ce-card-bg); border: 1px solid var(--ce-border); border-radius: 12px; overflow: hidden; }
+        .frame img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
+        .card:hover .frame img { transform: scale(1.04); }
+        .name { margin-top: 10px; font-weight: 600; color: var(--ce-text-dim); }
+        .card:hover .name { color: #fff; text-decoration: underline; }
+        .price { font-size: .9rem; color: var(--ce-text-dim); }
+        .status { color: var(--ce-text-dim); padding: 2rem 0; }
+        .status a { color: #fff; }
+    </style>
+</head>
+<body>
+<script src="/assets/nav.js"></script>
+<main>
+    <h1>Merch</h1>
+    <p class="sub">Official Collectors Envy gear. Checkout is handled securely by Fourthwall.</p>
+    <div id="grid" class="grid"></div>
+    <p id="status" class="status">Loading products…</p>
+</main>
+<script>
+(function () {
+    var API = 'https://ce-merch.ashton-98e.workers.dev/';
+    var SHOP = 'https://collectors-envy-shop.fourthwall.com';
+    var grid = document.getElementById('grid');
+    var status = document.getElementById('status');
+
+    function fail() {
+        status.innerHTML = 'Could not load products right now. <a href="' + SHOP + '">Shop on Fourthwall</a>.';
+    }
+    function price(p) {
+        var v = (p.variants || [])[0];
+        var u = v && v.unitPrice;
+        if (!u || u.value == null) return '';
+        try { return new Intl.NumberFormat(undefined, { style: 'currency', currency: u.currency || 'USD' }).format(u.value); }
+        catch (e) { return u.value + ' ' + (u.currency || ''); }
+    }
+    function card(p) {
+        var a = document.createElement('a');
+        a.className = 'card';
+        a.href = SHOP + '/products/' + encodeURIComponent(p.slug);
+        a.target = '_blank';
+        a.rel = 'noopener';
+        var frame = document.createElement('div');
+        frame.className = 'frame';
+        var img = (p.images || [])[0];
+        if (img && img.url) {
+            var el = document.createElement('img');
+            el.src = img.url;
+            el.alt = p.name || '';
+            el.loading = 'lazy';
+            frame.appendChild(el);
+        }
+        var name = document.createElement('div');
+        name.className = 'name';
+        name.textContent = p.name || '';
+        var pr = document.createElement('div');
+        pr.className = 'price';
+        pr.textContent = price(p);
+        a.appendChild(frame); a.appendChild(name); a.appendChild(pr);
+        return a;
+    }
+
+    fetch(API).then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        return r.json();
+    }).then(function (d) {
+        var list = (d.products || []).filter(function (p) { return p.slug; });
+        if (!list.length) { status.textContent = 'No products yet. Check back soon.'; return; }
+        list.forEach(function (p) { grid.appendChild(card(p)); });
+        status.remove();
+    }).catch(fail);
+})();
+</script>
+</body>
+</html>
