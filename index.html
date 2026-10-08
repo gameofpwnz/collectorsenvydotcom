@@ -26,7 +26,7 @@
 					</div>
 					<ul id="buttons01" class="buttons-component instance-1">
 						<li>
-							<a href="#merch" class="n03" role="button"><svg aria-labelledby="buttons01-icon-3-title"><title id="buttons01-icon-3-title">Cart</title><use xlink:href="assets/icons.svg#cart"></use></svg><span class="label">Merch</span></a>
+							<a href="/merch.html" class="n03" role="button"><svg aria-labelledby="buttons01-icon-3-title"><title id="buttons01-icon-3-title">Cart</title><use xlink:href="assets/icons.svg#cart"></use></svg><span class="label">Merch</span></a>
 						</li><li>
 							<a href="#streamers" class="n06" role="button"><svg aria-labelledby="buttons01-icon-6-title"><title id="buttons01-icon-6-title">Twitch</title><use xlink:href="assets/icons.svg#twitch"></use></svg><span class="label">Streamers</span></a>
 						</li><li>
@@ -126,7 +126,7 @@
 						{ value: 3000, prefix: "$", suffix: "+", label: "In Giveaways" },
 						{ value: 34, prefix: "> ", suffix: "", label: "Successful Auctions" },
 						{ value: 400, prefix: "> ", suffix: "", label: "Items Sold" },
-						{ value: 60k, prefix: "$", suffix: "+", label: "Total Value Sold" }
+						{ value: 60000, prefix: "$", suffix: "+", label: "Total Value Sold" }
 						];
 						/* ============================== */
 						
@@ -158,7 +158,7 @@
 						current = stat.value;
 						clearInterval(counter);
 						}
-						number.textContent = `${stat.prefix || ""}${current}${stat.suffix || ""}`;
+						number.textContent = `${stat.prefix || ""}${current.toLocaleString()}${stat.suffix || ""}`;
 						}, 16);
 						});
 						</script><!-- mnbnbxmbzxmncbzxc -->
@@ -175,74 +175,6 @@
 						frameborder="0"
 						style="border: none;">
 						</iframe><!-- mnbnbxmbzxmncbzxc -->
-					</div>
-					<hr id="divider03" data-scroll-id="merch" data-scroll-behavior="default" data-scroll-offset="0" data-scroll-speed="3" class="divider-component instance-3">
-					<h2 id="text04" class="text-component instance-4">Merch</h2>
-					<div id="embed04" class="embed-component instance-4">
-						<!-- qweoqwupeoiqwuewqe --><style>
-						.ce-grid{
-						display:flex;
-						gap:20px;
-						flex-wrap:wrap;
-						justify-content:center;
-						}
-						
-						.ce-tile{
-						flex:1 1 240px;
-						max-width:360px;
-						text-decoration:none;
-						color:#ffffff;
-						font-family:inherit;
-						}
-						
-						.ce-frame{
-						width:100%;
-						aspect-ratio:1 / 1; /* change to 4 / 5 if you want portrait */
-						background:#0a0a0a; border:1px solid #222222; border-radius:12px;
-						overflow:hidden;
-						}
-						
-						.ce-frame img{
-						width:100%;
-						height:100%;
-						object-fit:cover;
-						display:block;
-						}
-						
-						.ce-caption{
-						margin-top:10px;
-						text-align:center;
-						font-size:1rem;
-						font-weight:600; color:#a1a1a1; }
-						
-						.ce-tile:hover .ce-caption{ color:#ffffff;
-						text-decoration:underline; }
-							</style>
-						
-						<div class="ce-grid">
-						
-						<a class="ce-tile" href="/merch.html">
-						<div class="ce-frame">
-						<img src="https://imgproxy.fourthwall.com/pdfbEOla2J5Ib8lkXZpBFNAWXkM6yQgjLi4h12SROHk/w:1920/sm:1/enc/b2GUsZTNDfw6nofy/6AyE3LpS_SK_uCOk/RzIdUF-Tyax5AyZx/gw8KBSYJP3q9CiCu/QJVbPw_QoUzTcGyW/NimyV68iqIdQJ-yt/-Jn3XDBc9UPNnm7E/_RgX3GFcUHKfPFVT/HVmPIFIzMvqQiLpU/78XFDqQ-57VKOIds/kCkzyUYvLlQFBKqK/QiPz4yUxsAUtVP55/PAu_uhGaxNJo-Iln/s2qkV3kZJ79i3DNa/uDXv-GYZJt4" alt="Our Fourthwall Store">
-						</div>
-						<div class="ce-caption">Our Fourthwall Store</div>
-						</a>
-						
-						<a class="ce-tile" href="https://raven.gg/stores/collectorsenvy/collectors-envy-sour-candy-jersey-88293694/" target="_blank" rel="noopener">
-						<div class="ce-frame">
-						<img src="https://dug5azr6j37mk.cloudfront.net/2025/05/NoName-member_front_0f0d13f7bc221a92a722c9a732125a8b.png" alt="Sour Candy v2 Jersey">
-						</div>
-						<div class="ce-caption">Sour Candy v2 Jersey</div>
-						</a>
-						
-						<a class="ce-tile" href="https://www.cafecultura210.com/product-page/ce-x-cc" target="_blank" rel="noopener">
-						<div class="ce-frame">
-						<img src="https://static.wixstatic.com/media/3ae10f_84534551c5184311b6622da49131e1aa~mv2.png/v1/fill/w_687,h_870,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/3ae10f_84534551c5184311b6622da49131e1aa~mv2.png" alt="Our Coffee Collab">
-						</div>
-						<div class="ce-caption">Our Coffee Collab</div>
-						</a>
-						
-						</div><!-- mnbnbxmbzxmncbzxc -->
 					</div>
 					<hr id="divider05" data-scroll-id="shoutouts" data-scroll-behavior="default" data-scroll-offset="0" data-scroll-speed="3" class="divider-component instance-5">
 					<h2 id="text07" class="text-component instance-7">Shoutouts</h2>
