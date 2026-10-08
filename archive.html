@@ -124,6 +124,16 @@
 
         .link-card:hover { border-color: #444; }
 
+        .thumb {
+            margin: -30px -30px 22px;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            background: #050505;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
         .domain {
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -245,7 +255,7 @@
 
         <div id="app" hidden>
             <div class="toolbar">
-                <input id="search" type="search" placeholder="Search titles, descriptions, tags and sites" autocomplete="off" aria-label="Search the archive">
+                <input id="search" type="search" placeholder="Search titles, sites, links and tags" autocomplete="off" aria-label="Search the archive">
                 <select id="sort" aria-label="Sort">
                     <option value="new">Newest first</option>
                     <option value="old">Oldest first</option>
@@ -273,7 +283,7 @@
 
         const state = { links: [], tag: null, query: '', sort: 'new', shown: PAGE_SIZE };
 
-        // Pull every link in the public collection, following the cursor until it stops yielding new links
+        // Pull every link in the public collection, following nextCursor until the server runs out
         async function fetchAll() {
             const seen = new Map();
             let cursor = null;
@@ -282,16 +292,34 @@
                 if (cursor !== null) params.set('cursor', cursor);
                 const res = await fetch(`${ARCHIVE_BASE}/api/v1/public/collections/links?${params}`);
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                const data = await res.json();
-                const batch = Array.isArray(data) ? data : (data.response || data.links || []);
+                const body = await res.json();
+                const payload = body.data || body;
+                const batch = payload.links || payload.response || (Array.isArray(payload) ? payload : []);
                 if (!Array.isArray(batch) || !batch.length) break;
 
                 let added = 0;
                 batch.forEach(l => { if (l && l.id != null && !seen.has(l.id)) { seen.set(l.id, l); added++; } });
                 if (!added) break; // server ignored the cursor and repeated itself
-                cursor = batch[batch.length - 1].id;
+                if (payload.nextCursor == null) break;
+                cursor = payload.nextCursor;
             }
             return [...seen.values()];
+        }
+
+        // Titles from the archiver contain HTML entities (&ndash;, &amp;) and stray newlines
+        const decoder = new DOMParser();
+        const clean = str => decoder.parseFromString(String(str || ''), 'text/html').documentElement.textContent.replace(/\s+/g, ' ').trim();
+
+        function fallbackTitle(url, host) {
+            try {
+                const u = new URL(url);
+                const m = u.pathname.match(/^\/([^/]+)\/status\//);
+                if (m && /(^|\.)(x|twitter)\.com$/.test(host)) return `Post by @${m[1]} on X`;
+                const path = u.pathname.replace(/\/$/, '');
+                return host + (path && path !== '/' ? path : '');
+            } catch (e) {
+                return url || 'Untitled';
+            }
         }
 
         function normalize(l) {
@@ -300,25 +328,26 @@
             const tags = (l.tags || []).map(t => (typeof t === 'string' ? t : t && t.name) || '').filter(Boolean);
             const available = v => v && v !== 'unavailable';
             const formats = [];
-            if (available(l.image)) formats.push({ label: 'Screenshot', fmt: l.image === 'jpeg' ? 1 : 0 });
+            if (available(l.image)) formats.push({ label: 'Screenshot', fmt: /\.png$/i.test(l.image) ? 0 : 1 });
             if (available(l.pdf)) formats.push({ label: 'PDF', fmt: 2 });
             if (available(l.monolith)) formats.push({ label: 'Saved Page', fmt: 4 });
             return {
                 id: l.id,
-                title: (l.name || l.description || host || l.url || 'Untitled').trim(),
+                title: clean(l.name) || fallbackTitle(l.url, host),
                 url: l.url,
                 host,
-                description: (l.description || '').trim(),
+                description: clean(l.description),
                 tags,
                 date: Date.parse(l.createdAt || l.importDate || '') || 0,
-                formats
+                formats,
+                thumb: available(l.preview)
             };
         }
 
         function matches(l) {
             if (state.tag && !l.tags.includes(state.tag)) return false;
             if (!state.query) return true;
-            const hay = [l.title, l.description, l.host, l.tags.join(' ')].join(' ').toLowerCase();
+            const hay = [l.title, l.description, l.url, l.tags.join(' ')].join(' ').toLowerCase();
             return state.query.toLowerCase().split(/\s+/).every(w => hay.includes(w));
         }
 
@@ -334,7 +363,11 @@
             const date = l.date ? new Date(l.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
             const copies = l.formats.map(f =>
                 `<a class="btn-view btn-alt" target="_blank" rel="noopener" href="${esc(`${ARCHIVE_BASE}/api/v1/archives/${l.id}?format=${f.fmt}`)}">${esc(f.label)}</a>`).join('');
+            const thumb = l.thumb
+                ? `<div class="thumb"><img src="${esc(`${ARCHIVE_BASE}/api/v1/archives/${l.id}?format=1&preview=true`)}" alt="" loading="lazy" onerror="this.parentNode.remove()"></div>`
+                : '';
             return `<div class="link-card">
+                ${thumb}
                 ${l.host ? `<div class="domain">${esc(l.host)}</div>` : ''}
                 <h3 class="link-title">${esc(l.title)}</h3>
                 ${l.description && l.description !== l.title ? `<p class="link-desc">${esc(l.description)}</p>` : ''}
