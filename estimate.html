@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get an Estimate - Collectors Envy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <style>
+        :root { --ce-bg:#000; --ce-card-bg:#0a0a0a; --ce-text-main:#fff; --ce-text-dim:#a1a1a1; --ce-border:#222; --ce-accent:#00ff88; --ce-font:'Inter',sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:var(--ce-font); background:var(--ce-bg); color:var(--ce-text-main); line-height:1.6; -webkit-font-smoothing:antialiased; }
+        main { max-width:720px; margin:0 auto; padding:3rem 1.25rem 5rem; }
+        h1 { font-size:2.5rem; font-weight:800; letter-spacing:-1px; text-transform:uppercase; }
+        .sub { color:var(--ce-text-dim); margin:.5rem 0 2rem; }
+        form { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1.5rem; display:grid; gap:1.1rem; }
+        label { display:grid; gap:.35rem; font-weight:600; font-size:.9rem; }
+        label small { font-weight:400; color:var(--ce-text-dim); }
+        input[type=text], input[type=email], textarea { background:#000; border:1px solid var(--ce-border); border-radius:8px; color:#fff; padding:.7rem .8rem; font:inherit; font-weight:400; }
+        input:focus, textarea:focus { outline:none; border-color:var(--ce-accent); }
+        textarea { min-height:120px; resize:vertical; }
+        .hp { position:absolute; left:-9999px; height:0; overflow:hidden; }
+        .thumbs { display:flex; flex-wrap:wrap; gap:.5rem; }
+        .thumbs img { width:80px; height:80px; object-fit:cover; border-radius:8px; border:1px solid var(--ce-border); }
+        button { background:#fff; color:#000; border:0; border-radius:8px; padding:.85rem 1rem; font:inherit; font-weight:700; cursor:pointer; }
+        button:disabled { opacity:.5; cursor:wait; }
+        .msg { color:var(--ce-text-dim); font-size:.9rem; min-height:1.2em; }
+        .msg.err { color:#ff6b6b; }
+        .done { display:none; background:var(--ce-card-bg); border:1px solid var(--ce-accent); border-radius:12px; padding:1.5rem; }
+        .done h2 { margin-bottom:.5rem; }
+        .done a { display:inline-block; margin-top:1rem; background:#fff; color:#000; text-decoration:none; font-weight:700; padding:.75rem 1.25rem; border-radius:8px; }
+        .rules { color:var(--ce-text-dim); font-size:.8rem; }
+    </style>
+</head>
+<body>
+<script src="/assets/nav.js?v=3"></script>
+<main>
+    <h1>Get an Estimate</h1>
+    <p class="sub">Tell us about your item and the Collectors Envy community will help you value it. Your request is posted to our Discord, where you can follow the estimate.</p>
+
+    <form id="form" novalidate>
+        <label>Item name
+            <input type="text" name="item" maxlength="120" required placeholder="e.g. 1999 Pokemon Base Set Charizard, PSA 8">
+        </label>
+        <label>Description
+            <small>Condition, grading, where it came from, anything that affects value.</small>
+            <textarea name="description" maxlength="1500" required></textarea>
+        </label>
+        <label>Photos
+            <small>1 to 4 photos (JPG, PNG or WebP). Items only, please. Images are checked before posting.</small>
+            <input type="file" id="photos" accept="image/jpeg,image/png,image/webp" multiple required>
+            <div id="thumbs" class="thumbs"></div>
+        </label>
+        <label>Discord username
+            <small>So we can tag you when the estimate is ready.</small>
+            <input type="text" name="discord" maxlength="40" required placeholder="username">
+        </label>
+        <label>Email <small>(optional)</small>
+            <input type="email" name="email" maxlength="120">
+        </label>
+        <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAFRqJgyzJE1-s-YD"></div>
+        <p class="rules">Do not upload anything other than photos of your item. Abusive or inappropriate uploads are blocked and may get you banned.</p>
+        <button type="submit" id="submit">Submit request</button>
+        <p id="msg" class="msg" role="status"></p>
+    </form>
+
+    <div id="done" class="done">
+        <h2>Request sent</h2>
+        <p>Join our Discord and open the #get-an-estimate channel to see your post and follow the estimate.</p>
+        <a href="https://discord.gg/ecZQzTX55X" target="_blank" rel="noopener">Open #get-an-estimate</a>
+    </div>
+</main>
+<script>
+(function () {
+    var API = 'https://getanestimate.ashton-98e.workers.dev/';
+    var MAX_FILES = 4, MAX_DIM = 1600, MAX_PICK = 15 * 1024 * 1024;
+    var form = document.getElementById('form'), msg = document.getElementById('msg');
+    var btn = document.getElementById('submit'), photos = document.getElementById('photos');
+    var thumbs = document.getElementById('thumbs');
+    var blobs = [];
+
+    function say(t, err) { msg.textContent = t; msg.className = 'msg' + (err ? ' err' : ''); }
+
+    // Re-encode every photo through a canvas. Anything that is not a real, decodable
+    // image fails here, and the re-encoded JPEG carries no metadata or hidden payload.
+    function reencode(file) {
+        return new Promise(function (resolve, reject) {
+            if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size > MAX_PICK) return reject(new Error('bad'));
+            var url = URL.createObjectURL(file), img = new Image();
+            img.onload = function () {
+                var s = Math.min(1, MAX_DIM / Math.max(img.width, img.height));
+                var c = document.createElement('canvas');
+                c.width = Math.max(1, Math.round(img.width * s));
+                c.height = Math.max(1, Math.round(img.height * s));
+                var ctx = c.getContext('2d');
+                ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height);
+                ctx.drawImage(img, 0, 0, c.width, c.height);
+                URL.revokeObjectURL(url);
+                c.toBlob(function (b) { b ? resolve(b) : reject(new Error('bad')); }, 'image/jpeg', 0.85);
+            };
+            img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('bad')); };
+            img.src = url;
+        });
+    }
+
+    photos.addEventListener('change', function () {
+        blobs = []; thumbs.innerHTML = ''; say('');
+        var files = Array.prototype.slice.call(photos.files, 0, MAX_FILES);
+        if (photos.files.length > MAX_FILES) say('Only the first ' + MAX_FILES + ' photos are used.');
+        Promise.all(files.map(reencode)).then(function (out) {
+            blobs = out;
+            out.forEach(function (b) { var i = new Image(); i.src = URL.createObjectURL(b); thumbs.appendChild(i); });
+        }).catch(function () {
+            photos.value = ''; blobs = [];
+            say('One of those files is not a valid JPG, PNG or WebP photo.', true);
+        });
+    });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var f = form.elements;
+        if (!f.item.value.trim() || !f.description.value.trim() || !f.discord.value.trim()) return say('Please fill in the required fields.', true);
+        if (!blobs.length) return say('Please add at least one photo.', true);
+        var token = (form.querySelector('[name="cf-turnstile-response"]') || {}).value;
+        if (!token) return say('Please complete the spam check.', true);
+
+        var fd = new FormData();
+        ['item', 'description', 'discord', 'email', 'website'].forEach(function (k) { fd.append(k, f[k].value.trim()); });
+        fd.append('cf-turnstile-response', token);
+        blobs.forEach(function (b, i) { fd.append('photo' + i, b, 'photo' + i + '.jpg'); });
+
+        btn.disabled = true; say('Sending…');
+        fetch(API, { method: 'POST', body: fd }).then(function (r) {
+            return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) throw new Error(j.error || 'Something went wrong.'); });
+        }).then(function () {
+            form.style.display = 'none';
+            document.getElementById('done').style.display = 'block';
+        }).catch(function (err) {
+            btn.disabled = false; say(err.message || 'Could not send. Please try again.', true);
+            if (window.turnstile) window.turnstile.reset();
+        });
+    });
+})();
+</script>
+</body>
+</html>
