@@ -18,7 +18,7 @@
         form { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1.5rem; display:grid; gap:1.1rem; }
         label { display:grid; gap:.35rem; font-weight:600; font-size:.9rem; }
         label small { font-weight:400; color:var(--ce-text-dim); }
-        input[type=text], input[type=email], textarea { background:#000; border:1px solid var(--ce-border); border-radius:8px; color:#fff; padding:.7rem .8rem; font:inherit; font-weight:400; }
+        input[type=text], textarea { background:#000; border:1px solid var(--ce-border); border-radius:8px; color:#fff; padding:.7rem .8rem; font:inherit; font-weight:400; }
         input:focus, textarea:focus { outline:none; border-color:var(--ce-accent); }
         textarea { min-height:120px; resize:vertical; }
         .hp { position:absolute; left:-9999px; height:0; overflow:hidden; }
@@ -56,9 +56,6 @@
         <label>Discord username
             <small>So we can tag you when the estimate is ready.</small>
             <input type="text" name="discord" maxlength="40" required placeholder="username">
-        </label>
-        <label>Email <small>(optional)</small>
-            <input type="email" name="email" maxlength="120">
         </label>
         <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
         <div class="cf-turnstile" data-sitekey="0x4AAAAAAFRqJgyzJE1-s-YD"></div>
@@ -121,14 +118,15 @@
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-        var f = form.elements;
+        var f = {};
+        ['item', 'description', 'discord', 'website'].forEach(function (k) { f[k] = form.querySelector('[name="' + k + '"]'); });
         if (!f.item.value.trim() || !f.description.value.trim() || !f.discord.value.trim()) return say('Please fill in the required fields.', true);
         if (!blobs.length) return say('Please add at least one photo.', true);
         var token = (form.querySelector('[name="cf-turnstile-response"]') || {}).value;
         if (!token) return say('Please complete the spam check.', true);
 
         var fd = new FormData();
-        ['item', 'description', 'discord', 'email', 'website'].forEach(function (k) { fd.append(k, f[k].value.trim()); });
+        ['item', 'description', 'discord', 'website'].forEach(function (k) { fd.append(k, f[k].value.trim()); });
         fd.append('cf-turnstile-response', token);
         blobs.forEach(function (b, i) { fd.append('photo' + i, b, 'photo' + i + '.jpg'); });
 
