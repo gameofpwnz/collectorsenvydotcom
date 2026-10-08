@@ -33,7 +33,8 @@
 .ce-nav{position:sticky;top:0;z-index:90;background:rgba(0,0,0,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid #222;font-family:"Inter",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;text-align:left}\
 .ce-nav *{box-sizing:border-box;margin:0;padding:0}\
 .ce-nav-inner{max-width:1400px;margin:0 auto;height:60px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem}\
-.ce-nav-logo{font-weight:800;font-size:1.2rem;text-transform:uppercase;letter-spacing:-1px;color:#fff;text-decoration:none;white-space:nowrap}\
+.ce-nav-logo{font-weight:800;font-size:1.2rem;text-transform:uppercase;letter-spacing:-1px;color:#fff;text-decoration:none;white-space:nowrap;display:flex;align-items:center;flex-shrink:0}\
+.ce-nav-logo img{display:block;height:34px;width:auto;max-width:100%}\
 .ce-nav-menu{display:flex;align-items:center;gap:.25rem;list-style:none}\
 .ce-nav-menu>li{position:relative}\
 .ce-nav-menu a{display:block;color:#a1a1a1;text-decoration:none;font-size:.85rem;font-weight:600;padding:8px 12px;border-radius:6px;transition:color .2s,background .2s}\
@@ -50,6 +51,7 @@
 .ce-nav-toggle svg{width:20px;height:20px}\
 @media (max-width:860px){\
 .ce-nav-inner{padding:0 1rem}\
+.ce-nav-logo img{height:28px}\
 .ce-nav-toggle{display:inline-flex}\
 .ce-nav-menu{display:none;position:absolute;top:60px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#000;border-bottom:1px solid #222;padding:.5rem 1rem 1rem;max-height:calc(100vh - 60px);overflow-y:auto}\
 .ce-nav.open .ce-nav-menu{display:flex}\
@@ -75,7 +77,7 @@
   }
 
   var html = '<nav class="ce-nav" aria-label="Main"><div class="ce-nav-inner">' +
-    '<a href="/" class="ce-nav-logo">Collectors Envy</a>' +
+    '<a href="/" class="ce-nav-logo" aria-label="Collectors Envy home"><img src="/assets/images/image01.png" alt="Collectors Envy" width="137" height="34"></a>' +
     '<button class="ce-nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">' +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>' +
     '<ul class="ce-nav-menu">' + LINKS.map(item).join('') +
