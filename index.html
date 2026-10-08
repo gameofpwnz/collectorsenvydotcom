@@ -172,6 +172,13 @@
 						frameborder="0"
 						style="border: none;">
 						</iframe><!-- mnbnbxmbzxmncbzxc -->
+						<script>
+						window.addEventListener('message', function (e) {
+							if (e.origin !== location.origin || !e.data || e.data.type !== 'ce-streamers-height') return;
+							var f = document.querySelector('iframe[src="/streamers.html"]');
+							if (f && e.data.height > 0) f.style.height = e.data.height + 'px';
+						});
+						</script>
 					</div>
 					<hr id="divider05" data-scroll-id="shoutouts" data-scroll-behavior="default" data-scroll-offset="0" data-scroll-speed="3" class="divider-component instance-5">
 					<h2 id="text07" class="text-component instance-7">Shoutouts</h2>
