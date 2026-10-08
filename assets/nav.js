@@ -17,7 +17,7 @@
     { label: 'Proxy', href: '/proxy.html' },
     { label: 'Brand', href: '/brand.html' },
     { label: 'Files', href: 'https://drive.google.com/drive/u/0/folders/1iInTxulTKqZtXiK5bDEzIN_nMcN5tRb9' },
-    { label: 'Archives', href: 'https://archive.collectorsenvy.com/public/collections/1' }
+    { label: 'Archive', href: '/archive.html' }
   ];
   var DISCORD = 'https://discord.gg/DyHTs5GDkc';
 
