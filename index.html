@@ -72,6 +72,7 @@
 						background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
 						padding: 26px 22px 24px;
 						text-align: center;
+						container-type: inline-size; min-width: 0;
 						
 						/* Stronger separation */
 						
@@ -86,6 +87,7 @@
 						/* NUMBER */
 						.ce-stat-number{
 						font-weight: 800; font-size: clamp(34px, 3.4vw, 56px);
+						font-size: min(56px, 15cqi); /* scales with card width so it never spills */
 						line-height: 1.05;
 						letter-spacing: 0.03em;
 						color: #ffffff; white-space: nowrap;
