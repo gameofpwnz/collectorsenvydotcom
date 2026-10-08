@@ -61,51 +61,6 @@
       .shell { padding: 22px 26px 22px; }
     }
 
-    /* ===== Top nav (homepage link list vibe) ===== */
-    .topnav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 12px;
-      align-items: center;
-      padding: 6px 0 14px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 14px;
-    }
-
-    .topnav a {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      border-radius: 6px;
-      color: rgba(255,255,255,0.88);
-      text-decoration: none;
-      border: 1px solid transparent;
-      background: transparent;
-      font-size: 13.5px;
-      line-height: 1;
-      transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
-    }
-
-    .topnav a:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(0,255,136,0.25);
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.55);
-      box-shadow: 0 0 0 2px rgba(255,255,255,0.06);
-      flex: 0 0 auto;
-    }
-
-    .topnav a:hover .dot {
-      background: var(--accent);
-      box-shadow: 0 0 0 2px rgba(0,255,136,0.10);
-    }
-
     header {
       display: flex;
       flex-direction: column;
@@ -546,12 +501,6 @@
 <body>
 <script src="/assets/nav.js"></script>
   <div class="shell">
-    <nav class="topnav" aria-label="Collectors Envy links">
-      <a href="https://www.collectorsenvy.com/" rel="noopener"><span class="dot"></span>Home</a>
-      <a href="https://discord.gg/RgnNBhkzUc" target="_blank" rel="noopener noreferrer"><span class="dot"></span>Discord</a>
-      <a href="https://x.com/Collectors_Envy" target="_blank" rel="noopener noreferrer"><span class="dot"></span>X</a>
-    </nav>
-
     <header>
       <div class="chip">Our Group • Events</div>
       <h1>
@@ -605,7 +554,6 @@
 
       <div class="summary">
         <div>Say hi to us at the events!.</div>
-        <div><a href="https://www.collectorsenvy.com/">Back to collectorsenvy.com</a></div>
       </div>
     </section>
   </div>
