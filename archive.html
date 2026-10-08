@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive | Collectors Envy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #0a0a0a;
+            --card-border: #222222;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1a1;
+            --accent-white: #ffffff;
+            --accent-live: #00ff88;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: #ffffff; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .header { margin-bottom: 40px; }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            margin: 0 0 15px 0;
+            line-height: 1.1;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            max-width: 680px;
+            margin: 0;
+        }
+
+        /* --- TOOLBAR --- */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .toolbar input, .toolbar select {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            padding: 12px 16px;
+        }
+
+        .toolbar input { flex: 1 1 320px; min-width: 0; }
+        .toolbar input::placeholder { color: #666; }
+        .toolbar input:focus, .toolbar select:focus { outline: none; border-color: #fff; }
+
+        .pill-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
+
+        .pill {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pill:hover { color: #fff; border-color: #444; }
+        .pill.active { background: #fff; color: #000; border-color: #fff; }
+
+        .count {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        .count b { color: #fff; }
+
+        /* --- CARDS --- */
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
+            gap: 30px;
+        }
+
+        .link-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.3s ease;
+        }
+
+        .link-card:hover { border-color: #444; }
+
+        .thumb {
+            margin: -30px -30px 22px;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            background: #050505;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+        .domain {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .link-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin: 0 0 12px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .link-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin: 0 0 18px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+
+        .tag {
+            background: #111;
+            border: 1px solid var(--card-border);
+            border-radius: 999px;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            cursor: pointer;
+        }
+
+        .tag:hover { color: #fff; border-color: #fff; }
+
+        .link-meta {
+            border-top: 1px solid var(--card-border);
+            padding-top: 15px;
+            margin-top: auto;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+        .btn-view {
+            flex: 1 1 auto;
+            padding: 12px 16px;
+            background: var(--accent-white);
+            color: #000;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-view:hover { background: #e0e0e0; }
+
+        .btn-alt {
+            background: transparent;
+            color: #fff;
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-alt:hover { background: #111; border-color: #fff; }
+
+        .more-wrap { text-align: center; margin-top: 40px; }
+
+        .more-wrap button {
+            background: var(--accent-white);
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 14px 28px;
+            cursor: pointer;
+        }
+
+        .more-wrap button:hover { background: #e0e0e0; }
+
+        #loading, .empty-state {
+            padding: 80px 20px;
+            text-align: center;
+            font-weight: 800;
+            color: #333;
+        }
+
+        .empty-state { color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+        .empty-state a { color: #fff; }
+    </style>
+</head>
+<body>
+<script src="/assets/nav.js"></script>
+    <div class="container">
+        <div class="header">
+            <h1>Archive</h1>
+            <p>Preserved copies of posts, listings and pages from the community, saved so they don't disappear. Search it, filter by tag, or open the original.</p>
+        </div>
+
+        <div id="loading">LOADING ARCHIVE...</div>
+
+        <div id="app" hidden>
+            <div class="toolbar">
+                <input id="search" type="search" placeholder="Search titles, sites, links and tags" autocomplete="off" aria-label="Search the archive">
+                <select id="sort" aria-label="Sort">
+                    <option value="new">Newest first</option>
+                    <option value="old">Oldest first</option>
+                    <option value="az">A to Z</option>
+                </select>
+            </div>
+            <div class="pill-group" id="tag-pills"></div>
+            <div class="count" id="count"></div>
+            <div class="archive-grid" id="grid"></div>
+            <div class="more-wrap" id="more-wrap" hidden><button type="button" id="more">Show More</button></div>
+        </div>
+    </div>
+
+    <script>
+        // Linkwarden instance and the public collection to show
+        const ARCHIVE_BASE = 'https://archive.collectorsenvy.com';
+        const COLLECTION_ID = 1;
+        const COLLECTION_URL = `${ARCHIVE_BASE}/public/collections/${COLLECTION_ID}`;
+        const PAGE_SIZE = 60;      // cards shown per "Show More"
+        const MAX_PAGES = 40;      // safety cap on API pages fetched
+
+        const el = id => document.getElementById(id);
+        const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[ch]));
+        const isUrl = u => /^https?:\/\//i.test(u || '');
+
+        const state = { links: [], tag: null, query: '', sort: 'new', shown: PAGE_SIZE };
+
+        // Pull every link in the public collection, following nextCursor until the server runs out
+        async function fetchAll() {
+            const seen = new Map();
+            let cursor = null;
+            for (let page = 0; page < MAX_PAGES; page++) {
+                const params = new URLSearchParams({ collectionId: COLLECTION_ID, sort: 0 });
+                if (cursor !== null) params.set('cursor', cursor);
+                const res = await fetch(`${ARCHIVE_BASE}/api/v1/public/collections/links?${params}`);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const body = await res.json();
+                const payload = body.data || body;
+                const batch = payload.links || payload.response || (Array.isArray(payload) ? payload : []);
+                if (!Array.isArray(batch) || !batch.length) break;
+
+                let added = 0;
+                batch.forEach(l => { if (l && l.id != null && !seen.has(l.id)) { seen.set(l.id, l); added++; } });
+                if (!added) break; // server ignored the cursor and repeated itself
+                if (payload.nextCursor == null) break;
+                cursor = payload.nextCursor;
+            }
+            return [...seen.values()];
+        }
+
+        // Titles from the archiver contain HTML entities (&ndash;, &amp;) and stray newlines
+        const decoder = new DOMParser();
+        const clean = str => decoder.parseFromString(String(str || ''), 'text/html').documentElement.textContent.replace(/\s+/g, ' ').trim();
+
+        function fallbackTitle(url, host) {
+            try {
+                const u = new URL(url);
+                const m = u.pathname.match(/^\/([^/]+)\/status\//);
+                if (m && /(^|\.)(x|twitter)\.com$/.test(host)) return `Post by @${m[1]} on X`;
+                const path = u.pathname.replace(/\/$/, '');
+                return host + (path && path !== '/' ? path : '');
+            } catch (e) {
+                return url || 'Untitled';
+            }
+        }
+
+        function normalize(l) {
+            let host = '';
+            try { host = new URL(l.url).hostname.replace(/^www\./, ''); } catch (e) { /* no url */ }
+            const tags = (l.tags || []).map(t => (typeof t === 'string' ? t : t && t.name) || '').filter(Boolean);
+            const available = v => v && v !== 'unavailable';
+            const formats = [];
+            if (available(l.image)) formats.push({ label: 'Screenshot', fmt: /\.png$/i.test(l.image) ? 0 : 1 });
+            if (available(l.pdf)) formats.push({ label: 'PDF', fmt: 2 });
+            if (available(l.monolith)) formats.push({ label: 'Saved Page', fmt: 4 });
+            return {
+                id: l.id,
+                title: clean(l.name) || fallbackTitle(l.url, host),
+                url: l.url,
+                host,
+                description: clean(l.description),
+                tags,
+                date: Date.parse(l.createdAt || l.importDate || '') || 0,
+                formats,
+                thumb: available(l.preview)
+            };
+        }
+
+        function matches(l) {
+            if (state.tag && !l.tags.includes(state.tag)) return false;
+            if (!state.query) return true;
+            const hay = [l.title, l.description, l.url, l.tags.join(' ')].join(' ').toLowerCase();
+            return state.query.toLowerCase().split(/\s+/).every(w => hay.includes(w));
+        }
+
+        function sorted(list) {
+            const out = list.slice();
+            if (state.sort === 'az') out.sort((a, b) => a.title.localeCompare(b.title));
+            else if (state.sort === 'old') out.sort((a, b) => a.date - b.date || a.id - b.id);
+            else out.sort((a, b) => b.date - a.date || b.id - a.id);
+            return out;
+        }
+
+        function card(l) {
+            const date = l.date ? new Date(l.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+            const copies = l.formats.map(f =>
+                `<a class="btn-view btn-alt" target="_blank" rel="noopener" href="${esc(`${ARCHIVE_BASE}/api/v1/archives/${l.id}?format=${f.fmt}`)}">${esc(f.label)}</a>`).join('');
+            const thumb = l.thumb
+                ? `<div class="thumb"><img src="${esc(`${ARCHIVE_BASE}/api/v1/archives/${l.id}?format=1&preview=true`)}" alt="" loading="lazy" onerror="this.parentNode.remove()"></div>`
+                : '';
+            return `<div class="link-card">
+                ${thumb}
+                ${l.host ? `<div class="domain">${esc(l.host)}</div>` : ''}
+                <h3 class="link-title">${esc(l.title)}</h3>
+                ${l.description && l.description !== l.title ? `<p class="link-desc">${esc(l.description)}</p>` : ''}
+                ${l.tags.length ? `<div class="tags">${l.tags.map(t => `<button type="button" class="tag" data-tag="${esc(t)}">${esc(t)}</button>`).join('')}</div>` : ''}
+                <div class="link-meta">${date ? `Saved ${esc(date)}` : '&nbsp;'}</div>
+                <div class="actions">
+                    ${isUrl(l.url) ? `<a class="btn-view" target="_blank" rel="noopener" href="${esc(l.url)}">Original</a>` : ''}
+                    ${copies}
+                </div>
+            </div>`;
+        }
+
+        function render() {
+            const all = state.links;
+
+            // tag pills: most-used first
+            const counts = new Map();
+            all.forEach(l => l.tags.forEach(t => counts.set(t, (counts.get(t) || 0) + 1)));
+            const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 24);
+            el('tag-pills').innerHTML = tags.length
+                ? `<button type="button" class="pill${state.tag ? '' : ' active'}" data-tag="">All</button>` +
+                  tags.map(([t, n]) => `<button type="button" class="pill${state.tag === t ? ' active' : ''}" data-tag="${esc(t)}">${esc(t)} (${n})</button>`).join('')
+                : '';
+
+            const list = sorted(all.filter(matches));
+            const visible = list.slice(0, state.shown);
+            el('count').innerHTML = `<b>${list.length}</b> ${list.length === 1 ? 'link' : 'links'}${state.tag || state.query ? ` of ${all.length}` : ''}`;
+            el('grid').innerHTML = visible.length
+                ? visible.map(card).join('')
+                : '<div class="empty-state">Nothing matches that search</div>';
+            el('more-wrap').hidden = list.length <= visible.length;
+        }
+
+        function setTag(tag) {
+            state.tag = tag || null;
+            state.shown = PAGE_SIZE;
+            render();
+        }
+
+        el('search').addEventListener('input', e => { state.query = e.target.value.trim(); state.shown = PAGE_SIZE; render(); });
+        el('sort').addEventListener('change', e => { state.sort = e.target.value; state.shown = PAGE_SIZE; render(); });
+        el('more').addEventListener('click', () => { state.shown += PAGE_SIZE; render(); });
+        document.addEventListener('click', e => {
+            const t = e.target.closest('[data-tag]');
+            if (t) { setTag(t.dataset.tag === state.tag ? null : t.dataset.tag); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        });
+
+        async function init() {
+            try {
+                state.links = (await fetchAll()).map(normalize);
+            } catch (e) {
+                console.error('Error loading archive:', e);
+                el('loading').innerHTML = `<div class="empty-state">The archive couldn't be loaded here.<br><br><a href="${COLLECTION_URL}" target="_blank" rel="noopener">Open the full archive</a></div>`;
+                return;
+            }
+            el('loading').style.display = 'none';
+            el('app').hidden = false;
+            if (!state.links.length) {
+                el('grid').innerHTML = `<div class="empty-state">Nothing archived yet</div>`;
+                return;
+            }
+            render();
+        }
+
+        init();
+    </script>
+<script src="/assets/footer.js"></script>
+</body>
+</html>
