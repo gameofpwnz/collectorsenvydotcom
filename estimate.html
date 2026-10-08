@@ -121,7 +121,8 @@
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-        var f = form.elements;
+        var f = {};
+        ['item', 'description', 'discord', 'email', 'website'].forEach(function (k) { f[k] = form.querySelector('[name="' + k + '"]'); });
         if (!f.item.value.trim() || !f.description.value.trim() || !f.discord.value.trim()) return say('Please fill in the required fields.', true);
         if (!blobs.length) return say('Please add at least one photo.', true);
         var token = (form.querySelector('[name="cf-turnstile-response"]') || {}).value;
