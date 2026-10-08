@@ -12,7 +12,6 @@
     { label: 'Museum', href: '/museum.html' },
     { label: 'Proxy', href: '/proxy.html' },
     { label: 'Brand', href: '/brand.html' },
-    { label: 'Bounties', href: '/bounties.html' },
     { label: 'Files', href: 'https://drive.google.com/drive/u/0/folders/1iInTxulTKqZtXiK5bDEzIN_nMcN5tRb9' },
     { label: 'Archives', href: 'https://archive.collectorsenvy.com/public/collections/1' }
   ];
