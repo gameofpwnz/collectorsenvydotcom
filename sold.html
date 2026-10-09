@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previously Sold - Collectors Envy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --ce-bg:#000; --ce-card-bg:#0a0a0a; --ce-text-main:#fff; --ce-text-dim:#a1a1a1; --ce-border:#222; --ce-accent:#00ff88; --ce-font:'Inter',sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:var(--ce-font); background:var(--ce-bg); color:var(--ce-text-main); line-height:1.6; -webkit-font-smoothing:antialiased; }
+        main { max-width:960px; margin:0 auto; padding:3rem 1.25rem 5rem; }
+        form, .done { max-width:720px; }
+        h2.sec { font-size:1.5rem; font-weight:800; text-transform:uppercase; letter-spacing:-.5px; margin:3.5rem 0 .4rem; }
+        .how { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1.5rem; max-width:720px; }
+        .how ul { list-style:none; display:grid; gap:.75rem; }
+        .how li { display:flex; gap:.75rem; align-items:flex-start; font-weight:600; }
+        .how li::before { content:''; flex:none; width:.6rem; height:.6rem; margin-top:.55rem; border-radius:50%; background:var(--ce-accent); }
+        .how li span { display:block; font-weight:400; color:var(--ce-text-dim); font-size:.9rem; }
+        .research { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1.5rem; max-width:720px; }
+        .row { display:flex; gap:.6rem; }
+        .row input { flex:1; min-width:0; }
+        .links { display:none; gap:.6rem; margin-top:1rem; flex-wrap:wrap; }
+        .links a { background:#000; color:#fff; border:1px solid var(--ce-border); border-radius:8px; padding:.6rem .9rem; text-decoration:none; font-weight:600; font-size:.9rem; }
+        .links a:hover { border-color:var(--ce-accent); color:var(--ce-accent); }
+        .search { max-width:360px; width:100%; margin:1rem 0 1.25rem; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
+        .card { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+        .card .ph { aspect-ratio:1/1; background:#111; display:flex; align-items:center; justify-content:center; color:var(--ce-text-dim); font-size:.8rem; }
+        .card .ph img { width:100%; height:100%; object-fit:cover; display:block; }
+        .card .body { padding:.9rem; display:grid; gap:.35rem; }
+        .card .desc { font-size:.9rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+        .card .price { color:var(--ce-accent); font-weight:800; font-size:1.2rem; }
+        .card .date { color:var(--ce-text-dim); font-size:.8rem; }
+        h1 { font-size:2.5rem; font-weight:800; letter-spacing:-1px; text-transform:uppercase; }
+        .sub { color:var(--ce-text-dim); margin:.5rem 0 2rem; }
+        form { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1.5rem; display:grid; gap:1.1rem; }
+        label { display:grid; gap:.35rem; font-weight:600; font-size:.9rem; }
+        label small { font-weight:400; color:var(--ce-text-dim); }
+        input[type=text], textarea { background:#000; border:1px solid var(--ce-border); border-radius:8px; color:#fff; padding:.7rem .8rem; font:inherit; font-weight:400; }
+        input:focus, textarea:focus { outline:none; border-color:var(--ce-accent); }
+        textarea { min-height:120px; resize:vertical; }
+        .hp { position:absolute; left:-9999px; height:0; overflow:hidden; }
+        .thumbs { display:flex; flex-wrap:wrap; gap:.5rem; }
+        .thumbs img { width:80px; height:80px; object-fit:cover; border-radius:8px; border:1px solid var(--ce-border); }
+        button { background:#fff; color:#000; border:0; border-radius:8px; padding:.85rem 1rem; font:inherit; font-weight:700; cursor:pointer; }
+        button:disabled { opacity:.5; cursor:wait; }
+        .msg { color:var(--ce-text-dim); font-size:.9rem; min-height:1.2em; }
+        .msg.err { color:#ff6b6b; }
+        .done { display:none; background:var(--ce-card-bg); border:1px solid var(--ce-accent); border-radius:12px; padding:1.5rem; }
+        .done h2 { margin-bottom:.5rem; }
+        .done a { display:inline-block; margin-top:1rem; background:#fff; color:#000; text-decoration:none; font-weight:700; padding:.75rem 1.25rem; border-radius:8px; }
+        .rules { color:var(--ce-text-dim); font-size:.8rem; }
+        .card .ph { position:relative; cursor:pointer; }
+        .card .ph .more { position:absolute; right:.5rem; bottom:.5rem; background:rgba(0,0,0,.75); color:#fff; font-size:.75rem; font-weight:700; padding:.15rem .5rem; border-radius:999px; }
+        .card .seller { color:var(--ce-text-dim); font-size:.8rem; }
+        .lb { position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:100; display:none; align-items:center; justify-content:center; flex-direction:column; gap:1rem; padding:1rem; }
+        .lb.on { display:flex; }
+        .lb img { max-width:100%; max-height:75vh; border-radius:8px; }
+        .lb .nav { display:flex; gap:.6rem; align-items:center; }
+        .lb button { padding:.6rem 1rem; }
+    </style>
+</head>
+<body>
+<script src="/assets/nav.js?v=4"></script>
+<main>
+    <h1>Previously Sold</h1>
+    <p class="sub">A look at items that have sold through Collectors Envy.</p>
+    <input type="text" id="gq" class="search" placeholder="Search previously sold" aria-label="Search previously sold" style="background:#000;border:1px solid var(--ce-border);border-radius:8px;color:#fff;padding:.7rem .8rem;font:inherit">
+    <div id="grid" class="grid"></div>
+    <p id="gmsg" class="msg">Loading…</p>
+</main>
+<div id="lb" class="lb" role="dialog" aria-label="Photos"><img id="lbimg" alt=""><div class="nav"><button id="lbprev" type="button">Prev</button><button id="lbclose" type="button">Close</button><button id="lbnext" type="button">Next</button></div></div>
+<script>
+(function () {
+    // Same Apps Script web app as Past estimates, with ?tab=sold.
+    var FEED = 'https://script.google.com/macros/s/AKfycbyxSiGYa53XvY9w6V5wEYMZzx_6ZYjHgNr98ePsFPD3lpVjfZ54OZI63SB26BeaUDyk/exec?tab=sold';
+    var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : t; return d.innerHTML; };
+    var items = [], shown = [], grid = document.getElementById('grid'), gmsg = document.getElementById('gmsg');
+    var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'), cur = [], idx = 0;
+
+    function render() {
+        var t = document.getElementById('gq').value.toLowerCase();
+        shown = items.filter(function (i) { return !t || (String(i.description) + ' ' + String(i.seller)).toLowerCase().indexOf(t) > -1; });
+        grid.innerHTML = shown.map(function (i, n) {
+            var first = i.images[0];
+            var ph = first ? '<img loading="lazy" referrerpolicy="no-referrer" alt="" src="' + esc(first) + '">' : 'No photo';
+            var more = i.images.length > 1 ? '<span class="more">' + i.images.length + ' photos</span>' : '';
+            return '<div class="card"><div class="ph" data-n="' + n + '">' + ph + more + '</div><div class="body"><div class="desc">' + esc(i.description) +
+                '</div><div class="price">' + esc(i.price) + '</div><div class="date">' + esc(i.date) + '</div>' +
+                (i.seller ? '<div class="seller">Seller: ' + esc(i.seller) + '</div>' : '') + '</div></div>';
+        }).join('');
+        // A broken image link falls back to the placeholder (and the next image becomes the cover when possible).
+        Array.prototype.forEach.call(grid.querySelectorAll('.ph img'), function (img) {
+            img.addEventListener('error', function () {
+                var ph = img.parentNode, it = shown[+ph.getAttribute('data-n')];
+                it.images = it.images.filter(function (u) { return u !== img.getAttribute('src'); });
+                if (it.images.length) { img.src = it.images[0]; } else { ph.textContent = 'No photo'; }
+            });
+        });
+        gmsg.textContent = shown.length ? '' : (items.length ? 'No matches.' : 'Nothing here yet.');
+    }
+    function show() {
+        lbimg.onerror = function () { cur.splice(idx, 1); if (!cur.length) return lb.classList.remove('on'); idx = idx % cur.length; show(); };
+        lbimg.referrerPolicy = 'no-referrer';
+        lbimg.src = cur[idx];
+    }
+    grid.addEventListener('click', function (e) {
+        var ph = e.target.closest ? e.target.closest('.ph') : null;
+        if (!ph) return;
+        cur = shown[+ph.getAttribute('data-n')].images.slice();
+        if (!cur.length) return;
+        idx = 0; lb.classList.add('on'); show();
+    });
+    document.getElementById('lbprev').onclick = function () { idx = (idx - 1 + cur.length) % cur.length; show(); };
+    document.getElementById('lbnext').onclick = function () { idx = (idx + 1) % cur.length; show(); };
+    document.getElementById('lbclose').onclick = function () { lb.classList.remove('on'); };
+    lb.addEventListener('click', function (e) { if (e.target === lb) lb.classList.remove('on'); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('on'); });
+    document.getElementById('gq').addEventListener('input', render);
+    fetch(FEED).then(function (r) { return r.json(); }).then(function (j) {
+        items = (j.items || []).map(function (i) {
+            i.images = (i.images || []).filter(function (u) { return /^https:\/\//.test(u || ''); });
+            return i;
+        });
+        render();
+    }).catch(function () { gmsg.textContent = 'Could not load previously sold items right now.'; });
+})();
+</script>
+</body>
+</html>
