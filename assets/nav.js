@@ -14,8 +14,10 @@
       { label: 'Vision Episodes', href: '/matchmaking/vision.html' }
     ] },
     { label: 'Merch', href: '/merch.html' },
-    { label: 'Estimates', href: '/estimate.html' },
-    { label: 'Sold', href: '/sold.html' },
+    { label: 'Research', href: '/estimate.html', children: [
+      { label: 'Estimates', href: '/estimate.html' },
+      { label: 'Previously Sold', href: '/sold.html' }
+    ] },
     { label: 'Museum', href: '/museum.html' },
     { label: 'Proxy', href: '/proxy.html' },
     { label: 'Brand', href: '/brand.html' },
