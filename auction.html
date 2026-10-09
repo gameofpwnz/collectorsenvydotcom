@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auction Archive | Collectors Envy</title>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -320,6 +321,39 @@
         .nav-links a:hover, .nav-links a.active { color: #fff; }
         .become-proxy-btn, .btn-review { color: #000; }
         @media (max-width: 768px) { .global-nav { padding: 1rem; } .filter-tabs { overflow-x: auto; gap: 0; } .filter-tab { white-space: nowrap; padding: 10px 14px; } }
+
+        /* --- AUCTION REQUEST POPUP --- */
+        dialog.req { background:#0a0a0a; color:#fff; border:1px solid #222; border-radius:14px; padding:0; width:min(640px,94vw); max-height:92vh; font-family:'Inter',sans-serif; }
+        dialog.req::backdrop { background:rgba(0,0,0,.75); backdrop-filter:blur(4px); }
+        .req-head { display:flex; justify-content:space-between; align-items:center; padding:1.1rem 1.4rem; border-bottom:1px solid #222; position:sticky; top:0; background:#0a0a0a; z-index:1; }
+        .req-head h2 { margin:0; font-size:1.25rem; font-weight:800; text-transform:uppercase; letter-spacing:-.5px; }
+        .req-x { background:none; border:0; color:#a1a1a1; font-size:1.6rem; line-height:1; cursor:pointer; }
+        .req-x:hover { color:#fff; }
+        #reqForm { padding:1.2rem 1.4rem 1.5rem; display:grid; gap:1rem; }
+        .req-info { color:#a1a1a1; font-size:.85rem; margin:0; }
+        .req-info ul { margin:.5rem 0 0; padding-left:1.1rem; }
+        #reqForm label { display:grid; gap:.3rem; font-weight:600; font-size:.88rem; }
+        #reqForm label small { font-weight:400; color:#a1a1a1; }
+        #reqForm input[type=text], #reqForm input[type=number], #reqForm textarea { background:#000; border:1px solid #222; border-radius:8px; color:#fff; padding:.65rem .75rem; font:inherit; font-weight:400; width:100%; }
+        #reqForm input:focus, #reqForm textarea:focus { outline:none; border-color:#00ff88; }
+        #reqForm textarea { min-height:90px; resize:vertical; }
+        .req-row { display:grid; grid-template-columns:repeat(3,1fr); gap:.8rem; align-items:end; }
+        @media (max-width:560px) { .req-row { grid-template-columns:1fr; } }
+        .req-hp { position:absolute; left:-9999px; height:0; overflow:hidden; }
+        .req-thumbs { display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:.5rem; }
+        .req-thumb { position:relative; aspect-ratio:1/1; }
+        .req-thumb img { width:100%; height:100%; object-fit:cover; border-radius:8px; border:1px solid #222; display:block; }
+        .req-thumb button { position:absolute; top:3px; right:3px; width:22px; height:22px; border-radius:50%; border:0; background:rgba(0,0,0,.8); color:#fff; cursor:pointer; line-height:1; padding:0; }
+        .req-check { display:flex !important; grid-template-columns:none; align-items:flex-start; gap:.6rem; font-weight:400 !important; color:#ddd; }
+        .req-check input { margin-top:.25rem; accent-color:#00ff88; }
+        #reqSubmit { background:#fff; color:#000; border:0; border-radius:8px; padding:.85rem 1rem; font:inherit; font-weight:700; cursor:pointer; }
+        #reqSubmit:disabled { opacity:.5; cursor:wait; }
+        #reqMsg { color:#a1a1a1; font-size:.88rem; min-height:1.2em; margin:0; }
+        #reqMsg.err { color:#ff6b6b; }
+        #reqDone { display:none; padding:2rem 1.4rem; }
+        #reqDone h3 { margin:0 0 .5rem; font-size:1.3rem; }
+        #reqDone p { color:#a1a1a1; margin:0 0 1.2rem; }
+        #reqDone button { background:#fff; color:#000; border:0; border-radius:8px; padding:.75rem 1.25rem; font:inherit; font-weight:700; cursor:pointer; }
     </style>
 </head>
 <body>
@@ -327,7 +361,7 @@
     <div class="container">
         <div class="header">
             <h1>Auction Archive</h1>
-            <a href="https://forms.gle/6LhpWQfCKn6NwXiv5" target="_blank" class="btn-view" style="display:inline-block;margin:0 0 30px;padding:12px 24px;">Request An Auction</a>
+            <button type="button" id="reqOpen" class="btn-view" style="display:inline-block;margin:0 0 30px;padding:12px 24px;border:0;cursor:pointer;font-family:inherit;font-weight:inherit;">Request An Auction</button>
             <div class="filter-tabs">
                 <button class="filter-tab active" data-filter="all">All Auctions</button>
                 <button class="filter-tab" data-filter="current">Current Auctions</button>
@@ -556,5 +590,138 @@
         initArchive();
     </script>
 <script src="/assets/footer.js"></script>
+
+<dialog id="reqDialog" class="req" aria-labelledby="reqTitle">
+    <div class="req-head"><h2 id="reqTitle">Request an Auction</h2><button type="button" class="req-x" id="reqClose" aria-label="Close">&times;</button></div>
+    <form id="reqForm" novalidate>
+        <div class="req-info">
+            Submit this form to auction an item in the Collectors Envy Discord. Your request goes to the admins, and once approved your photos and details become the live auction.
+            <ul>
+                <li>$5 per auction, or free if 5 people join the Discord with your invite code.</li>
+                <li>Auctions are for special items. Standard items go in the for-sale section.</li>
+                <li>Maximum length is 6 days. Make sure reserve and Buy It Now numbers are accurate.</li>
+                <li>Cancelling after a bid has been placed gets you banned from future auctions.</li>
+                <li>Shipping is negotiated with the winner and must happen within 5 days of the auction ending unless agreed otherwise.</li>
+            </ul>
+        </div>
+        <label>Your Discord username
+            <input type="text" name="discord" maxlength="40" required placeholder="username">
+        </label>
+        <label>Title
+            <input type="text" name="title" maxlength="120" required placeholder="e.g. 2011 OpTic Gaming Hecz Jersey">
+        </label>
+        <label>Additional details <small>Optional. Condition, grading, history, anything buyers should know.</small>
+            <textarea name="details" maxlength="1000"></textarea>
+        </label>
+        <label>Photos <small>Up to 10 photos (JPG, PNG or WebP). These become your live auction, so use clear shots. The first photo is the cover.</small>
+            <input type="file" id="reqPhotos" accept="image/jpeg,image/png,image/webp" multiple>
+            <div id="reqThumbs" class="req-thumbs"></div>
+        </label>
+        <div class="req-row">
+            <label>Reserve price ($)<input type="number" name="reserve" min="1" step="any" inputmode="decimal" required></label>
+            <label>Buy It Now ($) <small>Optional</small><input type="number" name="buynow" min="1" step="any" inputmode="decimal"></label>
+            <label>Duration (days) <small>1 to 6</small><input type="number" name="days" min="1" max="6" step="1" inputmode="numeric" required></label>
+        </div>
+        <label class="req-check"><input type="checkbox" name="rules" value="yes"><span>I have read the server's Auction Rules and Guidelines and agree to follow them.</span></label>
+        <div class="req-hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAFRqJgyzJE1-s-YD"></div>
+        <button type="submit" id="reqSubmit">Submit request</button>
+        <p id="reqMsg" role="status"></p>
+    </form>
+    <div id="reqDone">
+        <h3>Request sent</h3>
+        <p>An admin will review it in the Discord. Once it is approved, your auction goes live.</p>
+        <button type="button" id="reqDoneClose">Close</button>
+    </div>
+</dialog>
+<script>
+(function () {
+    var API = 'https://auctionrequest.ashton-98e.workers.dev/';
+    var MAX_FILES = 10, MAX_DIM = 1800, MAX_PICK = 15 * 1024 * 1024;
+    var dlg = document.getElementById('reqDialog'), form = document.getElementById('reqForm');
+    var photos = document.getElementById('reqPhotos'), thumbs = document.getElementById('reqThumbs');
+    var msg = document.getElementById('reqMsg'), btn = document.getElementById('reqSubmit');
+    var blobs = [];
+    function say(t, err) { msg.textContent = t; msg.className = err ? 'err' : ''; }
+
+    function reencode(file) {
+        return new Promise(function (resolve, reject) {
+            if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size > MAX_PICK) return reject(new Error('bad'));
+            var url = URL.createObjectURL(file), img = new Image();
+            img.onload = function () {
+                var s = Math.min(1, MAX_DIM / Math.max(img.width, img.height));
+                var c = document.createElement('canvas');
+                c.width = Math.max(1, Math.round(img.width * s)); c.height = Math.max(1, Math.round(img.height * s));
+                var ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height);
+                ctx.drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+                c.toBlob(function (b) { b ? resolve(b) : reject(new Error('bad')); }, 'image/jpeg', 0.85);
+            };
+            img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('bad')); };
+            img.src = url;
+        });
+    }
+    function drawThumbs() {
+        thumbs.innerHTML = '';
+        blobs.forEach(function (b, i) {
+            var w = document.createElement('div'); w.className = 'req-thumb';
+            var im = new Image(); im.alt = ''; im.src = URL.createObjectURL(b);
+            var x = document.createElement('button'); x.type = 'button'; x.textContent = '\u00d7'; x.setAttribute('aria-label', 'Remove photo');
+            x.onclick = function () { blobs.splice(i, 1); drawThumbs(); };
+            w.appendChild(im); w.appendChild(x); thumbs.appendChild(w);
+        });
+    }
+    photos.addEventListener('change', function () {
+        var files = Array.prototype.slice.call(photos.files), room = MAX_FILES - blobs.length;
+        photos.value = ''; say('');
+        if (files.length > room) say('Only ' + MAX_FILES + ' photos are allowed.');
+        Promise.all(files.slice(0, Math.max(0, room)).map(reencode)).then(function (out) {
+            blobs = blobs.concat(out); drawThumbs();
+        }).catch(function () { say('One of those files is not a valid JPG, PNG or WebP photo.', true); });
+    });
+
+    function open() {
+        form.style.display = ''; document.getElementById('reqDone').style.display = 'none';
+        btn.disabled = false; say('');
+        if (!dlg.open) dlg.showModal();
+        if (window.turnstile) try { window.turnstile.reset(); } catch (e) {}
+    }
+    document.getElementById('reqOpen').addEventListener('click', open);
+    document.getElementById('reqClose').addEventListener('click', function () { dlg.close(); });
+    document.getElementById('reqDoneClose').addEventListener('click', function () { dlg.close(); });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var g = function (n) { return form.querySelector('[name="' + n + '"]'); };
+        var days = parseInt(g('days').value, 10), reserve = parseFloat(g('reserve').value);
+        if (!g('discord').value.trim() || !g('title').value.trim()) return say('Please fill in your Discord username and a title.', true);
+        if (!blobs.length) return say('Please add at least one photo.', true);
+        if (!(reserve > 0)) return say('Please enter a reserve price.', true);
+        if (!(days >= 1 && days <= 6)) return say('Duration must be between 1 and 6 days.', true);
+        if (!g('rules').checked) return say('Please confirm you have read the auction rules.', true);
+        var token = (form.querySelector('[name="cf-turnstile-response"]') || {}).value;
+        if (!token) return say('Please complete the spam check.', true);
+
+        var fd = new FormData();
+        fd.append('discord', g('discord').value.trim()); fd.append('title', g('title').value.trim());
+        fd.append('details', g('details').value.trim()); fd.append('reserve', String(reserve));
+        fd.append('buynow', g('buynow').value ? String(parseFloat(g('buynow').value)) : '');
+        fd.append('days', String(days)); fd.append('rules', 'yes'); fd.append('website', g('website').value);
+        fd.append('cf-turnstile-response', token);
+        blobs.forEach(function (b, i) { fd.append('photo' + i, b, 'photo' + i + '.jpg'); });
+
+        btn.disabled = true; say('Sending\u2026');
+        fetch(API, { method: 'POST', body: fd }).then(function (r) {
+            return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) throw new Error(j.error || 'Something went wrong.'); });
+        }).then(function () {
+            form.style.display = 'none'; document.getElementById('reqDone').style.display = 'block';
+            form.reset(); blobs = []; drawThumbs();
+        }).catch(function (err) {
+            btn.disabled = false; say(err.message || 'Could not send. Please try again.', true);
+            if (window.turnstile) try { window.turnstile.reset(); } catch (e2) {}
+        });
+    });
+})();
+</script>
 </body>
 </html>
