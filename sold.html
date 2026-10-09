@@ -75,8 +75,8 @@
 <div id="lb" class="lb" role="dialog" aria-label="Photos"><img id="lbimg" alt=""><div class="nav"><button id="lbprev" type="button">Prev</button><button id="lbclose" type="button">Close</button><button id="lbnext" type="button">Next</button></div></div>
 <script>
 (function () {
-    // Same Apps Script web app as Past estimates, with ?tab=sold.
-    var FEED = 'https://script.google.com/macros/s/AKfycbyxSiGYa53XvY9w6V5wEYMZzx_6ZYjHgNr98ePsFPD3lpVjfZ54OZI63SB26BeaUDyk/exec?tab=sold';
+    // Apps Script web app for the Previously-Sold tab (?tab=sold).
+    var FEED = 'https://script.google.com/macros/s/AKfycby7nMG2FAkjJNOYesCA8_7erTRAEtUG4MEMSOe3com6IrvS7DN35Cp5AEPB7yTPApuh/exec?tab=sold';
     var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : t; return d.innerHTML; };
     var items = [], shown = [], grid = document.getElementById('grid'), gmsg = document.getElementById('gmsg');
     var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'), cur = [], idx = 0;
