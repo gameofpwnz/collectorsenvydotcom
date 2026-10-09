@@ -136,6 +136,9 @@
         var list = [
             ['eBay sold listings', ebay],
             ['Mercari sold listings', 'https://www.mercari.com/search/?itemStatuses=2-3&keyword=' + encodeURIComponent(v.replace(/\s+/g, ' '))],
+            ['Poshmark sold listings', 'https://poshmark.com/search?query=' + q(v) + '&availability=sold_out&type=listings'],
+            ['Depop search', 'https://www.depop.com/search/?q=' + q(v)],
+            ['Vinted search', 'https://www.vinted.com/catalog?search_text=' + q(v)],
             ['eBay active listings', 'https://www.ebay.com/sch/i.html?_nkw=' + q(v)],
             ['Google', 'https://www.google.com/search?q=' + q(v + ' sold price')]
         ];
