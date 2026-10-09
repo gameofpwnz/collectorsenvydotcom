@@ -6,21 +6,21 @@
 
   var LINKS = [
     { label: 'Home', href: '/' },
-    { label: 'Events', href: '/events.html' },
-    { label: 'Auctions', href: '/auction.html' },
-    { label: 'Bounties', href: '/bounties.html' },
-    { label: 'Matchmaking', href: '/matchmaking/rings.html', children: [
-      { label: 'OpTic Rings', href: '/matchmaking/rings.html' },
-      { label: 'Vision Episodes', href: '/matchmaking/vision.html' }
-    ] },
-    { label: 'Merch', href: '/merch.html' },
     { label: 'Research', href: '/estimate.html', children: [
       { label: 'Estimates', href: '/estimate.html' },
       { label: 'Previously Sold', href: '/sold.html' },
       { label: 'Archive', href: '/archive.html' }
     ] },
-    { label: 'Museum', href: '/museum.html' },
+    { label: 'Events', href: '/events.html' },
+    { label: 'Auctions', href: '/auction.html' },
+    { label: 'Bounties', href: '/bounties.html' },
     { label: 'Proxy', href: '/proxy.html' },
+    { label: 'Matchmaking', href: '/matchmaking/rings.html', children: [
+      { label: 'OpTic Rings', href: '/matchmaking/rings.html' },
+      { label: 'Vision Episodes', href: '/matchmaking/vision.html' }
+    ] },
+    { label: 'Merch', href: '/merch.html' },
+    { label: 'Museum', href: '/museum.html' },
     { label: 'Brand', href: '/brand.html' },
     { label: 'Files', href: 'https://drive.google.com/drive/u/0/folders/1iInTxulTKqZtXiK5bDEzIN_nMcN5tRb9' }
   ];
