@@ -15,6 +15,11 @@
         main { max-width:960px; margin:0 auto; padding:3rem 1.25rem 5rem; }
         form, .done { max-width:720px; }
         h2.sec { font-size:1.5rem; font-weight:800; text-transform:uppercase; letter-spacing:-.5px; margin:3.5rem 0 .4rem; }
+        .how { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1.5rem; max-width:720px; }
+        .how ul { list-style:none; display:grid; gap:.75rem; }
+        .how li { display:flex; gap:.75rem; align-items:flex-start; font-weight:600; }
+        .how li::before { content:''; flex:none; width:.6rem; height:.6rem; margin-top:.55rem; border-radius:50%; background:var(--ce-accent); }
+        .how li span { display:block; font-weight:400; color:var(--ce-text-dim); font-size:.9rem; }
         .research { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1.5rem; max-width:720px; }
         .row { display:flex; gap:.6rem; }
         .row input { flex:1; min-width:0; }
@@ -86,6 +91,17 @@
         <p>Your item has been posted to our Discord. To see your estimate you need to join the Discord through the invite link below. Someone from the community will ping you there when your estimate is ready, and you won't be able to see it anywhere else.</p>
         <a href="https://discord.gg/ecZQzTX55X" target="_blank" rel="noopener">Join the Discord (#get-an-estimate)</a>
     </div>
+    <h2 class="sec">How Evaluations Are Determined</h2>
+    <div class="how">
+        <ul>
+            <li>Rarity of item</li>
+            <li>Historical Sales (Both Price and Frequency)</li>
+            <li>Demand</li>
+            <li>Similar Item Sales</li>
+            <li>Data from Private Sales in CE Discord, eBay Research Tool, and Mercari</li>
+        </ul>
+    </div>
+
     <h2 class="sec">Research it yourself</h2>
     <p class="sub">Type what you have and get one-click searches of sold listings on eBay and Mercari.</p>
     <div class="research">
@@ -120,6 +136,9 @@
         var list = [
             ['eBay sold listings', ebay],
             ['Mercari sold listings', 'https://www.mercari.com/search/?itemStatuses=2-3&keyword=' + encodeURIComponent(v.replace(/\s+/g, ' '))],
+            ['Poshmark sold listings', 'https://poshmark.com/search?query=' + q(v) + '&availability=sold_out&type=listings'],
+            ['Depop search', 'https://www.depop.com/search/?q=' + q(v)],
+            ['Vinted search', 'https://www.vinted.com/catalog?search_text=' + q(v)],
             ['eBay active listings', 'https://www.ebay.com/sch/i.html?_nkw=' + q(v)],
             ['Google', 'https://www.google.com/search?q=' + q(v + ' sold price')]
         ];
