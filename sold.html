@@ -78,6 +78,11 @@
     // Apps Script web app for the Previously-Sold tab (?tab=sold).
     var FEED = 'https://script.google.com/macros/s/AKfycby7nMG2FAkjJNOYesCA8_7erTRAEtUG4MEMSOe3com6IrvS7DN35Cp5AEPB7yTPApuh/exec?tab=sold';
     var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : t; return d.innerHTML; };
+    // Drive "uc?export=view" links are often blocked when embedded; the thumbnail endpoint loads reliably for shared files.
+    function driveThumb(u) {
+        var m = /^https:\/\/drive\.google\.com\/(?:uc\?(?:[^#]*&)?id=|file\/d\/|open\?id=)([\w-]+)/.exec(u);
+        return m ? 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w1000' : u;
+    }
     var items = [], shown = [], grid = document.getElementById('grid'), gmsg = document.getElementById('gmsg');
     var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'), cur = [], idx = 0;
 
@@ -122,7 +127,7 @@
     document.getElementById('gq').addEventListener('input', render);
     fetch(FEED).then(function (r) { return r.json(); }).then(function (j) {
         items = (j.items || []).map(function (i) {
-            i.images = (i.images || []).filter(function (u) { return /^https:\/\//.test(u || ''); });
+            i.images = (i.images || []).filter(function (u) { return /^https:\/\//.test(u || ''); }).map(driveThumb);
             return i;
         });
         render();
