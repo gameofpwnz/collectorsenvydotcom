@@ -16,13 +16,13 @@
     { label: 'Merch', href: '/merch.html' },
     { label: 'Research', href: '/estimate.html', children: [
       { label: 'Estimates', href: '/estimate.html' },
-      { label: 'Previously Sold', href: '/sold.html' }
+      { label: 'Previously Sold', href: '/sold.html' },
+      { label: 'Archive', href: '/archive.html' }
     ] },
     { label: 'Museum', href: '/museum.html' },
     { label: 'Proxy', href: '/proxy.html' },
     { label: 'Brand', href: '/brand.html' },
-    { label: 'Files', href: 'https://drive.google.com/drive/u/0/folders/1iInTxulTKqZtXiK5bDEzIN_nMcN5tRb9' },
-    { label: 'Archive', href: '/archive.html' }
+    { label: 'Files', href: 'https://drive.google.com/drive/u/0/folders/1iInTxulTKqZtXiK5bDEzIN_nMcN5tRb9' }
   ];
   var DISCORD = 'https://discord.gg/DyHTs5GDkc';
 
