@@ -12,7 +12,24 @@
         :root { --ce-bg:#000; --ce-card-bg:#0a0a0a; --ce-text-main:#fff; --ce-text-dim:#a1a1a1; --ce-border:#222; --ce-accent:#00ff88; --ce-font:'Inter',sans-serif; }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:var(--ce-font); background:var(--ce-bg); color:var(--ce-text-main); line-height:1.6; -webkit-font-smoothing:antialiased; }
-        main { max-width:720px; margin:0 auto; padding:3rem 1.25rem 5rem; }
+        main { max-width:960px; margin:0 auto; padding:3rem 1.25rem 5rem; }
+        form, .done { max-width:720px; }
+        h2.sec { font-size:1.5rem; font-weight:800; text-transform:uppercase; letter-spacing:-.5px; margin:3.5rem 0 .4rem; }
+        .research { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1.5rem; max-width:720px; }
+        .row { display:flex; gap:.6rem; }
+        .row input { flex:1; min-width:0; }
+        .links { display:none; gap:.6rem; margin-top:1rem; flex-wrap:wrap; }
+        .links a { background:#000; color:#fff; border:1px solid var(--ce-border); border-radius:8px; padding:.6rem .9rem; text-decoration:none; font-weight:600; font-size:.9rem; }
+        .links a:hover { border-color:var(--ce-accent); color:var(--ce-accent); }
+        .search { max-width:360px; width:100%; margin:1rem 0 1.25rem; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
+        .card { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+        .card .ph { aspect-ratio:1/1; background:#111; display:flex; align-items:center; justify-content:center; color:var(--ce-text-dim); font-size:.8rem; }
+        .card .ph img { width:100%; height:100%; object-fit:cover; display:block; }
+        .card .body { padding:.9rem; display:grid; gap:.35rem; }
+        .card .desc { font-size:.9rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+        .card .price { color:var(--ce-accent); font-weight:800; font-size:1.2rem; }
+        .card .date { color:var(--ce-text-dim); font-size:.8rem; }
         h1 { font-size:2.5rem; font-weight:800; letter-spacing:-1px; text-transform:uppercase; }
         .sub { color:var(--ce-text-dim); margin:.5rem 0 2rem; }
         form { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1.5rem; display:grid; gap:1.1rem; }
@@ -69,7 +86,66 @@
         <p>Your item has been posted to our Discord. To see your estimate you need to join the Discord through the invite link below. Someone from the community will ping you there when your estimate is ready, and you won't be able to see it anywhere else.</p>
         <a href="https://discord.gg/ecZQzTX55X" target="_blank" rel="noopener">Join the Discord (#get-an-estimate)</a>
     </div>
+    <h2 class="sec">Research it yourself</h2>
+    <p class="sub">Type what you have and get one-click searches of sold listings on eBay and Mercari.</p>
+    <div class="research">
+        <form id="rform" class="row" style="padding:0;border:0;background:none;display:flex;max-width:none">
+            <input type="text" id="rq" maxlength="120" placeholder="e.g. 2017 OpTic Gaming championship jersey" aria-label="Item to research">
+            <button type="submit">Research</button>
+        </form>
+        <div id="links" class="links"></div>
+    </div>
+
+    <h2 class="sec">Past estimates</h2>
+    <p class="sub">Items the community has already valued. Estimates are opinions, not appraisals.</p>
+    <input type="text" id="gq" class="search" placeholder="Search past estimates" aria-label="Search past estimates" style="background:#000;border:1px solid var(--ce-border);border-radius:8px;color:#fff;padding:.7rem .8rem;font:inherit">
+    <div id="grid" class="grid"></div>
+    <p id="gmsg" class="msg">Loading…</p>
 </main>
+<script>
+(function () {
+    // Published JSON feed of the past-estimates sheet (see Apps Script). Empty hides the section.
+    var FEED = '';
+    var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : t; return d.innerHTML; };
+    var q = function (x) { return encodeURIComponent(x.trim()).replace(/%20/g, '+'); };
+
+    document.getElementById('rform').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var v = document.getElementById('rq').value.trim();
+        if (!v) return;
+        var end = Date.now(), start = end - 3 * 365 * 86400000;
+        var tz = encodeURIComponent(Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Chicago');
+        var ebay = 'https://www.ebay.com/sh/research?marketplace=EBAY-US&keywords=' + q(v) + '&dayRange=1095&endDate=' + end +
+            '&startDate=' + start + '&categoryId=0&offset=0&limit=50&tabName=SOLD&tz=' + tz;
+        var list = [
+            ['eBay sold listings', ebay],
+            ['Mercari sold listings', 'https://www.mercari.com/search/?itemStatuses=2-3&keyword=' + encodeURIComponent(v.replace(/\s+/g, ' '))],
+            ['eBay active listings', 'https://www.ebay.com/sch/i.html?_nkw=' + q(v)],
+            ['Google', 'https://www.google.com/search?q=' + q(v + ' sold price')]
+        ];
+        document.getElementById('links').innerHTML = list.map(function (l) {
+            return '<a href="' + l[1] + '" target="_blank" rel="noopener">' + l[0] + '</a>';
+        }).join('');
+        document.getElementById('links').style.display = 'flex';
+    });
+
+    var items = [], grid = document.getElementById('grid'), gmsg = document.getElementById('gmsg');
+    function render() {
+        var t = document.getElementById('gq').value.toLowerCase();
+        var rows = items.filter(function (i) { return !t || String(i.description).toLowerCase().indexOf(t) > -1; });
+        grid.innerHTML = rows.map(function (i) {
+            var img = /^https:\/\//.test(i.image || '') ? '<img loading="lazy" referrerpolicy="no-referrer" alt="" src="' + esc(i.image) + '">' : 'No photo';
+            return '<div class="card"><div class="ph">' + img + '</div><div class="body"><div class="desc">' + esc(i.description) +
+                '</div><div class="price">' + esc(i.price) + '</div><div class="date">' + esc(i.date) + '</div></div></div>';
+        }).join('');
+        gmsg.textContent = rows.length ? '' : (items.length ? 'No matches.' : 'No estimates yet.');
+    }
+    document.getElementById('gq').addEventListener('input', render);
+    if (!FEED) { document.getElementById('gq').style.display = 'none'; gmsg.textContent = 'Past estimates are coming soon.'; return; }
+    fetch(FEED).then(function (r) { return r.json(); }).then(function (j) { items = j.items || []; render(); })
+        .catch(function () { gmsg.textContent = 'Could not load past estimates right now.'; });
+})();
+</script>
 <script>
 (function () {
     var API = 'https://getanestimate.ashton-98e.workers.dev/';
