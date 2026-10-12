@@ -176,67 +176,73 @@
             gap: 30px;
         }
 
-        .event-card {
+        .events-grid { grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 24px; align-items: start; }
+
+        .event-col {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            transition: border-color 0.3s ease;
             display: flex;
             flex-direction: column;
         }
 
-        .event-card:hover {
-            border-color: #444;
-        }
-
-        .event-header {
-            padding: 30px;
+        .event-col-head {
+            padding: 24px 28px;
             border-bottom: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
         }
 
-        .event-header h3 {
-            font-size: 1.3rem;
+        .event-col-head h3 {
+            font-size: 1.15rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: -0.5px;
-            margin: 0 0 10px 0;
+            margin: 0;
         }
 
-        .event-date {
+        .event-count {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
+            white-space: nowrap;
         }
 
-        .event-body {
-            padding: 30px;
+        .event-list {
+            list-style: none;
+            margin: 0;
+            padding: 8px 0;
             flex-grow: 1;
         }
 
-        .event-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 25px;
+        .event-list li {
+            padding: 12px 28px 12px 46px;
+            position: relative;
+            font-weight: 600;
+            line-height: 1.4;
+            border-bottom: 1px solid #161616;
         }
 
-        .btn-signup {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: var(--accent-white);
-            color: #000;
-            text-align: center;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: background 0.3s ease;
+        .event-list li:last-child { border-bottom: 0; }
+
+        .event-list li::before {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 19px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
         }
 
-        .btn-signup:hover {
-            background: #e0e0e0;
-        }
+        .event-list .rating-loading { padding: 20px 28px; }
+
+        .event-col-foot { padding: 20px 28px 28px; }
+        .event-col-foot .pf-open { width: 100%; }
 
         /* --- VERIFIED PROXIES SECTION --- */
         .proxies-intro {
@@ -438,7 +444,6 @@
         @media (max-width: 768px) { .global-nav { padding: 1rem; } }
 
         /* --- PROXY REQUEST POPUPS --- */
-        .pf-buttons { display:flex; flex-wrap:wrap; gap:.8rem; justify-content:center; margin:0 0 30px; }
         .pf-open { background:#fff; color:#000; border:0; border-radius:6px; padding:12px 24px; font-family:inherit; font-weight:700; text-transform:uppercase; letter-spacing:1px; font-size:.85rem; cursor:pointer; }
         .pf-open:hover { background:var(--accent-green); }
         dialog.req { background:#0a0a0a; color:#fff; border:1px solid #222; border-radius:14px; padding:0; width:min(560px,94vw); max-height:92vh; font-family:'Inter',sans-serif; }
@@ -571,15 +576,20 @@
         <!-- EVENTS SECTION -->
         <section class="section">
             <div class="section-header">
-                <h2>Upcoming Events</h2>
-                <p class="section-subtitle">Sign up for proxy services at these events. Ready to request one? Pick the type of event below.</p>
-            </div>
-            <div class="pf-buttons">
-                <button type="button" class="pf-open" data-kind="promo">Request a Proxy: Promotional Ticketed Event</button>
-                <button type="button" class="pf-open" data-kind="other">Request a Proxy: Other Event</button>
+                <h2>Events</h2>
+                <p class="section-subtitle">Events currently available for proxy requests. Pick the type of event and request a proxy.</p>
             </div>
             <div class="events-grid" id="events-grid">
-                <div class="rating-loading">Loading events...</div>
+                <div class="event-col">
+                    <div class="event-col-head"><h3>Promotional Ticketed Events</h3><span class="event-count" id="count-promo"></span></div>
+                    <ul class="event-list" id="list-promo"><li class="rating-loading">Loading events...</li></ul>
+                    <div class="event-col-foot"><button type="button" class="pf-open" data-kind="promo">Request a Proxy</button></div>
+                </div>
+                <div class="event-col">
+                    <div class="event-col-head"><h3>Other Events</h3><span class="event-count" id="count-other"></span></div>
+                    <ul class="event-list" id="list-other"><li class="rating-loading">Loading events...</li></ul>
+                    <div class="event-col-foot"><button type="button" class="pf-open" data-kind="other">Request a Proxy</button></div>
+                </div>
             </div>
         </section>
 
@@ -822,7 +832,6 @@
 
         // --- UPCOMING EVENTS (Google Sheets) ---
         const EVENTS_SHEET_ID = '1LyTBnhI7kKFn6tmlSWmeqgohlJnb43zfb_oTBJiYabc';
-        const EVENTS_SHEET_NAME = 'Upcoming Events';
 
         // Minimal CSV parser: handles quoted fields, escaped quotes, commas and newlines inside quotes
         function parseCSV(text) {
@@ -851,46 +860,26 @@
         }
 
         async function loadEvents() {
-            const grid = document.getElementById('events-grid');
+            const url = `https://docs.google.com/spreadsheets/d/${EVENTS_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent('Proxy Form Events')}`;
+            const cols = { promo: 'promotional ticketed events', other: 'other events' };
             try {
-                const url = `https://docs.google.com/spreadsheets/d/${EVENTS_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(EVENTS_SHEET_NAME)}`;
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('HTTP ' + response.status);
                 const rows = parseCSV(await response.text());
                 const header = (rows.shift() || []).map(h => h.trim().toLowerCase());
-                const col = name => header.indexOf(name);
-                const idx = {
-                    name: col('event name'), date: col('date'), location: col('location'),
-                    description: col('description'), link: col('link')
-                };
-
-                const cards = rows.map(r => {
-                    const get = i => (i >= 0 && r[i] ? r[i].trim() : '');
-                    const name = get(idx.name);
-                    if (!name) return '';
-                    const meta = [get(idx.date), get(idx.location)].filter(Boolean).map(escapeHtml).join(' \u2022 ');
-                    const desc = get(idx.description);
-                    const link = get(idx.link);
-                    const safeLink = /^https?:\/\//i.test(link) ? escapeHtml(link) : '';
-                    return `
-                <div class="event-card">
-                    <div class="event-header">
-                        <h3>${escapeHtml(name)}</h3>
-                        ${meta ? `<p class="event-date">${meta}</p>` : ''}
-                    </div>
-                    <div class="event-body">
-                        ${desc ? `<p class="event-description">${escapeHtml(desc)}</p>` : ''}
-                        ${safeLink ? `<a href="${safeLink}" target="_blank" rel="noopener" class="btn-signup">Request A Proxy</a>` : ''}
-                    </div>
-                </div>`;
-                }).filter(Boolean);
-
-                grid.innerHTML = cards.length
-                    ? cards.join('')
-                    : '<div class="rating-loading">No upcoming events right now.</div>';
+                Object.keys(cols).forEach(k => {
+                    const i = header.indexOf(cols[k]);
+                    const names = i < 0 ? [] : rows.map(r => (r[i] || '').trim()).filter(Boolean);
+                    document.getElementById('list-' + k).innerHTML = names.length
+                        ? names.map(n => `<li>${escapeHtml(n)}</li>`).join('')
+                        : '<li class="rating-loading">No events listed right now.</li>';
+                    document.getElementById('count-' + k).textContent = names.length ? names.length + (names.length === 1 ? ' event' : ' events') : '';
+                });
             } catch (e) {
                 console.error('Error loading events:', e);
-                grid.innerHTML = '<div class="rating-loading">Events unavailable right now.</div>';
+                Object.keys(cols).forEach(k => {
+                    document.getElementById('list-' + k).innerHTML = '<li class="rating-loading">Events unavailable right now.</li>';
+                });
             }
         }
 
