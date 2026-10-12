@@ -452,24 +452,25 @@
         .req-head h2 { margin:0; font-size:1.15rem; font-weight:800; text-transform:uppercase; letter-spacing:-.5px; }
         .req-x { background:none; border:0; color:#a1a1a1; font-size:1.6rem; line-height:1; cursor:pointer; }
         .req-x:hover { color:#fff; }
-        #reqForm { padding:1.2rem 1.4rem 1.5rem; display:grid; gap:1rem; }
+        #reqForm, #apForm { padding:1.2rem 1.4rem 1.5rem; display:grid; gap:1rem; }
         .req-info { color:#a1a1a1; font-size:.85rem; margin:0; }
-        #reqForm label { display:grid; gap:.3rem; font-weight:600; font-size:.88rem; }
-        #reqForm label small { font-weight:400; color:#a1a1a1; }
-        #reqForm input[type=text], #reqForm input[type=number], #reqForm select { background:#000; border:1px solid #222; border-radius:8px; color:#fff; padding:.65rem .75rem; font:inherit; font-weight:400; width:100%; }
-        #reqForm input:focus, #reqForm select:focus { outline:none; border-color:#00ff88; }
+        #reqForm label, #apForm label { display:grid; gap:.3rem; font-weight:600; font-size:.88rem; }
+        #reqForm label small, #apForm label small { font-weight:400; color:#a1a1a1; }
+        #reqForm input[type=text], #apForm input[type=text], #reqForm input[type=number], #apForm input[type=number], #reqForm select, #apForm select, #reqForm textarea, #apForm textarea { background:#000; border:1px solid #222; border-radius:8px; color:#fff; padding:.65rem .75rem; font:inherit; font-weight:400; width:100%; }
+        #reqForm input:focus, #apForm input:focus, #reqForm select:focus, #apForm select:focus, #reqForm textarea:focus, #apForm textarea:focus { outline:none; border-color:#00ff88; }
+        #apForm textarea { min-height:90px; resize:vertical; }
         .req-hp { position:absolute; left:-9999px; height:0; overflow:hidden; }
         .req-check { display:flex !important; align-items:flex-start; gap:.6rem; font-weight:400 !important; color:#ddd; }
         .req-check input { margin-top:.25rem; accent-color:#00ff88; }
         .req-check a { color:var(--accent-green); }
-        #reqSubmit { background:#fff; color:#000; border:0; border-radius:8px; padding:.85rem 1rem; font:inherit; font-weight:700; cursor:pointer; }
-        #reqSubmit:disabled { opacity:.5; cursor:wait; }
-        #reqMsg { color:#a1a1a1; font-size:.88rem; min-height:1.2em; margin:0; }
-        #reqMsg.err { color:#ff6b6b; }
-        #reqDone { display:none; padding:2rem 1.4rem; }
-        #reqDone h3 { margin:0 0 .5rem; font-size:1.3rem; }
-        #reqDone p { color:#a1a1a1; margin:0 0 1.2rem; }
-        #reqDone button { background:#fff; color:#000; border:0; border-radius:8px; padding:.75rem 1.25rem; font:inherit; font-weight:700; cursor:pointer; }
+        #reqSubmit, #apSubmit { background:#fff; color:#000; border:0; border-radius:8px; padding:.85rem 1rem; font:inherit; font-weight:700; cursor:pointer; }
+        #reqSubmit:disabled, #apSubmit:disabled { opacity:.5; cursor:wait; }
+        #reqMsg, #apMsg { color:#a1a1a1; font-size:.88rem; min-height:1.2em; margin:0; }
+        #reqMsg.err, #apMsg.err { color:#ff6b6b; }
+        #reqDone, #apDone { display:none; padding:2rem 1.4rem; }
+        #reqDone h3, #apDone h3 { margin:0 0 .5rem; font-size:1.3rem; }
+        #reqDone p, #apDone p { color:#a1a1a1; margin:0 0 1.2rem; }
+        #reqDone button, #apDone button { background:#fff; color:#000; border:0; border-radius:8px; padding:.75rem 1.25rem; font:inherit; font-weight:700; cursor:pointer; }
 
         /* --- FEE CALCULATOR --- */
         .calc-title { margin: 0 0 18px; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
@@ -630,7 +631,7 @@
                 <p>
                     <strong>Interested in becoming a verified proxy?</strong> We're always looking for reliable community members to join our network. You'll need to provide references, attend events regularly, and maintain a high standard of service.
                 </p>
-                <a href="https://forms.gle/VBU5FKgfeBn5wn3z9" target="_blank" class="become-proxy-btn">Apply to Be a Proxy</a>
+                <button type="button" class="become-proxy-btn" id="apOpen" style="border:0;cursor:pointer;font-family:inherit;">Apply to Be a Proxy</button>
             </div>
 
             <div class="proxies-grid">
@@ -1057,6 +1058,89 @@
     }
     [type, items, cost].forEach(function (el) { el.addEventListener('input', update); });
     update();
+})();
+</script>
+
+<dialog id="apDialog" class="req" aria-labelledby="apTitle">
+    <div class="req-head"><h2 id="apTitle">Apply to Be a Proxy</h2><button type="button" class="req-x" id="apClose" aria-label="Close">&times;</button></div>
+    <form id="apForm" novalidate>
+        <p class="req-info">Apply to become a verified proxy. An admin will review your application and reach out in the Discord.</p>
+        <label>Your Discord name
+            <input type="text" name="discord" maxlength="40" required placeholder="username">
+        </label>
+        <label>References <small>Past transactions, vouches or community members who can speak for you.</small>
+            <textarea name="references" maxlength="900" required></textarea>
+        </label>
+        <label>Are you over 18?
+            <select name="adult" required><option value="">Select</option><option>Yes</option><option>No</option></select>
+        </label>
+        <label>Location
+            <select name="location" required><option value="">Select a location</option><option>US</option><option>UK</option><option>EU</option><option>Other</option></select>
+        </label>
+        <label>Are you able to have an interview chat with Collectors Envy admins?
+            <select name="interview" required><option value="">Select</option><option>Yes</option><option>No</option></select>
+        </label>
+        <label class="req-check"><input type="checkbox" name="rules" value="yes"><span>I have read and agree with the <a href="#guidelines" id="apGuide">Rules &amp; Guidelines</a>.</span></label>
+        <div class="req-hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+        <div id="apTurnstile"></div>
+        <button type="submit" id="apSubmit">Submit application</button>
+        <p id="apMsg" role="status"></p>
+    </form>
+    <div id="apDone">
+        <h3>Application sent</h3>
+        <p>Thanks for applying. An admin will review it and follow up in the Discord.</p>
+        <button type="button" id="apDoneClose">Close</button>
+    </div>
+</dialog>
+<script>
+(function () {
+    var API = 'https://proxyrequest.ashton-98e.workers.dev/';
+    var dlg = document.getElementById('apDialog'), form = document.getElementById('apForm');
+    var msg = document.getElementById('apMsg'), btn = document.getElementById('apSubmit'), wid = null;
+    function say(t, err) { msg.textContent = t; msg.className = err ? 'err' : ''; }
+    function widget() {
+        if (!window.turnstile) return;
+        if (wid === null) wid = window.turnstile.render('#apTurnstile', { sitekey: '0x4AAAAAAFRqJgyzJE1-s-YD' });
+        else try { window.turnstile.reset(wid); } catch (e) {}
+    }
+    document.getElementById('apOpen').addEventListener('click', function () {
+        form.style.display = ''; document.getElementById('apDone').style.display = 'none';
+        btn.disabled = false; say('');
+        if (!dlg.open) dlg.showModal();
+        widget();
+    });
+    ['apClose', 'apDoneClose', 'apGuide'].forEach(function (id) {
+        document.getElementById(id).addEventListener('click', function () { dlg.close(); });
+    });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var g = function (n) { return form.querySelector('[name="' + n + '"]'); };
+        if (!g('discord').value.trim()) return say('Please enter your Discord name.', true);
+        if (!g('references').value.trim()) return say('Please add your references.', true);
+        if (!g('adult').value) return say('Please answer whether you are over 18.', true);
+        if (!g('location').value) return say('Please choose a location.', true);
+        if (!g('interview').value) return say('Please answer the interview question.', true);
+        if (!g('rules').checked) return say('Please confirm you have read the rules and guidelines.', true);
+        var token = (form.querySelector('[name="cf-turnstile-response"]') || {}).value;
+        if (!token) return say('Please complete the spam check.', true);
+
+        var fd = new FormData();
+        fd.append('kind', 'apply');
+        ['discord', 'references', 'adult', 'location', 'interview', 'website'].forEach(function (n) { fd.append(n, g(n).value.trim()); });
+        fd.append('rules', 'yes'); fd.append('cf-turnstile-response', token);
+
+        btn.disabled = true; say('Sending\u2026');
+        fetch(API, { method: 'POST', body: fd }).then(function (r) {
+            return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) throw new Error(j.error || 'Something went wrong.'); });
+        }).then(function () {
+            form.style.display = 'none'; document.getElementById('apDone').style.display = 'block'; form.reset();
+        }).catch(function (err) {
+            btn.disabled = false; say(err.message || 'Could not send. Please try again.', true);
+            widget();
+        });
+    });
 })();
 </script>
 
