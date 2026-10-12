@@ -9,7 +9,8 @@
     { label: 'Research', href: '/estimate.html', children: [
       { label: 'Estimates', href: '/estimate.html' },
       { label: 'Previously Sold', href: '/sold.html' },
-      { label: 'Archive', href: '/archive.html' }
+      { label: 'Archive', href: '/archive.html' },
+      { label: 'OpTic Scuf Archive', href: '/optic-scuf.html' }
     ] },
     { label: 'Events', href: '/events.html' },
     { label: 'Auctions', href: '/auction.html' },
