@@ -560,7 +560,7 @@
                 <div class="rules-card">
                     <h3>Other Events & Conventions - Percentage</h3>
                     <ul>
-                        <li>Proxy Fee is $10 + 15% of item(s) cost</li>
+                        <li>Proxy Fee is $15 + 15% of item(s) cost</li>
                         <li>Covers time, badge cost, travel, and effort</li>
                         <li>Fee does not cover item cost, tax, tariffs, or shipping</li>
                         <li>Scaled to reward proxies and cover multi-item pickups</li>
@@ -1049,8 +1049,8 @@
             note.textContent = 'Fee does not cover item cost, promo ticket, tax, tariffs, or shipping.';
         } else {
             var c = Math.max(0, parseFloat(cost.value) || 0), pct = c * 0.15;
-            line.textContent = '$10 + 15% of ' + usd(c) + ' (' + usd(pct) + ')';
-            fee.textContent = usd(10 + pct);
+            line.textContent = '$15 + 15% of ' + usd(c) + ' (' + usd(pct) + ')';
+            fee.textContent = usd(15 + pct);
             note.textContent = 'Fee does not cover item cost, tax, tariffs, or shipping.';
         }
     }
