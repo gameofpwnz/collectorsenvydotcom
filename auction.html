@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auction Archive | Collectors Envy</title>
+    <title>Esports Memorabilia Auctions &amp; Auction Archive | Collectors Envy</title>
+    <meta name="description" content="Current and past Collectors Envy auctions for esports memorabilia, plus a form to request your own auction.">
+    <link rel="canonical" href="https://collectorsenvy.com/auction.html">
+    <meta property="og:site_name" content="Collectors Envy">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Esports Memorabilia Auctions &amp; Auction Archive | Collectors Envy">
+    <meta property="og:description" content="Current and past Collectors Envy auctions for esports memorabilia, plus a form to request your own auction.">
+    <meta property="og:url" content="https://collectorsenvy.com/auction.html">
+    <meta property="og:image" content="https://collectorsenvy.com/assets/images/share.jpg">
+    <meta name="twitter:card" content="summary">
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -459,7 +468,7 @@
             if (isLive) {
                 card.innerHTML = `
                     <div class="image-viewport">
-                        <img src="${images[0]}" class="main-img">
+                        <img src="${images[0]}" alt="${String(item.title||"Auction item").replace(/"/g,'&quot;')}" class="main-img">
                         ${dotsHtml}
                     </div>
                     <div class="card-info">
@@ -477,7 +486,7 @@
             } else {
                 card.innerHTML = `
                     <div class="image-viewport">
-                        <img src="${images[0]}" class="main-img">
+                        <img src="${images[0]}" alt="${String(item.title||"Auction item").replace(/"/g,'&quot;')}" class="main-img">
                         ${dotsHtml}
                     </div>
                     <div class="card-info">
