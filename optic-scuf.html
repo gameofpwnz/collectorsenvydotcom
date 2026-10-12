@@ -70,7 +70,7 @@
 <script src="/assets/nav.js?v=8"></script>
 <main>
     <h1>OpTic Scuf Controllers</h1>
-    <p class="sub">An archive of OpTic Scuf controllers: platforms, approximate years and notes.</p>
+    <p class="sub">An archive of OpTic Scuf controllers: platforms, approximate years and notes. Research courtesy of twist_lj.</p>
     <input type="text" id="gq" class="search" placeholder="Search controllers" aria-label="Search controllers" style="background:#000;border:1px solid var(--ce-border);border-radius:8px;color:#fff;padding:.7rem .8rem;font:inherit">
     <div id="grid" class="grid"></div>
     <p id="gmsg" class="msg">Loading…</p>
@@ -80,7 +80,7 @@
 <script>
 (function () {
     // Apps Script web app, OpTic-Scuf tab (?tab=optic). Add ?debug=1 to this page to see the raw feed.
-    var FEED = 'https://script.google.com/macros/s/AKfycby7nMG2FAkjJNOYesCA8_7erTRAEtUG4MEMSOe3com6IrvS7DN35Cp5AEPB7yTPApuh/exec?tab=optic';
+    var FEED = 'https://script.google.com/macros/s/AKfycbyuNSk1kc9JjRuXD4fRtqbjKUsYNweD3yGf9AlPktlNmMtMXRDKRKiqTkrpY0KMYjA_2A/exec?tab=optic';
     var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : t; return d.innerHTML; };
     function driveThumb(u) {
         var m = /^https:\/\/drive\.google\.com\/(?:uc\?(?:[^#]*&)?id=|file\/d\/|open\?id=)([\w-]+)/.exec(u);
