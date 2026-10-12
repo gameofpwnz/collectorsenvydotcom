@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proxies | Collectors Envy</title>
@@ -435,6 +436,35 @@
         .nav-links a:hover, .nav-links a.active { color: #fff; }
         .become-proxy-btn, .btn-review { color: #000; }
         @media (max-width: 768px) { .global-nav { padding: 1rem; } }
+
+        /* --- PROXY REQUEST POPUPS --- */
+        .pf-buttons { display:flex; flex-wrap:wrap; gap:.8rem; justify-content:center; margin:0 0 30px; }
+        .pf-open { background:#fff; color:#000; border:0; border-radius:6px; padding:12px 24px; font-family:inherit; font-weight:700; text-transform:uppercase; letter-spacing:1px; font-size:.85rem; cursor:pointer; }
+        .pf-open:hover { background:var(--accent-green); }
+        dialog.req { background:#0a0a0a; color:#fff; border:1px solid #222; border-radius:14px; padding:0; width:min(560px,94vw); max-height:92vh; font-family:'Inter',sans-serif; }
+        dialog.req::backdrop { background:rgba(0,0,0,.75); backdrop-filter:blur(4px); }
+        .req-head { display:flex; justify-content:space-between; align-items:center; padding:1.1rem 1.4rem; border-bottom:1px solid #222; position:sticky; top:0; background:#0a0a0a; z-index:1; }
+        .req-head h2 { margin:0; font-size:1.15rem; font-weight:800; text-transform:uppercase; letter-spacing:-.5px; }
+        .req-x { background:none; border:0; color:#a1a1a1; font-size:1.6rem; line-height:1; cursor:pointer; }
+        .req-x:hover { color:#fff; }
+        #reqForm { padding:1.2rem 1.4rem 1.5rem; display:grid; gap:1rem; }
+        .req-info { color:#a1a1a1; font-size:.85rem; margin:0; }
+        #reqForm label { display:grid; gap:.3rem; font-weight:600; font-size:.88rem; }
+        #reqForm label small { font-weight:400; color:#a1a1a1; }
+        #reqForm input[type=text], #reqForm input[type=number], #reqForm select { background:#000; border:1px solid #222; border-radius:8px; color:#fff; padding:.65rem .75rem; font:inherit; font-weight:400; width:100%; }
+        #reqForm input:focus, #reqForm select:focus { outline:none; border-color:#00ff88; }
+        .req-hp { position:absolute; left:-9999px; height:0; overflow:hidden; }
+        .req-check { display:flex !important; align-items:flex-start; gap:.6rem; font-weight:400 !important; color:#ddd; }
+        .req-check input { margin-top:.25rem; accent-color:#00ff88; }
+        .req-check a { color:var(--accent-green); }
+        #reqSubmit { background:#fff; color:#000; border:0; border-radius:8px; padding:.85rem 1rem; font:inherit; font-weight:700; cursor:pointer; }
+        #reqSubmit:disabled { opacity:.5; cursor:wait; }
+        #reqMsg { color:#a1a1a1; font-size:.88rem; min-height:1.2em; margin:0; }
+        #reqMsg.err { color:#ff6b6b; }
+        #reqDone { display:none; padding:2rem 1.4rem; }
+        #reqDone h3 { margin:0 0 .5rem; font-size:1.3rem; }
+        #reqDone p { color:#a1a1a1; margin:0 0 1.2rem; }
+        #reqDone button { background:#fff; color:#000; border:0; border-radius:8px; padding:.75rem 1.25rem; font:inherit; font-weight:700; cursor:pointer; }
     </style>
 </head>
 <body>
@@ -448,7 +478,7 @@
         </div>
 
         <!-- RULES SECTION -->
-        <section class="section">
+        <section class="section" id="guidelines">
             <div class="section-header">
                 <h2>Rules & Guidelines</h2>
                 <p class="section-subtitle">Please read carefully before participating</p>
@@ -542,7 +572,11 @@
         <section class="section">
             <div class="section-header">
                 <h2>Upcoming Events</h2>
-                <p class="section-subtitle">Sign up for proxy services at these events. Don't see an event here? Fill out <a href="https://forms.gle/nrwGPuzxMBM7rR9L6" target="_blank">this form</a></p>
+                <p class="section-subtitle">Sign up for proxy services at these events. Ready to request one? Pick the type of event below.</p>
+            </div>
+            <div class="pf-buttons">
+                <button type="button" class="pf-open" data-kind="promo">Request a Proxy: Promotional Ticketed Event</button>
+                <button type="button" class="pf-open" data-kind="other">Request a Proxy: Other Event</button>
             </div>
             <div class="events-grid" id="events-grid">
                 <div class="rating-loading">Loading events...</div>
@@ -862,6 +896,130 @@
 
         document.addEventListener('DOMContentLoaded', loadEvents);
     </script>
+
+<dialog id="reqDialog" class="req" aria-labelledby="reqTitle">
+    <div class="req-head"><h2 id="reqTitle">Request a Proxy</h2><button type="button" class="req-x" id="reqClose" aria-label="Close">&times;</button></div>
+    <form id="reqForm" novalidate>
+        <p class="req-info" id="reqInfo"></p>
+        <label>Event Name
+            <select name="event" id="reqEvent" required></select>
+        </label>
+        <label id="reqOtherWrap" style="display:none">Event name <small>Type the event you want a proxy for.</small>
+            <input type="text" name="event_other" maxlength="100">
+        </label>
+        <label>Your Discord name
+            <input type="text" name="discord" maxlength="40" required placeholder="username">
+        </label>
+        <label>Shipping Location
+            <select name="shipping" required>
+                <option value="">Select a location</option>
+                <option>US</option><option>UK</option><option>EU</option><option>Other</option>
+            </select>
+        </label>
+        <label>Number of items
+            <input type="number" name="items" min="1" max="99" step="1" inputmode="numeric" required>
+        </label>
+        <label class="req-check"><input type="checkbox" name="rules" value="yes"><span>I have read the <a href="#guidelines" id="reqGuide">Rules &amp; Guidelines</a> and agree to follow them.</span></label>
+        <div class="req-hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAFRqJgyzJE1-s-YD"></div>
+        <button type="submit" id="reqSubmit">Submit request</button>
+        <p id="reqMsg" role="status"></p>
+    </form>
+    <div id="reqDone">
+        <h3>Request sent</h3>
+        <p>Your request has been sent to the team. Watch the Discord for next steps.</p>
+        <button type="button" id="reqDoneClose">Close</button>
+    </div>
+</dialog>
+<script>
+(function () {
+    var API = 'https://proxyrequest.ashton-98e.workers.dev/';
+    // Event lists come from the "Proxy Form Events" tab of the events sheet:
+    // column A "Promotional Ticketed Events", column B "Other Events". Edit the sheet to change the dropdowns.
+    var KINDS = {
+        promo: { title: 'Request a Proxy: Promotional Ticketed Event', info: 'Request a proxy to a promotional ticketed event. Choose the event, tell us where to ship, and submit.', col: 'promotional ticketed events' },
+        other: { title: 'Request a Proxy: Other Event', info: 'Request a proxy to any other event. Choose the event, tell us where to ship, and submit.', col: 'other events' }
+    };
+    var lists = null, kind = 'promo';
+    var dlg = document.getElementById('reqDialog'), form = document.getElementById('reqForm');
+    var sel = document.getElementById('reqEvent'), wrap = document.getElementById('reqOtherWrap');
+    var msg = document.getElementById('reqMsg'), btn = document.getElementById('reqSubmit');
+    function say(t, err) { msg.textContent = t; msg.className = err ? 'err' : ''; }
+
+    function loadLists() {
+        if (lists) return Promise.resolve(lists);
+        var url = 'https://docs.google.com/spreadsheets/d/' + EVENTS_SHEET_ID + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent('Proxy Form Events');
+        return fetch(url).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); }).then(function (t) {
+            var rows = parseCSV(t), head = (rows.shift() || []).map(function (h) { return h.trim().toLowerCase(); });
+            var out = {};
+            Object.keys(KINDS).forEach(function (k) {
+                var i = head.indexOf(KINDS[k].col);
+                out[k] = i < 0 ? [] : rows.map(function (r) { return (r[i] || '').trim(); }).filter(Boolean);
+            });
+            lists = out; return out;
+        });
+    }
+    function fill() {
+        var names = (lists && lists[kind]) || [];
+        sel.innerHTML = '';
+        var add = function (v, label) { var o = document.createElement('option'); o.value = v; o.textContent = label; sel.appendChild(o); };
+        add('', names.length ? 'Select an event' : 'No events listed');
+        names.forEach(function (n) { add(n, n); });
+        add('__other__', 'Other / not listed');
+        wrap.style.display = 'none';
+    }
+    sel.addEventListener('change', function () { wrap.style.display = sel.value === '__other__' ? '' : 'none'; });
+
+    function open(k) {
+        kind = k;
+        document.getElementById('reqTitle').textContent = KINDS[k].title;
+        document.getElementById('reqInfo').textContent = KINDS[k].info;
+        form.style.display = ''; document.getElementById('reqDone').style.display = 'none';
+        btn.disabled = false; say('');
+        fill();
+        if (!dlg.open) dlg.showModal();
+        if (window.turnstile) try { window.turnstile.reset(); } catch (e) {}
+        loadLists().then(fill).catch(function () { say('Could not load the event list. You can still pick "Other / not listed".', true); });
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('.pf-open'), function (b) {
+        b.addEventListener('click', function () { open(b.getAttribute('data-kind')); });
+    });
+    document.getElementById('reqClose').addEventListener('click', function () { dlg.close(); });
+    document.getElementById('reqDoneClose').addEventListener('click', function () { dlg.close(); });
+    document.getElementById('reqGuide').addEventListener('click', function () { dlg.close(); });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var g = function (n) { return form.querySelector('[name="' + n + '"]'); };
+        var ev = sel.value === '__other__' ? g('event_other').value.trim() : sel.value;
+        var items = parseInt(g('items').value, 10);
+        if (!ev) return say('Please choose an event.', true);
+        if (!g('discord').value.trim()) return say('Please enter your Discord name.', true);
+        if (!g('shipping').value) return say('Please choose a shipping location.', true);
+        if (!(items >= 1)) return say('Please enter the number of items.', true);
+        if (!g('rules').checked) return say('Please confirm you have read the guidelines.', true);
+        var token = (form.querySelector('[name="cf-turnstile-response"]') || {}).value;
+        if (!token) return say('Please complete the spam check.', true);
+
+        var fd = new FormData();
+        fd.append('kind', kind); fd.append('event', ev); fd.append('listed', sel.value === '__other__' ? 'no' : 'yes');
+        fd.append('discord', g('discord').value.trim()); fd.append('shipping', g('shipping').value);
+        fd.append('items', String(items)); fd.append('rules', 'yes'); fd.append('website', g('website').value);
+        fd.append('cf-turnstile-response', token);
+
+        btn.disabled = true; say('Sending\u2026');
+        fetch(API, { method: 'POST', body: fd }).then(function (r) {
+            return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) throw new Error(j.error || 'Something went wrong.'); });
+        }).then(function () {
+            form.style.display = 'none'; document.getElementById('reqDone').style.display = 'block'; form.reset();
+        }).catch(function (err) {
+            btn.disabled = false; say(err.message || 'Could not send. Please try again.', true);
+            if (window.turnstile) try { window.turnstile.reset(); } catch (e2) {}
+        });
+    });
+})();
+</script>
 
 <script src="/assets/footer.js"></script>
 </body>
