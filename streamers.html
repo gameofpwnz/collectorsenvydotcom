@@ -171,7 +171,7 @@
         const data = await response.json();
 
         if (data.error) {
-          container.innerHTML = `<div class="error">❌ Error: ${data.error}</div>`;
+          container.innerHTML = `<div class="error">❌ Error: ${escapeHtml(String(data.error))}</div>`;
           return;
         }
 
@@ -186,11 +186,11 @@
             .replace('{width}', '440')
             .replace('{height}', '248');
           
-          const viewers = stream.viewer_count.toLocaleString();
+          const viewers = Number(stream.viewer_count || 0).toLocaleString();
 
           return `
-            <a href="https://twitch.tv/${stream.user_login}" target="_blank" class="stream-card">
-              <img src="${thumbnail}" alt="${stream.title}" class="stream-thumbnail">
+            <a href="https://twitch.tv/${encodeURIComponent(stream.user_login)}" target="_blank" rel="noopener noreferrer" class="stream-card">
+              <img src="${escapeHtml(thumbnail)}" alt="${escapeHtml(stream.title)}" class="stream-thumbnail">
               <div class="stream-info">
                 <div class="stream-title">${escapeHtml(stream.title)}</div>
                 <div class="stream-streamer">${escapeHtml(stream.user_name)}</div>
@@ -208,7 +208,7 @@
         postHeight();
 
       } catch (error) {
-        container.innerHTML = `<div class="error">❌ Failed to load streams: ${error.message}</div>`;
+        container.innerHTML = `<div class="error">❌ Failed to load streams: ${escapeHtml(error.message)}</div>`;
       }
     }
 

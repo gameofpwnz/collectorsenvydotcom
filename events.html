@@ -993,7 +993,7 @@ async function loadEventsFromSheet() {
                 if (evt.linkUrl && evt.linkText) {
                   const infoLink = document.createElement("a");
                   infoLink.className = "btn-link info";
-                  infoLink.href = evt.linkUrl;
+                  infoLink.href = /^https?:\/\//i.test(evt.linkUrl) ? evt.linkUrl : '#';
                   infoLink.target = "_blank";
                   infoLink.rel = "noopener noreferrer";
                   infoLink.textContent = evt.linkText;
@@ -1003,7 +1003,7 @@ async function loadEventsFromSheet() {
                 if (evt.ticketsUrl && evt.ticketsText) {
                   const ticketsLink = document.createElement("a");
                   ticketsLink.className = "btn-link tickets";
-                  ticketsLink.href = evt.ticketsUrl;
+                  ticketsLink.href = /^https?:\/\//i.test(evt.ticketsUrl) ? evt.ticketsUrl : '#';
                   ticketsLink.target = "_blank";
                   ticketsLink.rel = "noopener noreferrer";
                   ticketsLink.textContent = evt.ticketsText;
