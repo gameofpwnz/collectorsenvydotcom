@@ -449,6 +449,10 @@
             });
         }
 
+        // Sheet text is untrusted: escape before it goes into innerHTML, and only allow http(s) links.
+        const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const safeUrl = u => /^https?:\/\//i.test(String(u || '').trim()) ? String(u).trim() : '#';
+
         function createAuctionCard(item, isLive = false) {
             const images = [item.img1, item.img2, item.img3].filter(url => url && url.startsWith('http'));
             if (images.length === 0) return null;
@@ -468,37 +472,37 @@
             if (isLive) {
                 card.innerHTML = `
                     <div class="image-viewport">
-                        <img src="${images[0]}" alt="${String(item.title||"Auction item").replace(/"/g,'&quot;')}" class="main-img">
+                        <img src="${esc(images[0])}" alt="${esc(item.title||"Auction item")}" class="main-img">
                         ${dotsHtml}
                     </div>
                     <div class="card-info">
                         <div class="price-line">
-                            <div class="price">${item.price}</div>
+                            <div class="price">${esc(item.price)}</div>
                         </div>
-                        <h3 class="title">${item.title}</h3>
+                        <h3 class="title">${esc(item.title)}</h3>
                         <div class="meta">
-                            <div><b>Ends At</b> ${item.endsAt}</div>
+                            <div><b>Ends At</b> ${esc(item.endsAt)}</div>
                             <div><b>Status</b> LIVE</div>
                         </div>
-                        <a href="${item.link}" target="_blank" class="btn-view">Place Bid</a>
+                        <a href="${esc(safeUrl(item.link))}" target="_blank" rel="noopener noreferrer" class="btn-view">Place Bid</a>
                     </div>
                 `;
             } else {
                 card.innerHTML = `
                     <div class="image-viewport">
-                        <img src="${images[0]}" alt="${String(item.title||"Auction item").replace(/"/g,'&quot;')}" class="main-img">
+                        <img src="${esc(images[0])}" alt="${esc(item.title||"Auction item")}" class="main-img">
                         ${dotsHtml}
                     </div>
                     <div class="card-info">
                         <div class="price-line">
-                            <div class="${isDNS ? 'dns-label' : 'price'}">${isDNS ? 'PASSED' : item.bid}</div>
+                            <div class="${isDNS ? 'dns-label' : 'price'}">${isDNS ? 'PASSED' : esc(item.bid)}</div>
                         </div>
-                        <h3 class="title">${item.title}</h3>
+                        <h3 class="title">${esc(item.title)}</h3>
                         <div class="meta">
-                            <div><b>Winner</b> ${isDNS ? 'N/A' : item.winner}</div>
-                            <div><b>Date</b> ${item.date}</div>
+                            <div><b>Winner</b> ${isDNS ? 'N/A' : esc(item.winner)}</div>
+                            <div><b>Date</b> ${esc(item.date)}</div>
                         </div>
-                        <a href="${item.link}" target="_blank" class="btn-view">View Thread</a>
+                        <a href="${esc(safeUrl(item.link))}" target="_blank" rel="noopener noreferrer" class="btn-view">View Thread</a>
                     </div>
                 `;
             }
