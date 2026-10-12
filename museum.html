@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Archive | Collectors Envy Museum</title>
+    <title>The Archive: Esports Memorabilia Museum | Collectors Envy</title>
+    <meta name="description" content="A digital museum of esports jerseys, hardware and signed pieces preserved by the Collectors Envy community.">
+    <link rel="canonical" href="https://collectorsenvy.com/museum.html">
+    <meta property="og:site_name" content="Collectors Envy">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="The Archive: Esports Memorabilia Museum | Collectors Envy">
+    <meta property="og:description" content="A digital museum of esports jerseys, hardware and signed pieces preserved by the Collectors Envy community.">
+    <meta property="og:url" content="https://collectorsenvy.com/museum.html">
+    <meta property="og:image" content="https://collectorsenvy.com/assets/images/share.jpg">
+    <meta name="twitter:card" content="summary">
     <link href="assets/style.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
@@ -161,7 +170,7 @@
         </section>
     </main>
 
-    <div id="darkroom" onclick="this.style.display='none'"><img id="darkroomImg" src=""></div>
+    <div id="darkroom" onclick="this.style.display='none'"><img id="darkroomImg" src="" alt="Exhibit enlarged view"></div>
 
     <div id="itemModal" class="modal">
         <button onclick="closeModal()" class="fixed top-6 right-6 z-[150] text-white uppercase text-[10px] tracking-widest bg-black/50 px-4 py-2 border border-white/10">Exit Gallery</button>
@@ -255,7 +264,7 @@
             const items = window.museumData.filter(i => i.steward === name);
             document.getElementById('profileGrid').innerHTML = items.map(i => `
                 <div class="display-case p-4 cursor-pointer" onclick="openModal('${i.id}')">
-                    <img src="${getThumbnail(i)}" class="aspect-square w-full object-contain mb-4 opacity-80">
+                    <img alt="${String(i.title||'').replace(/"/g,'&quot;')}" src="${getThumbnail(i)}" class="aspect-square w-full object-contain mb-4 opacity-80">
                     <span class="text-[8px] font-bold text-blue-600 uppercase tracking-widest">${i.id}</span>
                     <h4 class="serif text-lg text-white italic truncate uppercase leading-tight">${i.title}</h4>
                 </div>`).join('');
@@ -310,7 +319,7 @@
             document.getElementById('curator-spotlight').style.display = featured.length ? 'block' : 'none';
             document.getElementById('featured-grid').innerHTML = featured.map(i => `
                 <div class="display-case p-6 md:p-8 curator-choice group cursor-pointer flex flex-col md:flex-row gap-8 items-center" onclick="openModal('${i.id}')">
-                    <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img src="${getThumbnail(i)}" class="w-full h-full object-contain opacity-90 transition-transform"><div class="absolute top-0 left-0 curator-badge">ESSENTIAL RECORD</div></div>
+                    <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden relative shadow-2xl"><img alt="${String(i.title||'').replace(/"/g,'&quot;')}" src="${getThumbnail(i)}" class="w-full h-full object-contain opacity-90 transition-transform"><div class="absolute top-0 left-0 curator-badge">ESSENTIAL RECORD</div></div>
                     <div class="w-full md:w-1/2 text-left"><span class="text-white font-mono text-[10px] uppercase mb-4 block tracking-widest">${i.id}</span><h3 class="serif text-3xl md:text-4xl text-white italic mb-6 leading-tight uppercase tracking-tighter">${i.title}</h3><p class="text-zinc-500 text-sm italic mb-8 line-clamp-3 leading-relaxed">${i.description}</p></div>
                 </div>`).join('');
 
@@ -319,7 +328,7 @@
                 const items = data.filter(i => i.category === cat);
                 grid.innerHTML = items.map(i => `
                     <div class="display-case p-6 cursor-pointer ${i.verified ? 'verified-record' : ''}" onclick="openModal('${i.id}')">
-                        <div class="aspect-[4/5] bg-black mb-6 relative overflow-hidden"><img src="${getThumbnail(i)}" loading="lazy" class="w-full h-full object-contain opacity-80"></div>
+                        <div class="aspect-[4/5] bg-black mb-6 relative overflow-hidden"><img alt="${String(i.title||'').replace(/"/g,'&quot;')}" src="${getThumbnail(i)}" loading="lazy" class="w-full h-full object-contain opacity-80"></div>
                         <div class="flex justify-between mb-2"><span class="text-[9px] font-bold ${i.verified ? 'text-blue-500' : 'text-zinc-600'} uppercase tracking-widest">${i.id}</span><span class="text-[8px] text-zinc-700 font-mono font-bold">${i.year}</span></div>
                         <h4 class="serif text-xl text-white italic truncate uppercase tracking-tighter">${i.title}</h4>
                     </div>`).join('') + '<div class="display-case p-8 flex flex-col items-center justify-center border-dashed border-zinc-800 min-h-[300px] text-center text-zinc-600 serif italic uppercase text-[10px] tracking-widest">Space Reserved</div>';
@@ -365,11 +374,11 @@
                       </iframe>
                     </div>`;
                 }
-                return `<img src="${m.url}" onclick="openDarkroom('${m.url}')" class="w-full h-auto bg-black p-2 border border-white/5 shadow-2xl cursor-zoom-in">`;
+                return `<img alt="${String(i.title||'').replace(/"/g,'&quot;')}" src="${m.url}" onclick="openDarkroom('${m.url}')" class="w-full h-auto bg-black p-2 border border-white/5 shadow-2xl cursor-zoom-in">`;
             }).join('');
             
             const related = window.museumData.filter(o => o.id !== i.id && (o.esport === i.esport || (o.tags && i.tags && o.tags.some(t => i.tags.includes(t))))).slice(0, 4);
-            document.getElementById('relatedExhibits').innerHTML = related.length ? `<h4 class="serif text-xl text-white italic mb-6">Related Exhibits</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${related.map(r => `<div onclick="openModal('${r.id}')" class="related-card p-3 cursor-pointer group"><img src="${getThumbnail(r)}" class="h-24 w-full object-contain mb-2 opacity-60 group-hover:opacity-100 transition"><div class="text-[10px] text-zinc-300 font-bold uppercase truncate tracking-tight">${r.title}</div></div>`).join('')}</div>` : '';
+            document.getElementById('relatedExhibits').innerHTML = related.length ? `<h4 class="serif text-xl text-white italic mb-6">Related Exhibits</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${related.map(r => `<div onclick="openModal('${r.id}')" class="related-card p-3 cursor-pointer group"><img alt="${String(r.title||'').replace(/"/g,'&quot;')}" src="${getThumbnail(r)}" class="h-24 w-full object-contain mb-2 opacity-60 group-hover:opacity-100 transition"><div class="text-[10px] text-zinc-300 font-bold uppercase truncate tracking-tight">${r.title}</div></div>`).join('')}</div>` : '';
             
             document.getElementById('itemModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
