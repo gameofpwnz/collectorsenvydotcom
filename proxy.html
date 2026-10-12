@@ -470,6 +470,19 @@
         #reqDone h3 { margin:0 0 .5rem; font-size:1.3rem; }
         #reqDone p { color:#a1a1a1; margin:0 0 1.2rem; }
         #reqDone button { background:#fff; color:#000; border:0; border-radius:8px; padding:.75rem 1.25rem; font:inherit; font-weight:700; cursor:pointer; }
+
+        /* --- FEE CALCULATOR --- */
+        .calc-title { margin: 0 0 18px; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
+        .calc { display: grid; gap: 16px; margin-bottom: 24px; max-width: 520px; }
+        .calc label { display: grid; gap: 6px; font-weight: 600; font-size: 0.88rem; }
+        .calc select, .calc input { background: #000; border: 1px solid #222; border-radius: 8px; color: #fff; padding: 0.7rem 0.8rem; font: inherit; font-weight: 400; width: 100%; }
+        .calc select:focus, .calc input:focus { outline: none; border-color: var(--accent-green); }
+        .calc-result { background: #000; border: 1px solid #222; border-radius: 10px; padding: 16px 18px; }
+        .calc-line { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 12px; }
+        .calc-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+        .calc-total span { font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; color: var(--text-secondary); }
+        .calc-total strong { font-size: 1.8rem; font-weight: 800; color: var(--accent-green); }
+        .calc-note { margin: 0; color: var(--text-secondary); font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -556,17 +569,26 @@
             </div>
 
             <div class="proxies-intro" style="margin-top: 40px;">
-                <p>
-                    <strong>Example calculations:</strong> 
-                </p>
-                <p>
-  
-                    If you are requesting an OpTic Gaming x Texas Rangers Theme Night jersey, you would pay for the Theme Ticket via the Texas Rangers + the $15 flat Proxy fee + shipping + tariffs if applicable.
-                </p>
-                <p>
-  
-                    If you are requesting multiple items at a convention totaling $400, you would pay $400 + $5 + ($400 x 0.15) + shipping + tariffs if applicable.
-                </p>
+                <h3 class="calc-title">Estimated Proxy Fee Calculator</h3>
+                <div class="calc">
+                    <label>Event type
+                        <select id="calcType">
+                            <option value="promo">Promotional Ticketed Events</option>
+                            <option value="other">Other Events</option>
+                        </select>
+                    </label>
+                    <label id="calcItemsWrap">Number of items
+                        <input type="number" id="calcItems" min="1" max="99" step="1" value="1" inputmode="numeric">
+                    </label>
+                    <label id="calcCostWrap" style="display:none">Total cost of item(s) ($)
+                        <input type="number" id="calcCost" min="0" step="any" value="" placeholder="e.g. 400" inputmode="decimal">
+                    </label>
+                    <div class="calc-result">
+                        <div class="calc-line" id="calcBreakdown"></div>
+                        <div class="calc-total"><span>Estimated proxy fee</span><strong id="calcFee">$20.00</strong></div>
+                    </div>
+                    <p class="calc-note" id="calcNote"></p>
+                </div>
                 <p>
                     All fees should be discussed and agreed upon before the proxy attends the event. Buyers are responsible for all costs including the item, any promotional tickets, applicable taxes/tariffs, proxy fee, and shipping. Most proxies accept PayPal Goods & Services for buyer protection.
                 </p>
@@ -1007,6 +1029,33 @@
             if (window.turnstile) try { window.turnstile.reset(); } catch (e2) {}
         });
     });
+})();
+</script>
+
+<script>
+(function () {
+    var type = document.getElementById('calcType'), items = document.getElementById('calcItems'), cost = document.getElementById('calcCost');
+    var itemsWrap = document.getElementById('calcItemsWrap'), costWrap = document.getElementById('calcCostWrap');
+    var fee = document.getElementById('calcFee'), line = document.getElementById('calcBreakdown'), note = document.getElementById('calcNote');
+    var usd = function (n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
+    function update() {
+        var promo = type.value === 'promo';
+        itemsWrap.style.display = promo ? '' : 'none';
+        costWrap.style.display = promo ? 'none' : '';
+        if (promo) {
+            var n = Math.max(1, Math.min(99, parseInt(items.value, 10) || 1)), total = 20 + 5 * (n - 1);
+            line.textContent = n === 1 ? '$20 for the first item' : '$20 for the first item + ' + (n - 1) + ' \u00d7 $5 for additional items';
+            fee.textContent = usd(total);
+            note.textContent = 'Fee does not cover item cost, promo ticket, tax, tariffs, or shipping.';
+        } else {
+            var c = Math.max(0, parseFloat(cost.value) || 0), pct = c * 0.15;
+            line.textContent = '$10 + 15% of ' + usd(c) + ' (' + usd(pct) + ')';
+            fee.textContent = usd(10 + pct);
+            note.textContent = 'Fee does not cover item cost, tax, tariffs, or shipping.';
+        }
+    }
+    [type, items, cost].forEach(function (el) { el.addEventListener('input', update); });
+    update();
 })();
 </script>
 
