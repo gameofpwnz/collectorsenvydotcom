@@ -561,10 +561,10 @@
                 <div class="rules-card">
                     <h3>Other Events & Conventions - Percentage</h3>
                     <ul>
-                        <li>Proxy Fee is $15 + 15% of item(s) cost</li>
+                        <li>Proxy Fee is $15 + 10% of item(s) cost + $5 for each additional item</li>
                         <li>Covers time, badge cost, travel, and effort</li>
                         <li>Fee does not cover item cost, tax, tariffs, or shipping</li>
-                        <li>Scaled to reward proxies and cover multi-item pickups</li>
+                        <li>Scales with item cost and rewards proxies for multi-item pickups</li>
                     </ul>
                 </div>
             </div>
@@ -1042,17 +1042,17 @@
     var usd = function (n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
     function update() {
         var promo = type.value === 'promo';
-        itemsWrap.style.display = promo ? '' : 'none';
         costWrap.style.display = promo ? 'none' : '';
+        var n = Math.max(1, Math.min(99, parseInt(items.value, 10) || 1)), extra = 5 * (n - 1);
+        var extraText = n === 1 ? '' : ' + ' + (n - 1) + ' \u00d7 $5 for additional items';
         if (promo) {
-            var n = Math.max(1, Math.min(99, parseInt(items.value, 10) || 1)), total = 20 + 5 * (n - 1);
-            line.textContent = n === 1 ? '$20 for the first item' : '$20 for the first item + ' + (n - 1) + ' \u00d7 $5 for additional items';
-            fee.textContent = usd(total);
+            line.textContent = '$20 for the first item' + extraText;
+            fee.textContent = usd(20 + extra);
             note.textContent = 'Fee does not cover item cost, promo ticket, tax, tariffs, or shipping.';
         } else {
-            var c = Math.max(0, parseFloat(cost.value) || 0), pct = c * 0.15;
-            line.textContent = '$15 + 15% of ' + usd(c) + ' (' + usd(pct) + ')';
-            fee.textContent = usd(15 + pct);
+            var c = Math.max(0, parseFloat(cost.value) || 0), pct = c * 0.10;
+            line.textContent = '$15 + 10% of ' + usd(c) + ' (' + usd(pct) + ')' + extraText;
+            fee.textContent = usd(15 + pct + extra);
             note.textContent = 'Fee does not cover item cost, tax, tariffs, or shipping.';
         }
     }
