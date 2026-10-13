@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | Collectors Envy</title>
+    <meta name="robots" content="noindex">
+    <meta name="description" content="This page isn't in the vault. Head back to Collectors Envy estimates, auctions and the archive.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <style>
+        :root { --ce-bg:#000; --ce-card-bg:#0a0a0a; --ce-text-main:#fff; --ce-text-dim:#a1a1a1; --ce-border:#222; --ce-accent:#00ff88; --ce-font:'Inter',sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:var(--ce-font); background:var(--ce-bg); color:var(--ce-text-main); line-height:1.6; -webkit-font-smoothing:antialiased; }
+        main { max-width:760px; margin:0 auto; padding:4rem 1.25rem 5rem; text-align:center; }
+        .mark { width:96px; height:96px; margin:0 auto 1.25rem; display:block; }
+        .code { font-size:clamp(5rem,22vw,9rem); font-weight:800; letter-spacing:-.06em; line-height:1; background:linear-gradient(180deg,#fff 30%,#555); -webkit-background-clip:text; background-clip:text; color:transparent; }
+        h1 { font-size:clamp(1.4rem,4vw,2rem); font-weight:800; text-transform:uppercase; letter-spacing:-.5px; margin:.5rem 0 .6rem; }
+        .sub { color:var(--ce-text-dim); max-width:520px; margin:0 auto 2.25rem; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:.8rem; text-align:left; }
+        .tile { display:block; background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1rem 1.1rem; color:inherit; text-decoration:none; transition:border-color .2s, transform .2s; }
+        .tile:hover, .tile:focus-visible { border-color:var(--ce-accent); transform:translateY(-2px); outline:none; }
+        .tile b { display:block; font-size:1rem; }
+        .tile span { display:block; color:var(--ce-text-dim); font-size:.85rem; margin-top:.15rem; }
+        .row { display:flex; gap:.7rem; justify-content:center; flex-wrap:wrap; margin-top:2rem; }
+        .btn { display:inline-block; padding:.8rem 1.4rem; border-radius:8px; font-weight:700; text-decoration:none; }
+        .btn.primary { background:#fff; color:#000; }
+        .btn.ghost { border:1px solid var(--ce-border); color:#fff; }
+        .btn.ghost:hover { border-color:var(--ce-accent); }
+        .path { margin-top:1.5rem; color:#555; font-size:.8rem; word-break:break-all; }
+    </style>
+</head>
+<body>
+<script src="/assets/nav.js?v=8"></script>
+<main>
+    <img class="mark" src="/assets/images/favicon-192.png" alt="Collectors Envy">
+    <div class="code">404</div>
+    <h1>This one isn't in the vault</h1>
+    <p class="sub">The page you're looking for moved, sold out, or never existed. Try one of these instead.</p>
+
+    <div class="grid">
+        <a class="tile" href="/estimate.html"><b>Get an Estimate</b><span>Value your item with the community</span></a>
+        <a class="tile" href="/auction.html"><b>Auctions</b><span>Live and past auctions</span></a>
+        <a class="tile" href="/sold.html"><b>Previously Sold</b><span>Real sale prices</span></a>
+        <a class="tile" href="/museum.html"><b>Museum</b><span>Browse the collection</span></a>
+        <a class="tile" href="/proxy.html"><b>Proxy</b><span>Event proxy services</span></a>
+        <a class="tile" href="/events.html"><b>Events</b><span>What's coming up</span></a>
+    </div>
+
+    <div class="row">
+        <a class="btn primary" href="/">Back to home</a>
+        <a class="btn ghost" href="https://discord.gg/DyHTs5GDkc" target="_blank" rel="noopener">Join the Discord</a>
+    </div>
+    <p class="path" id="path"></p>
+</main>
+<script>
+(function () {
+    // Show the address that was not found, as plain text (never HTML).
+    var p = document.getElementById('path');
+    if (p && location.pathname && location.pathname !== '/404.html') p.textContent = 'Not found: ' + location.pathname;
+})();
+</script>
+</body>
+</html>
