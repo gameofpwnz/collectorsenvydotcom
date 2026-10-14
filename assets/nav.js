@@ -109,4 +109,43 @@
   nav.addEventListener('click', function (e) {
     if (e.target.closest && e.target.closest('.ce-nav-menu a')) { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
   });
+  // Announcement bar. Edit tab "Announcement" in the auctions spreadsheet:
+  // A1 = "Announcement", A2 = message (leave blank to hide), B2 = optional link.
+  (function () {
+    var SHEET = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
+    function parse(t) {
+      var rows = [], row = [], f = '', q = false;
+      for (var k = 0; k < t.length; k++) {
+        var c = t[k];
+        if (q) { if (c === '"') { if (t[k + 1] === '"') { f += '"'; k++; } else q = false; } else f += c; }
+        else if (c === '"') q = true;
+        else if (c === ',') { row.push(f); f = ''; }
+        else if (c === '\n' || c === '\r') { if (c === '\r' && t[k + 1] === '\n') k++; row.push(f); rows.push(row); row = []; f = ''; }
+        else f += c;
+      }
+      if (f !== '' || row.length) { row.push(f); rows.push(row); }
+      return rows;
+    }
+    fetch('https://docs.google.com/spreadsheets/d/' + SHEET + '/gviz/tq?tqx=out:csv&sheet=Announcement')
+      .then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(parse).then(function (rows) {
+        // A missing tab makes Google return the first tab, so insist on the header.
+        if (!rows.length || String(rows[0][0]).trim().toLowerCase() !== 'announcement') return;
+        var msg = rows[1] && rows[1][0] ? rows[1][0].trim() : '', link = rows[1] && rows[1][1] ? rows[1][1].trim() : '';
+        if (!msg) return;
+        var key = 'ce-ann:' + msg;
+        try { if (sessionStorage.getItem(key)) return; } catch (e) {}
+        var bar = document.createElement('div');
+        bar.setAttribute('role', 'status');
+        bar.style.cssText = 'background:#00ff88;color:#000;font:600 .9rem/1.4 Inter,sans-serif;padding:.55rem 2.6rem .55rem 1rem;text-align:center;position:relative';
+        var txt = document.createElement(/^(https?:\/\/|\/)/.test(link) ? 'a' : 'span');
+        txt.textContent = msg;
+        if (txt.tagName === 'A') { txt.href = link; txt.style.cssText = 'color:#000;text-decoration:underline'; if (/^https?:/.test(link)) { txt.target = '_blank'; txt.rel = 'noopener'; } }
+        var x = document.createElement('button');
+        x.type = 'button'; x.setAttribute('aria-label', 'Dismiss announcement'); x.textContent = '×';
+        x.style.cssText = 'position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:0;color:#000;font-size:1.4rem;line-height:1;cursor:pointer;padding:.2rem .5rem';
+        x.onclick = function () { bar.remove(); try { sessionStorage.setItem(key, '1'); } catch (e) {} };
+        bar.appendChild(txt); bar.appendChild(x);
+        nav.parentNode.insertBefore(bar, nav.nextSibling);
+      }).catch(function () {});
+  })();
 })();
