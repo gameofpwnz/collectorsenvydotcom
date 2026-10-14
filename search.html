@@ -54,6 +54,7 @@
 </head>
 <body>
 <script src="/assets/nav.js?v=10"></script>
+<script src="/assets/currency.js"></script>
 <main>
     <h1>Search</h1>
     <p class="sub">Look through estimates, sold items, auctions, bounties, the museum, the OpTic Scuf archive and every page on the site at once.</p>
@@ -95,7 +96,8 @@
         { name: 'Matchmaking: Vision Episodes', href: '/matchmaking/vision.html', desc: 'Vision episodes matchmaking.' },
         { name: 'Merch', href: '/merch.html', desc: 'Collectors Envy merch shop.' },
         { name: 'Museum', href: '/museum.html', desc: 'The Collectors Envy museum of verified esports memorabilia and stewards.' },
-        { name: 'Brand', href: '/brand.html', desc: 'Logos, colors and brand assets.' }
+        { name: 'Brand', href: '/brand.html', desc: 'Logos, colors and brand assets.' },
+        { name: 'Open Data', href: '/data.html', desc: 'Free read-only feeds of sold items, past estimates and museum pieces for bots and tools. Download CSV.' }
     ];
     var SRC = [
         { key: 'est', label: 'Estimates', href: '/estimate.html', load: function () { return json('https://script.google.com/macros/s/AKfycbyxSiGYa53XvY9w6V5wEYMZzx_6ZYjHgNr98ePsFPD3lpVjfZ54OZI63SB26BeaUDyk/exec').then(function (j) { return j.items || []; }); },
@@ -166,7 +168,7 @@
         }
         if (key === 'auc') {
             return wrap(i.link || '/auction.html', '<div class="ph">' + img(i.image) + '</div><div class="body"><div class="desc">' + hl(i.title, terms) + '</div>' +
-                (i.price ? '<div class="price">' + esc(i.price) + '</div>' : '') +
+                (i.price ? '<div class="price">' + esc(window.CE_CUR ? CE_CUR.fmt(i.price) : i.price) + '</div>' : '') +
                 '<div class="date">' + (i.live ? 'Live auction' : 'Ended ' + esc(i.date || '')) + (i.winner && !i.live ? ' · Winner: ' + esc(i.winner) : '') + '</div></div>', !!i.link);
         }
         if (key === 'museum') {
@@ -176,7 +178,7 @@
         }
         var pic = key === 'sold' ? (i.images || [])[0] : i.image;
         return wrap(s_href(key), '<div class="ph">' + img(pic) + '</div><div class="body"><div class="desc">' + hl(i.description, terms) +
-            '</div><div class="price">' + esc(i.price) + '</div><div class="date">' + esc(i.date) + '</div></div>');
+            '</div><div class="price">' + esc(window.CE_CUR ? CE_CUR.fmt(i.price) : i.price) + '</div><div class="date">' + esc(i.date) + '</div></div>');
     }
     function s_href(key) { return key === 'sold' ? '/sold.html' : '/estimate.html'; }
 
@@ -215,6 +217,7 @@
         if (b) { active = b.getAttribute('data-k'); render(); }
     });
     q.addEventListener('input', render);
+    window.addEventListener('cecurrency', render);
     q.value = new URLSearchParams(location.search).get('q') || '';
     q.focus();
     SRC.forEach(function (s) {

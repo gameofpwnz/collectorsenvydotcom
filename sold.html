@@ -82,9 +82,10 @@
 </head>
 <body>
 <script src="/assets/nav.js?v=10"></script>
+<script src="/assets/currency.js"></script>
 <main>
     <h1>Previously Sold</h1>
-    <p class="sub">A look at items that have sold through Collectors Envy.</p>
+    <p class="sub">A look at items that have sold through Collectors Envy. Building something? <a href="/data.html" style="color:var(--ce-accent)">Use this data</a>.</p>
     <input type="text" id="gq" class="search" placeholder="Search previously sold" aria-label="Search previously sold" style="background:#000;border:1px solid var(--ce-border);border-radius:8px;color:#fff;padding:.7rem .8rem;font:inherit">
     <div id="grid" class="grid"></div>
     <p id="gmsg" class="msg">Loading…</p>
@@ -111,7 +112,7 @@
             var ph = first ? '<img loading="lazy" referrerpolicy="no-referrer" alt="" src="' + esc(first) + '">' : 'No photo';
             var more = i.images.length > 1 ? '<span class="more">' + i.images.length + ' photos</span>' : '';
             return '<div class="card"><div class="ph" data-n="' + n + '">' + ph + more + '</div><div class="body"><div class="desc">' + esc(i.description) +
-                '</div><div class="price">' + esc(i.price) + '</div><div class="date">' + esc(i.date) + '</div>' +
+                '</div><div class="price">' + esc(window.CE_CUR ? CE_CUR.fmt(i.price) : i.price) + '</div><div class="date">' + esc(i.date) + '</div>' +
                 (i.seller ? '<div class="seller">Seller: ' + esc(i.seller) + '</div>' : '') + '</div></div>';
         }).join('');
         // A broken image link falls back to the placeholder (and the next image becomes the cover when possible).
@@ -142,6 +143,7 @@
     lb.addEventListener('click', function (e) { if (e.target === lb) lb.classList.remove('on'); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('on'); });
     document.getElementById('gq').addEventListener('input', render);
+    window.addEventListener('cecurrency', render);
     fetch(FEED).then(function (r) { return r.json(); }).then(function (j) {
         items = (j.items || []).map(function (i) {
             i.images = (i.images || []).filter(function (u) { return /^https:\/\//.test(u || ''); }).map(driveThumb);
