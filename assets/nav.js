@@ -4,6 +4,25 @@
   // Pages embedded in the homepage iframes don't need their own nav.
   if (window.self !== window.top) return;
 
+  // Private visit counter. Counts one page view per page per browser session into the
+  // owner's own sheet: no cookies, no IP, no browser details. Does nothing until STATS_URL is set.
+  (function () {
+    var STATS_URL = '';
+    try {
+      if (!STATS_URL || navigator.doNotTrack === '1' || /^(localhost|127\.)/.test(location.hostname)) return;
+      if (document.querySelector('meta[name="robots"][content*="noindex"]')) return;
+      var path = location.pathname.replace(/\/index\.html$/, '/') || '/';
+      if (/\/$/.test(path) && path !== '/') path += 'index.html';
+      var key = 'ce-v:' + path;
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, '1');
+      var ref = (new URLSearchParams(location.search).get('ref') || '').slice(0, 20);
+      var body = JSON.stringify({ p: path, r: ref });
+      if (navigator.sendBeacon) navigator.sendBeacon(STATS_URL, body);
+      else fetch(STATS_URL, { method: 'POST', body: body, mode: 'no-cors', keepalive: true });
+    } catch (e) {}
+  })();
+
   var LINKS = [
     { label: 'Home', href: '/' },
     { label: 'Research', href: '/estimate.html', children: [
