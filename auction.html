@@ -519,18 +519,35 @@
             return card;
         }
 
+        function parseCsv(text) {
+            const rows = [];
+            let row = [], f = '', q = false;
+            for (let k = 0; k < text.length; k++) {
+                const c = text[k];
+                if (q) {
+                    if (c === '"') { if (text[k + 1] === '"') { f += '"'; k++; } else q = false; }
+                    else f += c;
+                } else if (c === '"') q = true;
+                else if (c === ',') { row.push(f); f = ''; }
+                else if (c === '\n' || c === '\r') {
+                    if (c === '\r' && text[k + 1] === '\n') k++;
+                    row.push(f); rows.push(row); row = []; f = '';
+                } else f += c;
+            }
+            if (f !== '' || row.length) { row.push(f); rows.push(row); }
+            return rows.filter(r => r.some(v => v.trim() !== ''));
+        }
+
         async function loadCurrentAuctions() {
             const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${CURRENT_TAB}`;
             try {
                 const response = await fetch(url);
                 const data = await response.text();
-                const rows = data.split('\n').slice(1);
+                const rows = parseCsv(data).slice(1);
                 const grid = document.getElementById('current-grid');
 
-                rows.forEach(row => {
-                    const columns = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                    if (!columns || columns.length < 7) return;
-                    const clean = (str) => str ? str.replace(/^"|"$/g, '').trim() : '';
+                rows.forEach(columns => {
+                    const clean = (str) => str ? str.trim() : '';
 
                     const item = {
                         title: clean(columns[0]),
@@ -564,13 +581,11 @@
                 const response = await fetch(url);
                 const data = await response.text();
                 // Sheet is oldest-first; show newest first
-                const rows = data.split('\n').slice(1).reverse();
+                const rows = parseCsv(data).slice(1).reverse();
                 const grid = document.getElementById('past-grid');
 
-                rows.forEach(row => {
-                    const columns = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                    if (!columns) return;
-                    const clean = (str) => str ? str.replace(/^"|"$/g, '').trim() : '';
+                rows.forEach(columns => {
+                    const clean = (str) => str ? str.trim() : '';
 
                     const item = {
                         title: clean(columns[0]),
