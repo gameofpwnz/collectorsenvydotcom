@@ -54,6 +54,7 @@
 </head>
 <body>
 <script src="/assets/nav.js?v=10"></script>
+<script src="/assets/currency.js"></script>
 <main>
     <h1>Search</h1>
     <p class="sub">Look through estimates, sold items, auctions, bounties, the museum, the OpTic Scuf archive and every page on the site at once.</p>
@@ -166,7 +167,7 @@
         }
         if (key === 'auc') {
             return wrap(i.link || '/auction.html', '<div class="ph">' + img(i.image) + '</div><div class="body"><div class="desc">' + hl(i.title, terms) + '</div>' +
-                (i.price ? '<div class="price">' + esc(i.price) + '</div>' : '') +
+                (i.price ? '<div class="price">' + esc(window.CE_CUR ? CE_CUR.fmt(i.price) : i.price) + '</div>' : '') +
                 '<div class="date">' + (i.live ? 'Live auction' : 'Ended ' + esc(i.date || '')) + (i.winner && !i.live ? ' · Winner: ' + esc(i.winner) : '') + '</div></div>', !!i.link);
         }
         if (key === 'museum') {
@@ -176,7 +177,7 @@
         }
         var pic = key === 'sold' ? (i.images || [])[0] : i.image;
         return wrap(s_href(key), '<div class="ph">' + img(pic) + '</div><div class="body"><div class="desc">' + hl(i.description, terms) +
-            '</div><div class="price">' + esc(i.price) + '</div><div class="date">' + esc(i.date) + '</div></div>');
+            '</div><div class="price">' + esc(window.CE_CUR ? CE_CUR.fmt(i.price) : i.price) + '</div><div class="date">' + esc(i.date) + '</div></div>');
     }
     function s_href(key) { return key === 'sold' ? '/sold.html' : '/estimate.html'; }
 
@@ -215,6 +216,7 @@
         if (b) { active = b.getAttribute('data-k'); render(); }
     });
     q.addEventListener('input', render);
+    window.addEventListener('cecurrency', render);
     q.value = new URLSearchParams(location.search).get('q') || '';
     q.focus();
     SRC.forEach(function (s) {
