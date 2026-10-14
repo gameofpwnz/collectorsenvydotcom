@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search | Collectors Envy</title>
-    <meta name="description" content="Search Collectors Envy past estimates, previously sold prices and the OpTic Scuf archive in one place.">
+    <meta name="description" content="Search Collectors Envy estimates, sold prices, auctions, bounties, the museum and more in one place.">
     <link rel="canonical" href="https://collectorsenvy.com/search.html">
     <meta property="og:site_name" content="Collectors Envy">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Search | Collectors Envy">
-    <meta property="og:description" content="Search Collectors Envy past estimates, previously sold prices and the OpTic Scuf archive in one place.">
+    <meta property="og:description" content="Search Collectors Envy estimates, sold prices, auctions, bounties, the museum and more in one place.">
     <meta property="og:url" content="https://collectorsenvy.com/search.html">
     <meta property="og:image" content="https://collectorsenvy.com/assets/images/share.jpg">
     <meta name="twitter:card" content="summary">
@@ -39,6 +39,8 @@
         .card .desc { font-size:.9rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
         .card .price { color:var(--ce-accent); font-weight:800; font-size:1.1rem; }
         .card .date, .card .meta { color:var(--ce-text-dim); font-size:.8rem; }
+        a.card { color:inherit; text-decoration:none; transition:border-color .2s; }
+        a.card:hover { border-color:var(--ce-accent); }
         mark { background:rgba(0,255,136,.25); color:inherit; border-radius:3px; }
     </style>
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -50,7 +52,7 @@
 <script src="/assets/nav.js?v=9"></script>
 <main>
     <h1>Search</h1>
-    <p class="sub">Look through past estimates, previously sold items and the OpTic Scuf archive at once.</p>
+    <p class="sub">Look through estimates, sold items, auctions, bounties, the museum, the OpTic Scuf archive and every page on the site at once.</p>
     <input type="search" id="q" placeholder="Try &quot;OpTic jersey&quot; or &quot;Scuf&quot;" aria-label="Search the site" autocomplete="off">
     <div class="tabs" id="tabs"></div>
     <p id="msg" class="msg">Loading…</p>
@@ -58,13 +60,70 @@
 </main>
 <script>
 (function () {
+    function csv(text) {
+        var rows = [], row = [], f = '', q = false;
+        for (var k = 0; k < text.length; k++) {
+            var c = text[k];
+            if (q) { if (c === '"') { if (text[k + 1] === '"') { f += '"'; k++; } else q = false; } else f += c; }
+            else if (c === '"') q = true;
+            else if (c === ',') { row.push(f); f = ''; }
+            else if (c === '\n' || c === '\r') { if (c === '\r' && text[k + 1] === '\n') k++; row.push(f); rows.push(row); row = []; f = ''; }
+            else f += c;
+        }
+        if (f !== '' || row.length) { row.push(f); rows.push(row); }
+        return rows;
+    }
+    function sheet(id, tab) {
+        return fetch('https://docs.google.com/spreadsheets/d/' + id + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(tab))
+            .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); }).then(csv);
+    }
+    function json(url) { return fetch(url).then(function (r) { return r.json(); }); }
+    var PAGES = [
+        { name: 'Get an Estimate', href: '/estimate.html', desc: 'Send photos of your item and get a value estimate from the community. Past estimates, how evaluations are determined, research links.' },
+        { name: 'Previously Sold', href: '/sold.html', desc: 'Prices of esports memorabilia that sold through Collectors Envy.' },
+        { name: 'Archive', href: '/archive.html', desc: 'Searchable esports memorabilia archive collections.' },
+        { name: 'OpTic Scuf Controllers Archive', href: '/optic-scuf.html', desc: 'Research on OpTic Scuf controllers by platform and year.' },
+        { name: 'Events', href: '/events.html', desc: 'Upcoming esports events and tournaments for collectors, ticketed events and meetups.' },
+        { name: 'Auctions', href: '/auction.html', desc: 'Live and past auctions. Request an auction, auction rules, reserve, Buy It Now.' },
+        { name: 'Bounty Board', href: '/bounties.html', desc: 'Items collectors are looking for, with finders fees.' },
+        { name: 'Proxy', href: '/proxy.html', desc: 'Have a member buy event merch or tickets for you. Proxy fees, request a proxy, apply to be a proxy.' },
+        { name: 'Matchmaking: OpTic Rings', href: '/matchmaking/rings.html', desc: 'OpTic championship rings matchmaking.' },
+        { name: 'Matchmaking: Vision Episodes', href: '/matchmaking/vision.html', desc: 'Vision episodes matchmaking.' },
+        { name: 'Merch', href: '/merch.html', desc: 'Collectors Envy merch shop.' },
+        { name: 'Museum', href: '/museum.html', desc: 'The Collectors Envy museum of verified esports memorabilia and stewards.' },
+        { name: 'Brand', href: '/brand.html', desc: 'Logos, colors and brand assets.' }
+    ];
     var SRC = [
-        { key: 'est', label: 'Estimates', href: '/estimate.html', url: 'https://script.google.com/macros/s/AKfycbyxSiGYa53XvY9w6V5wEYMZzx_6ZYjHgNr98ePsFPD3lpVjfZ54OZI63SB26BeaUDyk/exec',
+        { key: 'est', label: 'Estimates', href: '/estimate.html', load: function () { return json('https://script.google.com/macros/s/AKfycbyxSiGYa53XvY9w6V5wEYMZzx_6ZYjHgNr98ePsFPD3lpVjfZ54OZI63SB26BeaUDyk/exec').then(function (j) { return j.items || []; }); },
           text: function (i) { return String(i.description); } },
-        { key: 'sold', label: 'Previously Sold', href: '/sold.html', url: 'https://script.google.com/macros/s/AKfycby7nMG2FAkjJNOYesCA8_7erTRAEtUG4MEMSOe3com6IrvS7DN35Cp5AEPB7yTPApuh/exec?tab=sold',
+        { key: 'sold', label: 'Previously Sold', href: '/sold.html', load: function () { return json('https://script.google.com/macros/s/AKfycby7nMG2FAkjJNOYesCA8_7erTRAEtUG4MEMSOe3com6IrvS7DN35Cp5AEPB7yTPApuh/exec?tab=sold').then(function (j) { return j.items || []; }); },
           text: function (i) { return String(i.description) + ' ' + String(i.seller || ''); } },
-        { key: 'optic', label: 'OpTic Scuf Archive', href: '/optic-scuf.html', url: 'https://script.google.com/macros/s/AKfycbyuNSk1kc9JjRuXD4fRtqbjKUsYNweD3yGf9AlPktlNmMtMXRDKRKiqTkrpY0KMYjA_2A/exec?tab=optic',
-          text: function (i) { return [i.name, i.platform, i.years, i.notes].join(' '); } }
+        { key: 'optic', label: 'OpTic Scuf Archive', href: '/optic-scuf.html', load: function () { return json('https://script.google.com/macros/s/AKfycbyuNSk1kc9JjRuXD4fRtqbjKUsYNweD3yGf9AlPktlNmMtMXRDKRKiqTkrpY0KMYjA_2A/exec?tab=optic').then(function (j) { return j.items || []; }); },
+          text: function (i) { return [i.name, i.platform, i.years, i.notes].join(' '); } },
+        { key: 'bounty', label: 'Bounties', href: '/bounties.html', load: function () {
+            return sheet('18AjaXsrZa9rTi3U7F7oItAlFFrkFDbSP-0eXGWnpcJQ', 'website').then(function (rows) {
+                var h = (rows.shift() || []).map(function (x) { return x.trim().toLowerCase(); });
+                var g = function (r, n) { var i = h.indexOf(n); return i >= 0 && r[i] ? r[i].trim() : ''; };
+                return rows.reverse().map(function (r) {
+                    return { item: g(r, 'item'), team: g(r, 'team/player'), year: g(r, 'year/event'), fee: g(r, 'finders fee'), deadline: g(r, 'deadline'),
+                        requirements: g(r, 'requirements'), notes: g(r, 'notes'), image: g(r, 'image 1'), link: g(r, 'post link') };
+                }).filter(function (i) { return i.item; });
+            });
+          },
+          text: function (i) { return [i.item, i.team, i.year, i.requirements, i.notes].join(' '); } },
+        { key: 'auc', label: 'Auctions', href: '/auction.html', load: function () {
+            var id = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
+            return Promise.all([sheet(id, 'LiveAuctions').catch(function () { return []; }), sheet(id, 'Auctions')]).then(function (res) {
+                var live = res[0].slice(1).map(function (r) { return { live: true, title: r[0], price: r[1], image: r[2], ends: r[5], link: r[6] }; });
+                var past = res[1].slice(1).reverse().map(function (r) { return { live: false, title: r[0], image: r[1], winner: r[4], price: r[5], date: r[6], link: r[7] }; });
+                return live.concat(past).filter(function (i) { return i.title && i.title.trim(); });
+            });
+          },
+          text: function (i) { return String(i.title); } },
+        { key: 'museum', label: 'Museum', href: '/museum.html', load: function () { return json('/assets/museum-data.json'); },
+          text: function (i) { return [i.id, i.title, i.steward, i.year, i.description, (i.tags || []).join(' ')].join(' '); } },
+        { key: 'page', label: 'Site Pages', href: '/', load: function () { return Promise.resolve(PAGES); },
+          text: function (i) { return i.name + ' ' + i.desc; } }
     ];
     var MAX = 12;
     var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : t; return d.innerHTML; };
@@ -84,16 +143,38 @@
         });
         return out;
     }
+    function wrap(href, inner, ext) {
+        return /^https?:\/\/|^\//.test(href || '') ? '<a class="card" href="' + esc(href) + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '>' + inner + '</a>' : '<div class="card">' + inner + '</div>';
+    }
     function card(key, i, terms) {
+        var inner;
+        if (key === 'page') return wrap(i.href, '<div class="body"><div class="desc" style="font-weight:700">' + hl(i.name, terms) + '</div><div class="meta">' + hl(i.desc, terms) + '</div></div>');
         if (key === 'optic') {
             var meta = [i.platform, i.years].filter(Boolean).join(' · ');
-            return '<div class="card"><div class="ph">' + img(i.image) + '</div><div class="body"><div class="desc">' + hl(i.name, terms) + '</div>' +
-                (meta ? '<div class="meta">' + esc(meta) + '</div>' : '') + '</div></div>';
+            return wrap('/optic-scuf.html', '<div class="ph">' + img(i.image) + '</div><div class="body"><div class="desc">' + hl(i.name, terms) + '</div>' +
+                (meta ? '<div class="meta">' + esc(meta) + '</div>' : '') + '</div>');
+        }
+        if (key === 'bounty') {
+            var bm = [i.team, i.year].filter(Boolean).join(' · ');
+            return wrap(i.link || '/bounties.html', '<div class="ph">' + img(i.image) + '</div><div class="body"><div class="desc">' + hl(i.item, terms) + '</div>' +
+                (i.fee ? '<div class="price">' + esc(i.fee) + '</div>' : '') + (bm ? '<div class="meta">' + esc(bm) + '</div>' : '') +
+                (i.deadline ? '<div class="date">Deadline: ' + esc(i.deadline) + '</div>' : '') + '</div>', !!i.link);
+        }
+        if (key === 'auc') {
+            return wrap(i.link || '/auction.html', '<div class="ph">' + img(i.image) + '</div><div class="body"><div class="desc">' + hl(i.title, terms) + '</div>' +
+                (i.price ? '<div class="price">' + esc(i.price) + '</div>' : '') +
+                '<div class="date">' + (i.live ? 'Live auction' : 'Ended ' + esc(i.date || '')) + (i.winner && !i.live ? ' · Winner: ' + esc(i.winner) : '') + '</div></div>', !!i.link);
+        }
+        if (key === 'museum') {
+            var m = (i.media || []).filter(function (x) { return x.type === 'image'; })[0];
+            return wrap('/museum.html#' + encodeURIComponent(i.id), '<div class="ph">' + img(m && m.url) + '</div><div class="body"><div class="desc">' + hl(i.title, terms) + '</div>' +
+                '<div class="meta">' + esc(i.id) + (i.year ? ' · ' + esc(i.year) : '') + (i.steward ? ' · ' + esc(i.steward) : '') + '</div></div>');
         }
         var pic = key === 'sold' ? (i.images || [])[0] : i.image;
-        return '<div class="card"><div class="ph">' + img(pic) + '</div><div class="body"><div class="desc">' + hl(i.description, terms) +
-            '</div><div class="price">' + esc(i.price) + '</div><div class="date">' + esc(i.date) + '</div></div></div>';
+        return wrap(s_href(key), '<div class="ph">' + img(pic) + '</div><div class="body"><div class="desc">' + hl(i.description, terms) +
+            '</div><div class="price">' + esc(i.price) + '</div><div class="date">' + esc(i.date) + '</div></div>');
     }
+    function s_href(key) { return key === 'sold' ? '/sold.html' : '/estimate.html'; }
 
     var data = {}, failed = {}, active = 'all', pending = SRC.length;
     var q = document.getElementById('q'), out = document.getElementById('out'), msg = document.getElementById('msg'), tabs = document.getElementById('tabs');
@@ -133,7 +214,7 @@
     q.value = new URLSearchParams(location.search).get('q') || '';
     q.focus();
     SRC.forEach(function (s) {
-        fetch(s.url).then(function (r) { return r.json(); }).then(function (j) { data[s.key] = j.items || []; })
+        s.load().then(function (items) { data[s.key] = items; })
             .catch(function () { failed[s.key] = true; })
             .then(function () { pending--; render(); });
     });
