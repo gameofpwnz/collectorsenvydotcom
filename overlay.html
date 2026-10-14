@@ -36,11 +36,17 @@
 <script>
 (function () {
     // Use as an OBS Browser Source (set the source size to the card size you want). Options in the URL:
-    //   ?show=auctions (default) or sold     what to show
+    //   ?show=auctions (default)             live auctions
+    //        sold                            previously sold
+    //        past                            past auction results
+    //        all                             all three, mixed (or combine: show=auctions,sold)
+    // Only rows marked Approved are shown once a sheet has an "Approved" column.
     //   &seconds=7                           time per item
     //   &images=off                          text only, no item photos
     var P = new URLSearchParams(location.search);
-    var SHOW = P.get('show') === 'sold' ? 'sold' : 'auctions';
+    var WANT = (P.get('show') || 'auctions').toLowerCase().split(',').map(function (x) { return x.trim(); });
+    var SOURCES = ['auctions', 'past', 'sold'].filter(function (k) { return WANT.indexOf('all') > -1 || WANT.indexOf(k) > -1; });
+    if (!SOURCES.length) SOURCES = ['auctions'];
     var NOIMG = P.get('images') === 'off';
     var SECS = Math.max(3, Math.min(60, parseInt(P.get('seconds'), 10) || 7));
     var AUC_SHEET = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
@@ -67,8 +73,33 @@
         var m = /^https:\/\/drive\.google\.com\/(?:uc\?(?:[^#]*&)?id=|file\/d\/|open\?id=)([\w-]+)/.exec(u || '');
         return m ? 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w400' : u;
     }
-    function load() {
-        if (SHOW === 'sold') {
+    var YES = /^\s*(true|yes|y|x|1)\s*$/i, GATE = /^\s*(approved|show on stream|stream)\s*$/i;
+    function sheetRows(tab) {
+        return fetch('https://docs.google.com/spreadsheets/d/' + AUC_SHEET + '/gviz/tq?tqx=out:csv&sheet=' + tab)
+            .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); }).then(csv).then(function (rows) {
+                // Approval gate: with a column headed "Approved" / "Show on stream" / "Stream", only rows ticked TRUE appear.
+                // Without that column every row shows, as before.
+                var gate = rows.length ? rows[0].findIndex(function (h) { return GATE.test(h); }) : -1;
+                return rows.slice(1).filter(function (r) {
+                    return r[0] && r[0].trim() && (gate < 0 || YES.test(r[gate] || ''));
+                });
+            });
+    }
+    var LOADERS = {
+        auctions: function () {
+            return sheetRows('LiveAuctions').then(function (rows) {
+                return rows.map(function (r) { return { tag: 'Live auction', title: r[0], price: r[1], sub: r[5] ? 'Ends ' + r[5] : '', img: r[2] }; });
+            });
+        },
+        past: function () {
+            // Past tab is oldest-first; show newest first. Columns: title, 3 images, winner, bid, date, link. Did-not-sell rows are skipped.
+            return sheetRows('Auctions').then(function (rows) {
+                return rows.reverse().filter(function (r) { return !/^\s*dns\s*$/i.test(r[4] || ''); }).slice(0, 5).map(function (r) {
+                    return { tag: 'Auction result', title: r[0], price: r[5], sub: r[6], img: r[1] };
+                });
+            });
+        },
+        sold: function () {
             return fetch(SOLD).then(function (r) { return r.json(); }).then(function (j) {
                 // Approval gate: once the Previously-Sold tab has an "Approved" column (the Apps Script then sends
                 // approved: true/false per item), only ticked items appear. Without it every item shows.
@@ -79,18 +110,14 @@
                 });
             });
         }
-        return fetch('https://docs.google.com/spreadsheets/d/' + AUC_SHEET + '/gviz/tq?tqx=out:csv&sheet=LiveAuctions')
-            .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); }).then(csv).then(function (rows) {
-                // Approval gate: if the sheet has a column headed "Approved" / "Show on stream" / "Stream",
-                // only rows ticked TRUE appear. Without that column every row shows, as before.
-                var gate = rows[0].findIndex(function (h) { return /^\s*(approved|show on stream|stream)\s*$/i.test(h); });
-                return rows.slice(1).filter(function (r) {
-                    if (!(r[0] && r[0].trim())) return false;
-                    return gate < 0 || /^\s*(true|yes|y|x|1)\s*$/i.test(r[gate] || '');
-                }).map(function (r) {
-                    return { tag: 'Live auction', title: r[0], price: r[1], sub: r[5] ? 'Ends ' + r[5] : '', img: r[2] };
-                });
-            });
+    };
+    // Loads every chosen source (one failing doesn't hide the others) and mixes them: one from each in turn.
+    function load() {
+        return Promise.all(SOURCES.map(function (k) { return LOADERS[k]().catch(function () { return []; }); })).then(function (lists) {
+            var out = [];
+            for (var i = 0; lists.some(function (l) { return i < l.length; }); i++) lists.forEach(function (l) { if (i < l.length) out.push(l[i]); });
+            return out;
+        });
     }
     function show() {
         if (!items.length) { bar.classList.remove('on'); return; }
