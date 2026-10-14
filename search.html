@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search | Collectors Envy</title>
+    <meta name="description" content="Search Collectors Envy past estimates, previously sold prices and the OpTic Scuf archive in one place.">
+    <link rel="canonical" href="https://collectorsenvy.com/search.html">
+    <meta property="og:site_name" content="Collectors Envy">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Search | Collectors Envy">
+    <meta property="og:description" content="Search Collectors Envy past estimates, previously sold prices and the OpTic Scuf archive in one place.">
+    <meta property="og:url" content="https://collectorsenvy.com/search.html">
+    <meta property="og:image" content="https://collectorsenvy.com/assets/images/share.jpg">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --ce-bg:#000; --ce-card-bg:#0a0a0a; --ce-text-main:#fff; --ce-text-dim:#a1a1a1; --ce-border:#222; --ce-accent:#00ff88; --ce-font:'Inter',sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:var(--ce-font); background:var(--ce-bg); color:var(--ce-text-main); line-height:1.6; -webkit-font-smoothing:antialiased; }
+        main { max-width:960px; margin:0 auto; padding:3rem 1.25rem 5rem; }
+        h1 { font-size:2.5rem; font-weight:800; letter-spacing:-1px; text-transform:uppercase; }
+        .sub { color:var(--ce-text-dim); margin:.5rem 0 1.5rem; }
+        #q { width:100%; max-width:560px; background:#000; border:1px solid var(--ce-border); border-radius:8px; color:#fff; padding:.85rem 1rem; font:inherit; font-size:1.05rem; }
+        #q:focus { outline:none; border-color:var(--ce-accent); }
+        .tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin:1rem 0 1.5rem; }
+        .tabs button { background:#000; color:var(--ce-text-dim); border:1px solid var(--ce-border); border-radius:999px; padding:.4rem .9rem; font:inherit; font-weight:600; font-size:.85rem; cursor:pointer; }
+        .tabs button.on { color:#000; background:#fff; border-color:#fff; }
+        .msg { color:var(--ce-text-dim); font-size:.9rem; min-height:1.2em; }
+        h2.sec { font-size:1.2rem; font-weight:800; text-transform:uppercase; letter-spacing:-.5px; margin:2rem 0 .8rem; display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+        h2.sec a { font-size:.8rem; font-weight:600; color:var(--ce-accent); text-decoration:none; text-transform:none; letter-spacing:0; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; }
+        .card { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+        .card .ph { aspect-ratio:1/1; background:#111; display:flex; align-items:center; justify-content:center; color:var(--ce-text-dim); font-size:.8rem; }
+        .card .ph img { width:100%; height:100%; object-fit:cover; display:block; }
+        .card .body { padding:.85rem; display:grid; gap:.3rem; }
+        .card .desc { font-size:.9rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+        .card .price { color:var(--ce-accent); font-weight:800; font-size:1.1rem; }
+        .card .date, .card .meta { color:var(--ce-text-dim); font-size:.8rem; }
+        mark { background:rgba(0,255,136,.25); color:inherit; border-radius:3px; }
+    </style>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+</head>
+<body>
+<script src="/assets/nav.js?v=9"></script>
+<main>
+    <h1>Search</h1>
+    <p class="sub">Look through past estimates, previously sold items and the OpTic Scuf archive at once.</p>
+    <input type="search" id="q" placeholder="Try &quot;OpTic jersey&quot; or &quot;Scuf&quot;" aria-label="Search the site" autocomplete="off">
+    <div class="tabs" id="tabs"></div>
+    <p id="msg" class="msg">Loading…</p>
+    <div id="out"></div>
+</main>
+<script>
+(function () {
+    var SRC = [
+        { key: 'est', label: 'Estimates', href: '/estimate.html', url: 'https://script.google.com/macros/s/AKfycbyxSiGYa53XvY9w6V5wEYMZzx_6ZYjHgNr98ePsFPD3lpVjfZ54OZI63SB26BeaUDyk/exec',
+          text: function (i) { return String(i.description); } },
+        { key: 'sold', label: 'Previously Sold', href: '/sold.html', url: 'https://script.google.com/macros/s/AKfycby7nMG2FAkjJNOYesCA8_7erTRAEtUG4MEMSOe3com6IrvS7DN35Cp5AEPB7yTPApuh/exec?tab=sold',
+          text: function (i) { return String(i.description) + ' ' + String(i.seller || ''); } },
+        { key: 'optic', label: 'OpTic Scuf Archive', href: '/optic-scuf.html', url: 'https://script.google.com/macros/s/AKfycbyuNSk1kc9JjRuXD4fRtqbjKUsYNweD3yGf9AlPktlNmMtMXRDKRKiqTkrpY0KMYjA_2A/exec?tab=optic',
+          text: function (i) { return [i.name, i.platform, i.years, i.notes].join(' '); } }
+    ];
+    var MAX = 12;
+    var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : t; return d.innerHTML; };
+    function driveThumb(u) {
+        var m = /^https:\/\/drive\.google\.com\/(?:uc\?(?:[^#]*&)?id=|file\/d\/|open\?id=)([\w-]+)/.exec(u);
+        return m ? 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w600' : u;
+    }
+    function img(u) {
+        u = /^https:\/\//.test(u || '') ? driveThumb(u) : '';
+        return u ? '<img loading="lazy" referrerpolicy="no-referrer" alt="" src="' + esc(u) + '" onerror="this.parentNode.textContent=\'No photo\'">' : 'No photo';
+    }
+    function hl(text, terms) {
+        var out = esc(text);
+        terms.forEach(function (t) {
+            var re = new RegExp('(' + esc(t).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig');
+            out = out.replace(re, '<mark>$1</mark>');
+        });
+        return out;
+    }
+    function card(key, i, terms) {
+        if (key === 'optic') {
+            var meta = [i.platform, i.years].filter(Boolean).join(' · ');
+            return '<div class="card"><div class="ph">' + img(i.image) + '</div><div class="body"><div class="desc">' + hl(i.name, terms) + '</div>' +
+                (meta ? '<div class="meta">' + esc(meta) + '</div>' : '') + '</div></div>';
+        }
+        var pic = key === 'sold' ? (i.images || [])[0] : i.image;
+        return '<div class="card"><div class="ph">' + img(pic) + '</div><div class="body"><div class="desc">' + hl(i.description, terms) +
+            '</div><div class="price">' + esc(i.price) + '</div><div class="date">' + esc(i.date) + '</div></div></div>';
+    }
+
+    var data = {}, failed = {}, active = 'all', pending = SRC.length;
+    var q = document.getElementById('q'), out = document.getElementById('out'), msg = document.getElementById('msg'), tabs = document.getElementById('tabs');
+
+    function render() {
+        var terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
+        if (history.replaceState) history.replaceState(null, '', terms.length ? '?q=' + encodeURIComponent(q.value.trim()) : location.pathname);
+        var total = 0, html = '', counts = {};
+        SRC.forEach(function (s) {
+            var rows = (data[s.key] || []).filter(function (i) {
+                var t = s.text(i).toLowerCase();
+                return terms.every(function (w) { return t.indexOf(w) > -1; });
+            });
+            counts[s.key] = rows.length;
+            total += rows.length;
+            if (!terms.length || !rows.length || (active !== 'all' && active !== s.key)) return;
+            var cap = active === 'all' ? MAX : rows.length;
+            html += '<h2 class="sec"><span>' + esc(s.label) + ' (' + rows.length + ')</span><a href="' + s.href + '">Open page</a></h2><div class="grid">' +
+                rows.slice(0, cap).map(function (i) { return card(s.key, i, terms); }).join('') + '</div>' +
+                (rows.length > cap ? '<p class="msg" style="margin-top:.8rem">Showing ' + cap + ' of ' + rows.length + '. Pick the "' + esc(s.label) + '" tab to see all.</p>' : '');
+        });
+        tabs.innerHTML = [['all', 'All', total]].concat(SRC.map(function (s) { return [s.key, s.label, counts[s.key] || 0]; })).map(function (t) {
+            return '<button type="button" data-k="' + t[0] + '"' + (active === t[0] ? ' class="on"' : '') + '>' + esc(t[1]) + (terms.length ? ' (' + t[2] + ')' : '') + '</button>';
+        }).join('');
+        out.innerHTML = html;
+        var bad = SRC.filter(function (s) { return failed[s.key]; }).map(function (s) { return s.label; });
+        if (pending) msg.textContent = 'Loading…';
+        else if (!terms.length) msg.textContent = bad.length ? 'Could not load: ' + bad.join(', ') + '.' : 'Type something to search.';
+        else if (!total) msg.textContent = 'No matches. Try fewer or different words, or ask in the Discord.';
+        else msg.textContent = bad.length ? 'Could not load: ' + bad.join(', ') + '.' : '';
+    }
+    tabs.addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('button') : null;
+        if (b) { active = b.getAttribute('data-k'); render(); }
+    });
+    q.addEventListener('input', render);
+    q.value = new URLSearchParams(location.search).get('q') || '';
+    q.focus();
+    SRC.forEach(function (s) {
+        fetch(s.url).then(function (r) { return r.json(); }).then(function (j) { data[s.key] = j.items || []; })
+            .catch(function () { failed[s.key] = true; })
+            .then(function () { pending--; render(); });
+    });
+    render();
+})();
+</script>
+</body>
+</html>
