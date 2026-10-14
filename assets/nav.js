@@ -50,6 +50,7 @@
 .ce-nav-sub{display:none;position:absolute;top:100%;left:0;min-width:170px;background:#0a0a0a;border:1px solid #222;border-radius:12px;padding:6px;list-style:none}\
 .ce-nav-menu li:hover>.ce-nav-sub,.ce-nav-menu li:focus-within>.ce-nav-sub{display:block}\
 .ce-nav-sub a{white-space:nowrap}\
+.ce-nav-search{display:flex!important;align-items:center}\
 .ce-nav-cta{background:#fff!important;color:#000!important;margin-left:.5rem}\
 .ce-nav-cta:hover{opacity:.9;background:#fff!important}\
 .ce-nav-toggle{display:none;background:none;border:1px solid #222;border-radius:6px;width:40px;height:40px;cursor:pointer;align-items:center;justify-content:center;color:#fff}\
@@ -86,6 +87,7 @@
     '<button class="ce-nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">' +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>' +
     '<ul class="ce-nav-menu">' + LINKS.map(item).join('') +
+    '<li><a class="ce-nav-search" href="/search.html" aria-label="Search the site"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a></li>' +
     '<li><a class="ce-nav-cta" href="' + DISCORD + '" target="_blank" rel="noopener">Join Discord</a></li></ul>' +
     '</div></nav>';
 
