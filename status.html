@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Status | Collectors Envy</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <style>
+        :root { --ce-bg:#000; --ce-card-bg:#0a0a0a; --ce-text-dim:#a1a1a1; --ce-border:#222; --ce-accent:#00ff88; --warn:#ffb020; --bad:#ff6b6b; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',sans-serif; background:var(--ce-bg); color:#fff; line-height:1.6; -webkit-font-smoothing:antialiased; }
+        main { max-width:760px; margin:0 auto; padding:3rem 1.25rem 5rem; }
+        h1 { font-size:2.5rem; font-weight:800; letter-spacing:-1px; text-transform:uppercase; }
+        .sub { color:var(--ce-text-dim); margin:.5rem 0 1.5rem; }
+        .summary { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-left:4px solid var(--ce-text-dim); border-radius:12px; padding:1rem 1.25rem; font-weight:700; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+        .summary.ok { border-left-color:var(--ce-accent); }
+        .summary.warn { border-left-color:var(--warn); }
+        .summary.bad { border-left-color:var(--bad); }
+        button { background:#fff; color:#000; border:0; border-radius:8px; padding:.6rem 1rem; font:inherit; font-weight:700; cursor:pointer; }
+        button:disabled { opacity:.5; cursor:wait; }
+        h2 { font-size:1.1rem; font-weight:800; text-transform:uppercase; letter-spacing:-.3px; margin:2rem 0 .75rem; }
+        .row { display:flex; align-items:center; gap:.9rem; background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:10px; padding:.75rem 1rem; margin-bottom:.5rem; }
+        .dot { flex:none; width:.8rem; height:.8rem; border-radius:50%; background:var(--ce-text-dim); }
+        .ok .dot { background:var(--ce-accent); }
+        .warn .dot { background:var(--warn); }
+        .bad .dot { background:var(--bad); }
+        .row .name { font-weight:600; flex:1; min-width:0; }
+        .row .det { color:var(--ce-text-dim); font-size:.85rem; text-align:right; }
+        .note { color:var(--ce-text-dim); font-size:.8rem; margin-top:2rem; }
+    </style>
+</head>
+<body>
+<script src="/assets/nav.js?v=10"></script>
+<main>
+    <h1>Site Status</h1>
+    <p class="sub">Checks run from your browser, right now. Green means it answered, yellow means it answered with no data, red means it did not answer.</p>
+    <div class="summary" id="summary"><span id="sumtxt">Checking…</span><button type="button" id="again">Check again</button></div>
+    <div id="out"></div>
+    <p class="note">Form relays are checked for reachability only. A green dot does not prove the Discord channel behind it still has a working webhook, so send a test submission after changing a secret.</p>
+</main>
+<script>
+(function () {
+    var GS = 'https://script.google.com/macros/s/';
+    var DOCS = 'https://docs.google.com/spreadsheets/d/';
+    var csvRows = function (t) { return Math.max(0, t.split('\n').filter(function (l) { return l.trim(); }).length - 1); };
+    var items = function (j) { return (j.items || []).length; };
+    function gviz(id, tab, fmt) { return DOCS + id + '/gviz/tq?tqx=out:' + fmt + '&sheet=' + encodeURIComponent(tab); }
+
+    // kind: 'json' (count items), 'csv' (count rows), 'text' (just needs a reply), 'ping' (reachability only)
+    var GROUPS = [
+        { title: 'Data feeds', checks: [
+            { name: 'Past estimates', url: GS + 'AKfycbyxSiGYa53XvY9w6V5wEYMZzx_6ZYjHgNr98ePsFPD3lpVjfZ54OZI63SB26BeaUDyk/exec', kind: 'json', count: items },
+            { name: 'Previously sold', url: GS + 'AKfycby7nMG2FAkjJNOYesCA8_7erTRAEtUG4MEMSOe3com6IrvS7DN35Cp5AEPB7yTPApuh/exec?tab=sold', kind: 'json', count: items },
+            { name: 'OpTic Scuf archive', url: GS + 'AKfycbyuNSk1kc9JjRuXD4fRtqbjKUsYNweD3yGf9AlPktlNmMtMXRDKRKiqTkrpY0KMYjA_2A/exec?tab=optic', kind: 'json', count: items },
+            { name: 'Live auctions', url: gviz('1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4', 'LiveAuctions', 'csv'), kind: 'csv', count: csvRows, emptyOk: true },
+            { name: 'Past auctions', url: gviz('1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4', 'Auctions', 'csv'), kind: 'csv', count: csvRows },
+            { name: 'Bounty board', url: gviz('18AjaXsrZa9rTi3U7F7oItAlFFrkFDbSP-0eXGWnpcJQ', 'website', 'csv'), kind: 'csv', count: csvRows },
+            { name: 'Events calendar', url: gviz('1xaApa29fmBWIs1hJQ5OSeocpepFqpNXN4rx3qMeremw', 'Events', 'json'), kind: 'text' },
+            { name: 'Proxy form events', url: gviz('1LyTBnhI7kKFn6tmlSWmeqgohlJnb43zfb_oTBJiYabc', 'Proxy Form Events', 'csv'), kind: 'csv', count: csvRows },
+            { name: 'Museum data', url: '/assets/museum-data.json?t=' + Date.now(), kind: 'json', count: function (j) { return Array.isArray(j) ? j.length : 0; } }
+        ] },
+        { title: 'Form relays and live services', checks: [
+            { name: 'Get an Estimate form', url: 'https://getanestimate.ashton-98e.workers.dev/', kind: 'ping' },
+            { name: 'Auction request form', url: 'https://auctionrequest.ashton-98e.workers.dev/', kind: 'ping' },
+            { name: 'Proxy request forms', url: 'https://proxyrequest.ashton-98e.workers.dev/', kind: 'ping' },
+            { name: 'Merch shop', url: 'https://ce-merch.ashton-98e.workers.dev/', kind: 'ping' },
+            { name: 'Live streamers', url: 'https://lively-glitter-e13f.ashton-98e.workers.dev/', kind: 'ping' }
+        ] }
+    ];
+
+    var out = document.getElementById('out'), btn = document.getElementById('again');
+    var sum = document.getElementById('summary'), sumtxt = document.getElementById('sumtxt');
+    var rows = [];
+
+    function build() {
+        out.innerHTML = '';
+        rows = [];
+        GROUPS.forEach(function (g) {
+            var h = document.createElement('h2'); h.textContent = g.title; out.appendChild(h);
+            g.checks.forEach(function (c) {
+                var r = document.createElement('div'); r.className = 'row';
+                var d = document.createElement('span'); d.className = 'dot';
+                var n = document.createElement('span'); n.className = 'name'; n.textContent = c.name;
+                var t = document.createElement('span'); t.className = 'det'; t.textContent = 'checking…';
+                r.appendChild(d); r.appendChild(n); r.appendChild(t); out.appendChild(r);
+                rows.push({ c: c, el: r, det: t });
+            });
+        });
+    }
+    function set(row, state, text) { row.el.className = 'row ' + state; row.det.textContent = text; row.state = state; }
+
+    function run(row) {
+        var c = row.c, t0 = performance.now(), ctl = new AbortController();
+        var timer = setTimeout(function () { ctl.abort(); }, 10000);
+        var opts = { signal: ctl.signal, cache: 'no-store' };
+        if (c.kind === 'ping') opts.mode = 'no-cors';
+        return fetch(c.url, opts).then(function (r) {
+            var ms = Math.round(performance.now() - t0);
+            if (c.kind === 'ping') return set(row, 'ok', 'reachable · ' + ms + ' ms');
+            if (!r.ok) return set(row, 'bad', 'HTTP ' + r.status);
+            return r.text().then(function (txt) {
+                ms = Math.round(performance.now() - t0);
+                if (c.kind === 'text') return set(row, txt.length > 20 ? 'ok' : 'warn', (txt.length > 20 ? 'responding' : 'empty reply') + ' · ' + ms + ' ms');
+                var n;
+                if (c.kind === 'json') { try { n = c.count(JSON.parse(txt)); } catch (e) { return set(row, 'bad', 'not valid data'); } }
+                else n = c.count(txt);
+                if (!n && !c.emptyOk) return set(row, 'warn', 'responding but empty · ' + ms + ' ms');
+                set(row, 'ok', n + ' ' + (n === 1 ? 'row' : 'rows') + ' · ' + ms + ' ms');
+            });
+        }).catch(function (e) {
+            set(row, 'bad', e && e.name === 'AbortError' ? 'timed out' : 'no answer');
+        }).then(function () { clearTimeout(timer); });
+    }
+    function check() {
+        btn.disabled = true; sum.className = 'summary'; sumtxt.textContent = 'Checking…';
+        build();
+        Promise.all(rows.map(run)).then(function () {
+            var bad = rows.filter(function (r) { return r.state === 'bad'; }).length;
+            var warn = rows.filter(function (r) { return r.state === 'warn'; }).length;
+            if (bad) { sum.className = 'summary bad'; sumtxt.textContent = bad + (bad === 1 ? ' service is' : ' services are') + ' not answering'; }
+            else if (warn) { sum.className = 'summary warn'; sumtxt.textContent = 'Everything answered, ' + warn + (warn === 1 ? ' feed is' : ' feeds are') + ' empty'; }
+            else { sum.className = 'summary ok'; sumtxt.textContent = 'Everything is responding'; }
+            btn.disabled = false;
+        });
+    }
+    btn.addEventListener('click', check);
+    check();
+})();
+</script>
+</body>
+</html>
