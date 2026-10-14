@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Codes | Collectors Envy</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <style>
+        :root { --ce-bg:#000; --ce-card-bg:#0a0a0a; --ce-text-dim:#a1a1a1; --ce-border:#222; --ce-accent:#00ff88; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',sans-serif; background:var(--ce-bg); color:#fff; line-height:1.6; -webkit-font-smoothing:antialiased; }
+        main { max-width:960px; margin:0 auto; padding:3rem 1.25rem 5rem; }
+        h1 { font-size:2.5rem; font-weight:800; letter-spacing:-1px; text-transform:uppercase; }
+        .sub { color:var(--ce-text-dim); margin:.5rem 0 1.5rem; max-width:640px; }
+        .btn { background:#fff; color:#000; border:0; border-radius:8px; padding:.7rem 1.1rem; font:inherit; font-weight:700; cursor:pointer; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1rem; margin-top:1.5rem; }
+        .qr { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1rem; display:grid; gap:.75rem; justify-items:center; text-align:center; break-inside:avoid; }
+        .qr img { width:100%; max-width:220px; height:auto; background:#fff; border-radius:8px; }
+        .qr figcaption { display:grid; gap:.15rem; }
+        .qr span { color:var(--ce-text-dim); font-size:.8rem; word-break:break-all; }
+        .qr .dl { color:var(--ce-accent); font-size:.85rem; font-weight:600; text-decoration:none; margin-top:.3rem; }
+        @media print {
+            body { background:#fff; color:#000; }
+            .ce-nav, .noprint, .qr .dl { display:none !important; }
+            .sub, .qr span { color:#444; }
+            .qr { background:#fff; border:1px solid #bbb; }
+            .grid { grid-template-columns:repeat(3,1fr); }
+            main { padding:0; }
+        }
+    </style>
+</head>
+<body>
+<script src="/assets/nav.js?v=10"></script>
+<main>
+    <h1>QR Codes</h1>
+    <p class="sub noprint">Print this page for flyers and table signs, or download any code as a vector SVG. Each code carries a small tag so the link works exactly like the normal page.</p>
+    <button class="btn noprint" type="button" id="print">Print this page</button>
+    <div class="grid">
+        <figure class="qr"><img src="/assets/qr/home.svg" alt="QR code for Home" width="220" height="220"><figcaption><strong>Home</strong><span>collectorsenvy.com/</span><a class="dl" href="/assets/qr/home.svg" download="collectors-envy-home-qr.svg">Download SVG</a></figcaption></figure>
+        <figure class="qr"><img src="/assets/qr/estimate.svg" alt="QR code for Get an Estimate" width="220" height="220"><figcaption><strong>Get an Estimate</strong><span>collectorsenvy.com/estimate.html</span><a class="dl" href="/assets/qr/estimate.svg" download="collectors-envy-estimate-qr.svg">Download SVG</a></figcaption></figure>
+        <figure class="qr"><img src="/assets/qr/auction.svg" alt="QR code for Auctions" width="220" height="220"><figcaption><strong>Auctions</strong><span>collectorsenvy.com/auction.html</span><a class="dl" href="/assets/qr/auction.svg" download="collectors-envy-auction-qr.svg">Download SVG</a></figcaption></figure>
+        <figure class="qr"><img src="/assets/qr/proxy.svg" alt="QR code for Proxy Service" width="220" height="220"><figcaption><strong>Proxy Service</strong><span>collectorsenvy.com/proxy.html</span><a class="dl" href="/assets/qr/proxy.svg" download="collectors-envy-proxy-qr.svg">Download SVG</a></figcaption></figure>
+        <figure class="qr"><img src="/assets/qr/museum.svg" alt="QR code for Museum" width="220" height="220"><figcaption><strong>Museum</strong><span>collectorsenvy.com/museum.html</span><a class="dl" href="/assets/qr/museum.svg" download="collectors-envy-museum-qr.svg">Download SVG</a></figcaption></figure>
+        <figure class="qr"><img src="/assets/qr/bounties.svg" alt="QR code for Bounty Board" width="220" height="220"><figcaption><strong>Bounty Board</strong><span>collectorsenvy.com/bounties.html</span><a class="dl" href="/assets/qr/bounties.svg" download="collectors-envy-bounties-qr.svg">Download SVG</a></figcaption></figure>
+        <figure class="qr"><img src="/assets/qr/events.svg" alt="QR code for Events" width="220" height="220"><figcaption><strong>Events</strong><span>collectorsenvy.com/events.html</span><a class="dl" href="/assets/qr/events.svg" download="collectors-envy-events-qr.svg">Download SVG</a></figcaption></figure>
+        <figure class="qr"><img src="/assets/qr/sold.svg" alt="QR code for Previously Sold" width="220" height="220"><figcaption><strong>Previously Sold</strong><span>collectorsenvy.com/sold.html</span><a class="dl" href="/assets/qr/sold.svg" download="collectors-envy-sold-qr.svg">Download SVG</a></figcaption></figure>
+        <figure class="qr"><img src="/assets/qr/discord.svg" alt="QR code for Join the Discord" width="220" height="220"><figcaption><strong>Join the Discord</strong><span>discord.gg/DyHTs5GDkc</span><a class="dl" href="/assets/qr/discord.svg" download="collectors-envy-discord-qr.svg">Download SVG</a></figcaption></figure>
+    </div>
+</main>
+<script>document.getElementById('print').addEventListener('click', function () { window.print(); });</script>
+</body>
+</html>
