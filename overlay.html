@@ -12,34 +12,35 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        /* Transparent so OBS shows the stream behind it. */
-        html, body { background:transparent; overflow:hidden; font-family:'Inter',sans-serif; color:#fff; -webkit-font-smoothing:antialiased; }
-        .bar { position:fixed; left:2vw; bottom:3vh; display:flex; align-items:stretch; max-width:96vw; background:rgba(0,0,0,.82); border:1px solid #222; border-left:4px solid #00ff88; border-radius:14px; overflow:hidden; opacity:0; transform:translateY(12px); transition:opacity .5s, transform .5s; }
-        .bar.on { opacity:1; transform:none; }
-        .bar img { width:110px; height:110px; object-fit:cover; display:block; background:#111; }
-        .bar img[hidden] { display:none; }
-        .txt { padding:.8rem 1.2rem; display:grid; gap:.15rem; align-content:center; min-width:260px; max-width:640px; }
-        .tag { color:#00ff88; font-size:.75rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; }
-        .title { font-size:1.25rem; font-weight:700; line-height:1.25; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-        .sub { color:#a1a1a1; font-size:.9rem; }
-        .price { color:#00ff88; font-weight:800; font-size:1.5rem; }
-        .brand { position:fixed; right:2vw; bottom:3vh; font-weight:800; font-size:.8rem; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,.7); text-shadow:0 1px 4px #000; }
-        .top .bar, .top .brand { bottom:auto; top:3vh; }
+        /* Transparent page; the card fills whatever size the OBS Browser Source is set to,
+           so it works in any ratio (try 640x160 or 480x200). Text scales with the card height. */
+        html, body { height:100%; background:transparent; overflow:hidden; font-family:'Inter',sans-serif; color:#fff; -webkit-font-smoothing:antialiased; }
+        .wrap { position:fixed; inset:0; container-type:size; }
+        .bar { width:100%; height:100%; display:flex; align-items:stretch; background:rgba(0,0,0,.85); border:1px solid #222; border-left:4px solid #00ff88; border-radius:14px; overflow:hidden; opacity:0; transition:opacity .5s; }
+        .bar.on { opacity:1; }
+        .bar img.pic { height:100%; aspect-ratio:1; max-width:40%; object-fit:cover; display:block; background:#111; flex-shrink:0; }
+        .bar img.pic[hidden] { display:none; }
+        .txt { flex:1; min-width:0; padding:5cqh 6cqh; display:flex; flex-direction:column; justify-content:space-between; gap:2cqh; }
+        .main { display:grid; gap:1.5cqh; align-content:start; min-height:0; }
+        .tag { color:#00ff88; font-size:min(11cqh,4cqw); font-weight:800; text-transform:uppercase; letter-spacing:.12em; }
+        .title { font-size:min(15cqh,5.5cqw); font-weight:700; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .price { color:#00ff88; font-weight:800; font-size:min(19cqh,7cqw); line-height:1.1; }
+        .sub { color:#a1a1a1; font-size:min(10cqh,3.6cqw); }
+        .foot { display:flex; align-items:center; gap:3cqh; border-top:1px solid #222; padding-top:2.5cqh; }
+        .foot img { height:min(13cqh,5cqw); width:auto; display:block; }
+        .foot span { color:#d4d4d4; font-weight:700; font-size:min(9cqh,3cqw); letter-spacing:.04em; margin-left:auto; white-space:nowrap; }
     </style>
 </head>
 <body>
-<div class="bar" id="bar"><img id="pic" alt="" referrerpolicy="no-referrer" hidden><div class="txt"><div class="tag" id="tag"></div><div class="title" id="title"></div><div class="price" id="price"></div><div class="sub" id="sub"></div></div></div>
-<div class="brand">collectorsenvy.com</div>
+<div class="wrap"><div class="bar" id="bar"><img class="pic" id="pic" alt="" referrerpolicy="no-referrer" hidden><div class="txt"><div class="main"><div class="tag" id="tag"></div><div class="title" id="title"></div><div class="price" id="price"></div><div class="sub" id="sub"></div></div><div class="foot"><img src="/assets/images/image01.png" alt="Collectors Envy"><span>collectorsenvy.com</span></div></div></div></div>
 <script>
 (function () {
-    // Use as an OBS Browser Source. Options in the URL:
+    // Use as an OBS Browser Source (set the source size to the card size you want). Options in the URL:
     //   ?show=auctions (default) or sold     what to show
     //   &seconds=7                           time per item
-    //   &position=top                        move to the top of the screen
     var P = new URLSearchParams(location.search);
     var SHOW = P.get('show') === 'sold' ? 'sold' : 'auctions';
     var SECS = Math.max(3, Math.min(60, parseInt(P.get('seconds'), 10) || 7));
-    if (P.get('position') === 'top') document.body.className = 'top';
     var AUC_SHEET = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
     var SOLD = 'https://script.google.com/macros/s/AKfycby7nMG2FAkjJNOYesCA8_7erTRAEtUG4MEMSOe3com6IrvS7DN35Cp5AEPB7yTPApuh/exec?tab=sold';
 
