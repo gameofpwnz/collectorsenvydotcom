@@ -70,7 +70,11 @@
     function load() {
         if (SHOW === 'sold') {
             return fetch(SOLD).then(function (r) { return r.json(); }).then(function (j) {
-                return (j.items || []).slice(0, 5).map(function (i) {
+                // Approval gate: once the Previously-Sold tab has an "Approved" column (the Apps Script then sends
+                // approved: true/false per item), only ticked items appear. Without it every item shows.
+                var all = j.items || [];
+                if (all.some(function (i) { return typeof i.approved === 'boolean'; })) all = all.filter(function (i) { return i.approved === true; });
+                return all.slice(0, 5).map(function (i) {
                     return { tag: 'Just sold', title: i.description, price: i.price, sub: i.date, img: (i.images || [])[0] };
                 });
             });
