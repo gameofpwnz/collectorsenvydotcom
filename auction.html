@@ -461,9 +461,17 @@
         const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
         const safeUrl = u => /^https?:\/\//i.test(String(u || '').trim()) ? String(u).trim() : '#';
 
+        const NO_PHOTO = 'data:image/svg+xml,' + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#16181d"/>' +
+            '<text x="200" y="158" fill="#8b93a1" font-family="Inter,Arial,sans-serif" font-size="22" text-anchor="middle">Photos coming soon</text></svg>');
+
         function createAuctionCard(item, isLive = false) {
             const images = [item.img1, item.img2, item.img3].filter(url => url && url.startsWith('http'));
-            if (images.length === 0) return null;
+            if (images.length === 0) {
+                // A live auction with no photos yet still shows (past ones without photos stay hidden)
+                if (!isLive) return null;
+                images.push(NO_PHOTO);
+            }
 
             const isDNS = !isLive && item.winner && item.winner.toUpperCase() === 'DNS';
             
