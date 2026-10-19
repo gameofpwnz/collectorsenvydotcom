@@ -109,25 +109,6 @@
   nav.addEventListener('click', function (e) {
     if (e.target.closest && e.target.closest('.ce-nav-menu a')) { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
   });
-  // TEMPORARY Streamer Awards banner (above the nav). Auto-hides after Oct 31 2026; delete this block any time.
-  (function () {
-    if (new Date() >= new Date(2026, 10, 1)) return;
-    var key = 'ce-sa-banner';
-    try { if (sessionStorage.getItem(key)) return; } catch (e) {}
-    var b = document.createElement('div');
-    b.setAttribute('role', 'status');
-    b.style.cssText = 'background:#00ff88;color:#000;font:600 .9rem/1.4 Inter,sans-serif;padding:.55rem 2.6rem .55rem 1rem;text-align:center;position:relative;z-index:91';
-    var a = document.createElement('a');
-    a.href = 'https://thestreamerawards.com/vote'; a.target = '_blank'; a.rel = 'noopener';
-    a.style.cssText = 'color:#000;text-decoration:underline';
-    a.textContent = '\u2605 The Watch Party CEO is up for the Streamer Awards. Vote Now!';
-    var x = document.createElement('button');
-    x.type = 'button'; x.setAttribute('aria-label', 'Dismiss banner'); x.textContent = '\u00d7';
-    x.style.cssText = 'position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:0;color:#000;font-size:1.4rem;line-height:1;cursor:pointer;padding:.2rem .5rem';
-    x.onclick = function () { b.remove(); try { sessionStorage.setItem(key, '1'); } catch (e) {} };
-    b.appendChild(a); b.appendChild(x);
-    nav.parentNode.insertBefore(b, nav);
-  })();
   // Announcement bar. Edit tab "Announcement" in the auctions spreadsheet:
   // A1 = "Announcement", A2 = message (leave blank to hide), B2 = optional link.
   (function () {
