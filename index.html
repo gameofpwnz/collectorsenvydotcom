@@ -28,51 +28,10 @@
     <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
 </head>
 	<body class="is-loading">
-		<script src="/assets/nav.js?v=11"></script>
+		<script src="/assets/nav.js?v=12"></script>
 		<div class="site-wrapper">
 			<div class="site-main">
 				<div class="inner">
-					<!-- TEMPORARY: Streamer Awards spotlight. Hides itself after Oct 31 2026; delete this block (and the banner in assets/nav.js) any time. -->
-					<div id="sa-spot" class="embed-component" style="display:none">
-						<style>
-						#sa-spot .sa{position:relative;overflow:hidden;border:1px solid #00ff88;border-radius:14px;background:radial-gradient(120% 90% at 0% 0%,rgba(0,255,136,.18),transparent 60%),#0a0a0a;box-shadow:0 0 28px rgba(0,255,136,.18);padding:1.4rem;text-align:left;font-family:"Inter",sans-serif;color:rgba(255,255,255,.92)}
-						#sa-spot .sa-tag{display:inline-block;font:700 .72rem/1 "Inter",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#000;background:#00ff88;border-radius:99px;padding:.4rem .7rem;margin-bottom:1rem}
-						#sa-spot .sa-row{display:flex;gap:1.2rem;align-items:flex-start}
-						#sa-spot .sa-img{flex:0 0 150px;width:150px;height:150px;border-radius:12px;object-fit:cover;border:2px solid #00ff88;box-shadow:0 0 18px rgba(0,255,136,.35);background:#111}
-						#sa-spot h3{font:800 1.5rem/1.2 "Inter",sans-serif;margin:0 0 .5rem;color:#fff}
-						#sa-spot p{font:400 .95rem/1.55 "Inter",sans-serif;margin:0 0 .6rem;color:rgba(255,255,255,.82)}
-						#sa-spot .sa-btns{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1rem}
-						#sa-spot .sa-btns a{display:inline-flex;align-items:center;gap:.4rem;font:700 .95rem/1 "Inter",sans-serif;text-decoration:none;border-radius:99px;padding:.8rem 1.3rem;transition:transform .15s}
-						#sa-spot .sa-btns a:hover{transform:translateY(-2px)}
-						#sa-spot .sa-vote{background:#00ff88;color:#000}
-						#sa-spot .sa-x{background:#000;color:#fff;border:1px solid #fff}
-						@media(max-width:600px){#sa-spot .sa-row{flex-direction:column;align-items:center;text-align:center}#sa-spot .sa-btns{justify-content:center}}
-						</style>
-						<div class="sa">
-							<span class="sa-tag">★ Streamer Awards Nominee</span>
-							<div class="sa-row">
-								<img class="sa-img" src="https://cdn.thestreamerawards.com/public/applicants/3d33f86516073f0c86633cb1cef8bd12f047eab8f370911917b7d92d98fe4bc3/headshot-1789237003.webp" alt="Zav Paul, The Watch Party CEO" width="150" height="150" onerror="this.style.display='none'">
-								<div>
-									<h3>Vote for Zav Paul!</h3>
-									<p>The Watch Party CEO, The K-I-D that D-I-D, Zav Paul is nominated for the Streamer Awards. Support fellow Collector’s Envy member and creator by voting for him in the following categories: Hidden Gem Awards, Best FPS Streamer, Best Variety Streamer, Rising Star Award, and League of Their Own.</p>
-									<p><strong>Voting is from October 16 to October 31.</strong></p>
-								</div>
-							</div>
-							<div class="sa-btns">
-								<a class="sa-vote" href="https://thestreamerawards.com/vote" target="_blank" rel="noopener">Vote Now →</a>
-								<a class="sa-x" id="sa-tweet" href="https://x.com/intent/post" target="_blank" rel="noopener">Post on X</a>
-							</div>
-						</div>
-						<script>
-						(function () {
-							var end = new Date(2026, 10, 1); // Nov 1 00:00 local = after Oct 31
-							if (new Date() >= end) return;
-							var t = 'The Watch Party CEO, @ItsZavPaul, is nominated for the @StreamerAwards! Vote for him in Hidden Gem, Best FPS Streamer, Best Variety Streamer, Rising Star and League of Their Own. Voting runs Oct 16-31 #StreamerAwards';
-							document.getElementById('sa-tweet').href = 'https://x.com/intent/post?text=' + encodeURIComponent(t) + '&url=' + encodeURIComponent('https://thestreamerawards.com/vote');
-							document.getElementById('sa-spot').style.display = '';
-						})();
-						</script>
-					</div>
 					<ul id="buttons01" class="buttons-component instance-1">
 						<li>
 							<a href="#streamers" class="n06" role="button"><svg aria-labelledby="buttons01-icon-6-title"><title id="buttons01-icon-6-title">Twitch</title><use xlink:href="assets/icons.svg#twitch"></use></svg><span class="label">Streamers</span></a>
