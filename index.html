@@ -172,6 +172,49 @@
 						</script><!-- mnbnbxmbzxmncbzxc -->
 					</div>
 					<p id="text01" class="text-component instance-1">Collector’s Envy is a dedicated community for esports fans who buy, sell, trade, and discover rare memorabilia and jerseys. Our group brings together collectors from all over the world, helping them find exclusive, hard-to-get items from the esports scene. Whether you&#39;re looking to complete your collection, trade with fellow enthusiasts, or sell valuable pieces, we provide a platform for passionate fans to connect and grow their collections.</p>
+					<hr id="dividerRecent" data-scroll-id="recent" data-scroll-behavior="default" data-scroll-offset="0" data-scroll-speed="3" class="divider-component instance-1" hidden>
+					<h2 id="textRecent" class="text-component instance-2" hidden>Recently Added</h2>
+					<div id="embedRecent" class="embed-component instance-3" hidden>
+						<style>
+						#dividerRecent[hidden],#textRecent[hidden],#embedRecent[hidden]{display:none!important}
+						.ce-recent{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+						.ce-recent a{display:block;background:#0a0a0a;border:1px solid #222;border-radius:12px;overflow:hidden;color:#fff;text-decoration:none;transition:border-color .15s}
+						.ce-recent a:hover{border-color:#00ff88}
+						.ce-recent .ph{aspect-ratio:4/3;background:#111;display:flex;align-items:center;justify-content:center;color:#666;font-size:.8rem;overflow:hidden}
+						.ce-recent .ph img{width:100%;height:100%;object-fit:cover;display:block}
+						.ce-recent .b{padding:.7rem .8rem;display:grid;gap:.25rem}
+						.ce-recent .k{color:#00ff88;font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+						.ce-recent .d{font-size:.9rem;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+						.ce-recent .p{color:#00ff88;font-weight:800}
+						</style>
+						<div class="ce-recent" id="ceRecent"></div>
+						<script>
+						(function () {
+							// Latest 3 previously sold items and 3 estimates, mixed. The section stays hidden if the feeds can't be reached.
+							var BASE = 'https://script.google.com/macros/s/AKfycbyuWh6YicPzuinlSSg79e9ejS5Anb_rVQ2xo2DQoWzU1OM0N-wzQzYMkW6iycE-GvR4/exec';
+							var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : t; return d.innerHTML; };
+							function thumb(u) {
+								if (!/^https:\/\//.test(u || '')) return '';
+								var m = /^https:\/\/drive\.google\.com\/(?:uc\?(?:[^#]*&)?id=|file\/d\/|open\?id=)([\w-]+)/.exec(u);
+								return m ? 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w600' : u;
+							}
+							function get(url) { return fetch(url).then(function (r) { return r.json(); }).then(function (j) { return j.items || []; }).catch(function () { return []; }); }
+							Promise.all([get(BASE + '?tab=sold'), get(BASE)]).then(function (r) {
+								var sold = r[0].slice(0, 3).map(function (i) { return { k: 'Sold', href: '/sold.html', d: i.description, p: i.price, img: (i.images || [])[0] }; });
+								var est = r[1].slice(0, 3).map(function (i) { return { k: 'Estimate', href: '/estimate.html', d: i.description, p: i.price, img: i.image }; });
+								var all = [];
+								for (var n = 0; n < 3; n++) { if (sold[n]) all.push(sold[n]); if (est[n]) all.push(est[n]); }
+								if (!all.length) return;
+								document.getElementById('ceRecent').innerHTML = all.map(function (i) {
+									var u = thumb(i.img);
+									return '<a href="' + i.href + '"><div class="ph">' + (u ? '<img loading="lazy" referrerpolicy="no-referrer" alt="" src="' + esc(u) + '" onerror="this.parentNode.textContent=\'No photo\'">' : 'No photo') + '</div>' +
+										'<div class="b"><div class="k">' + i.k + '</div><div class="d">' + esc(i.d) + '</div><div class="p">' + esc(i.p) + '</div></div></a>';
+								}).join('');
+								['dividerRecent', 'textRecent', 'embedRecent'].forEach(function (id) { document.getElementById(id).hidden = false; });
+							});
+						})();
+						</script>
+					</div>
 					<hr id="divider01" data-scroll-id="streamers" data-scroll-behavior="default" data-scroll-offset="0" data-scroll-speed="3" class="divider-component instance-1">
 					<h2 id="text02" class="text-component instance-2">Live Streamers</h2>
 					<p id="text08" class="text-component instance-8">Streamers are members of the Collectors Envy Discord.* Show them some support on Twitch.</p>
