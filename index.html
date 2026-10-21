@@ -173,7 +173,7 @@
 					</div>
 					<p id="text01" class="text-component instance-1">Collector’s Envy is a dedicated community for esports fans who buy, sell, trade, and discover rare memorabilia and jerseys. Our group brings together collectors from all over the world, helping them find exclusive, hard-to-get items from the esports scene. Whether you&#39;re looking to complete your collection, trade with fellow enthusiasts, or sell valuable pieces, we provide a platform for passionate fans to connect and grow their collections.</p>
 					<hr id="dividerRecent" data-scroll-id="recent" data-scroll-behavior="default" data-scroll-offset="0" data-scroll-speed="3" class="divider-component instance-1" hidden>
-					<h2 id="textRecent" class="text-component instance-2" hidden>Recently Added</h2>
+					<h2 id="textRecent" class="text-component instance-2" hidden>Live Auctions &amp; Sold</h2>
 					<div id="embedRecent" class="embed-component instance-3" hidden>
 						<style>
 						#dividerRecent[hidden],#textRecent[hidden],#embedRecent[hidden]{display:none!important}
@@ -190,20 +190,35 @@
 						<div class="ce-recent" id="ceRecent"></div>
 						<script>
 						(function () {
-							// Latest 3 previously sold items and 3 estimates, mixed. The section stays hidden if the feeds can't be reached.
-							var BASE = 'https://script.google.com/macros/s/AKfycbyuWh6YicPzuinlSSg79e9ejS5Anb_rVQ2xo2DQoWzU1OM0N-wzQzYMkW6iycE-GvR4/exec';
+							// Latest 3 live auctions and 3 previously sold items, mixed. The section stays hidden if the feeds can't be reached.
+							var SOLD = 'https://script.google.com/macros/s/AKfycbyuWh6YicPzuinlSSg79e9ejS5Anb_rVQ2xo2DQoWzU1OM0N-wzQzYMkW6iycE-GvR4/exec?tab=sold';
+							var LIVE = 'https://docs.google.com/spreadsheets/d/1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4/gviz/tq?tqx=out:csv&sheet=LiveAuctions';
 							var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : t; return d.innerHTML; };
+							function csv(text) {
+								var rows = [], row = [], f = '', q = false;
+								for (var k = 0; k < text.length; k++) {
+									var c = text[k];
+									if (q) { if (c === '"') { if (text[k + 1] === '"') { f += '"'; k++; } else q = false; } else f += c; }
+									else if (c === '"') q = true;
+									else if (c === ',') { row.push(f); f = ''; }
+									else if (c === '\n' || c === '\r') { if (c === '\r' && text[k + 1] === '\n') k++; row.push(f); rows.push(row); row = []; f = ''; }
+									else f += c;
+								}
+								if (f !== '' || row.length) { row.push(f); rows.push(row); }
+								return rows;
+							}
 							function thumb(u) {
 								if (!/^https:\/\//.test(u || '')) return '';
 								var m = /^https:\/\/drive\.google\.com\/(?:uc\?(?:[^#]*&)?id=|file\/d\/|open\?id=)([\w-]+)/.exec(u);
 								return m ? 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w600' : u;
 							}
-							function get(url) { return fetch(url).then(function (r) { return r.json(); }).then(function (j) { return j.items || []; }).catch(function () { return []; }); }
-							Promise.all([get(BASE + '?tab=sold'), get(BASE)]).then(function (r) {
-								var sold = r[0].slice(0, 3).map(function (i) { return { k: 'Sold', href: '/sold.html', d: i.description, p: i.price, img: (i.images || [])[0] }; });
-								var est = r[1].slice(0, 3).map(function (i) { return { k: 'Estimate', href: '/estimate.html', d: i.description, p: i.price, img: i.image }; });
+							function sold() { return fetch(SOLD).then(function (r) { return r.json(); }).then(function (j) { return j.items || []; }).catch(function () { return []; }); }
+							function live() { return fetch(LIVE).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(csv).then(function (rows) { return rows.slice(1).filter(function (r) { return r[0] && r[0].trim(); }); }).catch(function () { return []; }); }
+							Promise.all([live(), sold()]).then(function (r) {
+								var auc = r[0].slice(0, 3).map(function (x) { return { k: 'Live auction', href: '/auction.html', d: x[0], p: x[1], img: x[2] }; });
+								var sld = r[1].slice(0, 3).map(function (i) { return { k: 'Sold', href: '/sold.html', d: i.description, p: i.price, img: (i.images || [])[0] }; });
 								var all = [];
-								for (var n = 0; n < 3; n++) { if (sold[n]) all.push(sold[n]); if (est[n]) all.push(est[n]); }
+								for (var n = 0; n < 3; n++) { if (auc[n]) all.push(auc[n]); if (sld[n]) all.push(sld[n]); }
 								if (!all.length) return;
 								document.getElementById('ceRecent').innerHTML = all.map(function (i) {
 									var u = thumb(i.img);
