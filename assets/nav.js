@@ -10,13 +10,13 @@
       { label: 'Estimates', href: '/estimate.html' },
       { label: 'Previously Sold', href: '/sold.html' },
       { label: 'Archive', href: '/archive.html' },
-      { label: 'OpTic Scuf Archive', href: '/optic-scuf.html' },
-      { label: 'Reputation', href: '/reputation.html' }
+      { label: 'OpTic Scuf Archive', href: '/optic-scuf.html' }
     ] },
     { label: 'Events', href: '/events.html' },
     { label: 'Auctions', href: '/auction.html' },
     { label: 'Bounties', href: '/bounties.html' },
     { label: 'Proxy', href: '/proxy.html' },
+    { label: 'Reputation', href: '/reputation.html' },
     { label: 'Matchmaking', href: '/matchmaking/rings.html', children: [
       { label: 'OpTic Rings', href: '/matchmaking/rings.html' },
       { label: 'Vision Episodes', href: '/matchmaking/vision.html' }
