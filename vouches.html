@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vouches | Collectors Envy</title>
-    <meta name="description" content="Search community vouches for sellers, buyers, traders and more in the Collectors Envy Discord.">
+    <meta name="description" content="Search community members vouched as sellers, buyers, traders and proxies in the Collectors Envy Discord.">
     <link rel="canonical" href="https://collectorsenvy.com/vouches.html">
     <meta property="og:site_name" content="Collectors Envy">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Vouches | Collectors Envy">
-    <meta property="og:description" content="Search community vouches for sellers, buyers, traders and more in the Collectors Envy Discord.">
+    <meta property="og:description" content="Search community members vouched as sellers, buyers, traders and proxies in the Collectors Envy Discord.">
     <meta property="og:url" content="https://collectorsenvy.com/vouches.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,12 +29,15 @@
         .count { color:var(--ce-text-dim); font-size:.85rem; margin-bottom:1rem; }
         .list { display:grid; gap:.75rem; }
         .v { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1rem 1.1rem; }
-        .v .top { display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; font-size:.9rem; }
-        .v .who { font-weight:800; }
-        .v .by { color:var(--ce-text-dim); }
-        .v .type { margin-left:auto; color:var(--ce-accent); border:1px solid var(--ce-accent); border-radius:999px; padding:0 .6rem; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; }
-        .v .text { margin-top:.4rem; overflow-wrap:anywhere; }
-        .v .date { color:var(--ce-text-dim); font-size:.8rem; margin-top:.3rem; }
+        .v .top { display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; }
+        .v .who { font-weight:800; font-size:1.05rem; overflow-wrap:anywhere; }
+        .v .tot { color:var(--ce-accent); font-weight:800; }
+        .badges { display:flex; flex-wrap:wrap; gap:.4rem; margin-left:auto; }
+        .badges span { border:1px solid var(--ce-border); border-radius:999px; padding:0 .6rem; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ce-text-dim); }
+        .v details { margin-top:.5rem; }
+        .v summary { cursor:pointer; color:var(--ce-text-dim); font-size:.85rem; }
+        .v ul { list-style:none; margin-top:.5rem; display:grid; gap:.25rem; font-size:.9rem; }
+        .v li small { color:var(--ce-text-dim); margin-left:.4rem; }
         #more { margin-top:1rem; background:#fff; color:#000; border:0; border-radius:8px; padding:.75rem 1.25rem; font:inherit; font-weight:700; cursor:pointer; display:none; }
         .msg { color:var(--ce-text-dim); font-size:.9rem; margin-top:1rem; }
     </style>
@@ -47,8 +50,8 @@
 <script src="/assets/nav.js?v=14"></script>
 <main>
     <h1>Vouches</h1>
-    <p class="sub">Search community vouches by member, type or keyword. Updated daily from the Discord server.</p>
-    <input type="text" id="q" placeholder="Search a member or keyword" aria-label="Search vouches">
+    <p class="sub">Search members to see their vouches as a seller, buyer, trader or proxy. Updated daily from the Discord server.</p>
+    <input type="text" id="q" placeholder="Search a member" aria-label="Search vouches">
     <div class="chips" id="chips"></div>
     <div class="count" id="count"></div>
     <div class="list" id="list"></div>
@@ -57,9 +60,10 @@
 </main>
 <script>
 (function () {
-    // Tab "Vouches" of the auctions spreadsheet (shared view-only). Columns: Date, Type, Vouched For, Vouched By, Message.
+    // Tab "Vouches" of the auctions spreadsheet (shared view-only). One row per vouch:
+    // Vouched For, Vouched By, Seller, Buyer, Trader, Proxy (TRUE/FALSE).
     var SHEET = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
-    var PAGE = 50;
+    var PAGE = 50, TYPES = ['Seller', 'Buyer', 'Trader', 'Proxy'];
     function parse(t) {
         var rows = [], row = [], f = '', q = false;
         for (var k = 0; k < t.length; k++) {
@@ -73,34 +77,38 @@
         if (f !== '' || row.length) { row.push(f); rows.push(row); }
         return rows;
     }
-    var all = [], shown = [], limit = PAGE, type = 'All';
+    var members = [], shown = [], limit = PAGE, type = 'All';
     var $ = function (id) { return document.getElementById(id); };
     function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
     function render() {
         var t = $('q').value.toLowerCase().trim();
-        shown = all.filter(function (v) {
-            return (type === 'All' || v.type === type) && (!t || (v.to + ' ' + v.by + ' ' + v.text + ' ' + v.type).toLowerCase().indexOf(t) > -1);
+        shown = members.filter(function (m) {
+            return (type === 'All' || m.c[type]) && (!t || m.name.toLowerCase().indexOf(t) > -1);
+        }).sort(function (a, b) {
+            var x = type === 'All' ? a.total : a.c[type], y = type === 'All' ? b.total : b.c[type];
+            return y - x || a.name.localeCompare(b.name);
         });
         var list = $('list'); list.textContent = '';
-        shown.slice(0, limit).forEach(function (v) {
-            var d = el('div', 'v'), top = el('div', 'top');
-            top.appendChild(el('span', 'who', v.to));
-            if (v.by) top.appendChild(el('span', 'by', 'vouched by ' + v.by));
-            if (v.type) top.appendChild(el('span', 'type', v.type));
-            d.appendChild(top);
-            if (v.text) d.appendChild(el('div', 'text', v.text));
-            if (v.date) d.appendChild(el('div', 'date', v.date));
-            list.appendChild(d);
+        shown.slice(0, limit).forEach(function (m) {
+            var d = el('div', 'v'), top = el('div', 'top'), bd = el('div', 'badges');
+            top.appendChild(el('span', 'who', m.name));
+            top.appendChild(el('span', 'tot', m.total + ' vouch' + (m.total === 1 ? '' : 'es')));
+            TYPES.forEach(function (n) { if (m.c[n]) bd.appendChild(el('span', '', n + ' ' + m.c[n])); });
+            top.appendChild(bd); d.appendChild(top);
+            var det = el('details'); det.appendChild(el('summary', '', 'Vouched by'));
+            var ul = el('ul');
+            m.by.slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (v) {
+                var li = el('li', '', v.name); li.appendChild(el('small', '', v.types.join(', '))); ul.appendChild(li);
+            });
+            det.appendChild(ul); d.appendChild(det); list.appendChild(d);
         });
-        $('count').textContent = shown.length + ' vouch' + (shown.length === 1 ? '' : 'es');
+        $('count').textContent = shown.length + ' member' + (shown.length === 1 ? '' : 's');
         $('more').style.display = shown.length > limit ? 'inline-block' : 'none';
-        $('msg').textContent = shown.length ? '' : (all.length ? 'No matches.' : 'No vouches yet.');
+        $('msg').textContent = shown.length ? '' : (members.length ? 'No matches.' : 'No vouches yet.');
     }
     function chips() {
-        var types = ['All'], c = $('chips');
-        all.forEach(function (v) { if (v.type && types.indexOf(v.type) < 0) types.push(v.type); });
-        if (types.length < 3) return;
-        types.forEach(function (n) {
+        var c = $('chips');
+        ['All'].concat(TYPES).forEach(function (n) {
             var b = el('button', n === type ? 'on' : '', n); b.type = 'button';
             b.onclick = function () { type = n; limit = PAGE; Array.prototype.forEach.call(c.children, function (x) { x.className = x.textContent === n ? 'on' : ''; }); render(); };
             c.appendChild(b);
@@ -111,12 +119,17 @@
     fetch('https://docs.google.com/spreadsheets/d/' + SHEET + '/gviz/tq?tqx=out:csv&sheet=Vouches')
         .then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(parse).then(function (rows) {
             // A missing tab makes Google return the first tab, so insist on the header.
-            if (!rows.length || String(rows[0][0]).trim().toLowerCase() !== 'date' || String(rows[0][1]).trim().toLowerCase() !== 'type') throw 0;
-            all = rows.slice(1).filter(function (r) { return r[2] && r[2].trim(); }).map(function (r) {
-                return { date: (r[0] || '').trim(), type: (r[1] || '').trim(), to: r[2].trim(), by: (r[3] || '').trim(), text: (r[4] || '').trim() };
+            if (!rows.length || String(rows[0][0]).trim().toLowerCase() !== 'vouched for' || String(rows[0][1]).trim().toLowerCase() !== 'vouched by') throw 0;
+            var map = {};
+            rows.slice(1).forEach(function (r) {
+                var to = (r[0] || '').trim(); if (!to) return;
+                var types = [];
+                TYPES.forEach(function (n, i) { if (String(r[2 + i] || '').trim().toUpperCase() === 'TRUE') types.push(n); });
+                var m = map[to] || (map[to] = { name: to, total: 0, c: {}, by: [] });
+                m.total++; m.by.push({ name: (r[1] || '').trim() || 'Unknown', types: types });
+                types.forEach(function (n) { m.c[n] = (m.c[n] || 0) + 1; });
             });
-            // Newest first (the sync writes ISO dates).
-            all.sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
+            members = Object.keys(map).map(function (k) { return map[k]; });
             chips(); render();
         }).catch(function () { $('msg').textContent = 'Could not load vouches right now.'; });
 })();
