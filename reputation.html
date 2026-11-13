@@ -28,6 +28,15 @@
         .chips button.on { border-color:var(--ce-accent); color:var(--ce-accent); }
         .count { color:var(--ce-text-dim); font-size:.85rem; margin-bottom:1rem; }
         .list { display:grid; gap:.75rem; }
+        .lb { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:.75rem; margin-bottom:2rem; }
+        .lb .box { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1rem 1.1rem; }
+        .lb h2 { font-size:.85rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--ce-accent); margin-bottom:.5rem; }
+        .lb ol { list-style:none; counter-reset:r; display:grid; gap:.15rem; }
+        .lb li { counter-increment:r; display:flex; gap:.5rem; align-items:baseline; font-size:.9rem; }
+        .lb li::before { content:counter(r); color:var(--ce-text-dim); font-size:.75rem; width:1.3rem; flex:none; }
+        .lb li button { background:none; border:0; color:#fff; font:inherit; text-align:left; cursor:pointer; padding:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+        .lb li button:hover { color:var(--ce-accent); }
+        .lb li b { margin-left:auto; color:var(--ce-text-dim); font-weight:700; }
         .v { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1rem 1.1rem; }
         .v .top { display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; }
         .v .who { font-weight:800; font-size:1.05rem; overflow-wrap:anywhere; }
@@ -51,6 +60,7 @@
 <main>
     <h1>Reputation</h1>
     <p class="sub">Search members to see their vouches as a seller, buyer, trader or proxy. Updated daily from the Discord server.</p>
+    <div class="lb" id="lb"></div>
     <input type="text" id="q" placeholder="Search a member" aria-label="Search vouches">
     <div class="chips" id="chips"></div>
     <div class="count" id="count"></div>
@@ -106,6 +116,21 @@
         $('more').style.display = shown.length > limit ? 'inline-block' : 'none';
         $('msg').textContent = shown.length ? '' : (members.length ? 'No matches.' : 'No vouches yet.');
     }
+    function board() {
+        var lb = $('lb'); lb.textContent = '';
+        TYPES.forEach(function (n) {
+            var top = members.filter(function (m) { return m.c[n]; }).sort(function (a, b) { return b.c[n] - a.c[n] || a.name.localeCompare(b.name); }).slice(0, 10);
+            if (!top.length) return;
+            var box = el('div', 'box'); box.appendChild(el('h2', '', 'Top ' + n + 's'));
+            var ol = el('ol');
+            top.forEach(function (m) {
+                var li = el('li'), b = el('button', '', m.name); b.type = 'button';
+                b.onclick = function () { $('q').value = m.name; type = 'All'; limit = PAGE; Array.prototype.forEach.call($('chips').children, function (x) { x.className = x.textContent === 'All' ? 'on' : ''; }); render(); $('q').scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+                li.appendChild(b); li.appendChild(el('b', '', String(m.c[n]))); ol.appendChild(li);
+            });
+            box.appendChild(ol); lb.appendChild(box);
+        });
+    }
     function chips() {
         var c = $('chips');
         ['All'].concat(TYPES).forEach(function (n) {
@@ -130,7 +155,7 @@
                 types.forEach(function (n) { m.c[n] = (m.c[n] || 0) + 1; });
             });
             members = Object.keys(map).map(function (k) { return map[k]; });
-            chips(); render();
+            board(); chips(); render();
         }).catch(function () { $('msg').textContent = 'Could not load vouches right now.'; });
 })();
 </script>
