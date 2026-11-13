@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reputation | Collectors Envy</title>
+    <meta name="description" content="Search community members vouched as sellers, buyers, traders and proxies in the Collectors Envy Discord.">
+    <link rel="canonical" href="https://collectorsenvy.com/reputation.html">
+    <meta property="og:site_name" content="Collectors Envy">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Reputation | Collectors Envy">
+    <meta property="og:description" content="Search community members vouched as sellers, buyers, traders and proxies in the Collectors Envy Discord.">
+    <meta property="og:url" content="https://collectorsenvy.com/reputation.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --ce-bg:#000; --ce-card-bg:#0a0a0a; --ce-text-main:#fff; --ce-text-dim:#a1a1a1; --ce-border:#222; --ce-accent:#00ff88; --ce-font:'Inter',sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:var(--ce-font); background:var(--ce-bg); color:var(--ce-text-main); line-height:1.6; -webkit-font-smoothing:antialiased; }
+        main { max-width:960px; margin:0 auto; padding:3rem 1.25rem 5rem; }
+        h1 { font-size:2.5rem; font-weight:800; letter-spacing:-1px; text-transform:uppercase; }
+        .sub { color:var(--ce-text-dim); margin:.5rem 0 1.5rem; }
+        #q { width:100%; max-width:480px; background:#000; border:1px solid var(--ce-border); border-radius:8px; color:#fff; padding:.7rem .8rem; font:inherit; }
+        #q:focus { outline:none; border-color:var(--ce-accent); }
+        .chips { display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0; }
+        .chips button { background:#000; color:#fff; border:1px solid var(--ce-border); border-radius:999px; padding:.35rem .9rem; font:inherit; font-size:.85rem; font-weight:600; cursor:pointer; }
+        .chips button.on { border-color:var(--ce-accent); color:var(--ce-accent); }
+        .count { color:var(--ce-text-dim); font-size:.85rem; margin-bottom:1rem; }
+        .list { display:grid; gap:.75rem; }
+        .v { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1rem 1.1rem; }
+        .v .top { display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; }
+        .v .who { font-weight:800; font-size:1.05rem; overflow-wrap:anywhere; }
+        .v .tot { color:var(--ce-accent); font-weight:800; }
+        .badges { display:flex; flex-wrap:wrap; gap:.4rem; margin-left:auto; }
+        .badges span { border:1px solid var(--ce-border); border-radius:999px; padding:0 .6rem; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ce-text-dim); }
+        .v details { margin-top:.5rem; }
+        .v summary { cursor:pointer; color:var(--ce-text-dim); font-size:.85rem; }
+        .v ul { list-style:none; margin-top:.5rem; display:grid; gap:.25rem; font-size:.9rem; }
+        .v li small { color:var(--ce-text-dim); margin-left:.4rem; }
+        #more { margin-top:1rem; background:#fff; color:#000; border:0; border-radius:8px; padding:.75rem 1.25rem; font:inherit; font-weight:700; cursor:pointer; display:none; }
+        .msg { color:var(--ce-text-dim); font-size:.9rem; margin-top:1rem; }
+    </style>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+</head>
+<body>
+<script src="/assets/nav.js?v=15"></script>
+<main>
+    <h1>Reputation</h1>
+    <p class="sub">Search members to see their vouches as a seller, buyer, trader or proxy. Updated daily from the Discord server.</p>
+    <input type="text" id="q" placeholder="Search a member" aria-label="Search vouches">
+    <div class="chips" id="chips"></div>
+    <div class="count" id="count"></div>
+    <div class="list" id="list"></div>
+    <button id="more" type="button">Show more</button>
+    <p class="msg" id="msg">Loading…</p>
+</main>
+<script>
+(function () {
+    // Tab "Vouches" of the auctions spreadsheet (shared view-only). One row per vouch:
+    // Vouched For, Vouched By, Seller, Buyer, Trader, Proxy (TRUE/FALSE).
+    var SHEET = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
+    var PAGE = 50, TYPES = ['Seller', 'Buyer', 'Trader', 'Proxy'];
+    function parse(t) {
+        var rows = [], row = [], f = '', q = false;
+        for (var k = 0; k < t.length; k++) {
+            var c = t[k];
+            if (q) { if (c === '"') { if (t[k + 1] === '"') { f += '"'; k++; } else q = false; } else f += c; }
+            else if (c === '"') q = true;
+            else if (c === ',') { row.push(f); f = ''; }
+            else if (c === '\n' || c === '\r') { if (c === '\r' && t[k + 1] === '\n') k++; row.push(f); rows.push(row); row = []; f = ''; }
+            else f += c;
+        }
+        if (f !== '' || row.length) { row.push(f); rows.push(row); }
+        return rows;
+    }
+    var members = [], shown = [], limit = PAGE, type = 'All';
+    var $ = function (id) { return document.getElementById(id); };
+    function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+    function render() {
+        var t = $('q').value.toLowerCase().trim();
+        shown = members.filter(function (m) {
+            return (type === 'All' || m.c[type]) && (!t || m.name.toLowerCase().indexOf(t) > -1);
+        }).sort(function (a, b) {
+            var x = type === 'All' ? a.total : a.c[type], y = type === 'All' ? b.total : b.c[type];
+            return y - x || a.name.localeCompare(b.name);
+        });
+        var list = $('list'); list.textContent = '';
+        shown.slice(0, limit).forEach(function (m) {
+            var d = el('div', 'v'), top = el('div', 'top'), bd = el('div', 'badges');
+            top.appendChild(el('span', 'who', m.name));
+            top.appendChild(el('span', 'tot', m.total + ' vouch' + (m.total === 1 ? '' : 'es')));
+            TYPES.forEach(function (n) { if (m.c[n]) bd.appendChild(el('span', '', n + ' ' + m.c[n])); });
+            top.appendChild(bd); d.appendChild(top);
+            var det = el('details'); det.appendChild(el('summary', '', 'Vouched by'));
+            var ul = el('ul');
+            m.by.slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (v) {
+                var li = el('li', '', v.name); li.appendChild(el('small', '', v.types.join(', '))); ul.appendChild(li);
+            });
+            det.appendChild(ul); d.appendChild(det); list.appendChild(d);
+        });
+        $('count').textContent = shown.length + ' member' + (shown.length === 1 ? '' : 's');
+        $('more').style.display = shown.length > limit ? 'inline-block' : 'none';
+        $('msg').textContent = shown.length ? '' : (members.length ? 'No matches.' : 'No vouches yet.');
+    }
+    function chips() {
+        var c = $('chips');
+        ['All'].concat(TYPES).forEach(function (n) {
+            var b = el('button', n === type ? 'on' : '', n); b.type = 'button';
+            b.onclick = function () { type = n; limit = PAGE; Array.prototype.forEach.call(c.children, function (x) { x.className = x.textContent === n ? 'on' : ''; }); render(); };
+            c.appendChild(b);
+        });
+    }
+    $('q').addEventListener('input', function () { limit = PAGE; render(); });
+    $('more').onclick = function () { limit += PAGE; render(); };
+    fetch('https://docs.google.com/spreadsheets/d/' + SHEET + '/gviz/tq?tqx=out:csv&sheet=Vouches')
+        .then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(parse).then(function (rows) {
+            // A missing tab makes Google return the first tab, so insist on the header.
+            if (!rows.length || String(rows[0][0]).trim().toLowerCase() !== 'vouched for' || String(rows[0][1]).trim().toLowerCase() !== 'vouched by') throw 0;
+            var map = {};
+            rows.slice(1).forEach(function (r) {
+                var to = (r[0] || '').trim(); if (!to) return;
+                var types = [];
+                TYPES.forEach(function (n, i) { if (String(r[2 + i] || '').trim().toUpperCase() === 'TRUE') types.push(n); });
+                var m = map[to] || (map[to] = { name: to, total: 0, c: {}, by: [] });
+                m.total++; m.by.push({ name: (r[1] || '').trim() || 'Unknown', types: types });
+                types.forEach(function (n) { m.c[n] = (m.c[n] || 0) + 1; });
+            });
+            members = Object.keys(map).map(function (k) { return map[k]; });
+            chips(); render();
+        }).catch(function () { $('msg').textContent = 'Could not load vouches right now.'; });
+})();
+</script>
+</body>
+</html>
