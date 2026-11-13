@@ -148,4 +148,69 @@
         nav.parentNode.insertBefore(bar, nav.nextSibling);
       }).catch(function () {});
   })();
+  // Live auctions slider (home page only): a slim bar under the nav that rotates through the LiveAuctions tab.
+  // Hidden when there are no live auctions or the sheet can't be reached; the x hides it for the visit.
+  (function () {
+    if (!/^\/(index\.html)?$/.test(location.pathname)) return;
+    try { if (sessionStorage.getItem('ce-live-bar')) return; } catch (e) {}
+    var SHEET = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
+    function parse(t) {
+      var rows = [], row = [], f = '', q = false;
+      for (var k = 0; k < t.length; k++) {
+        var c = t[k];
+        if (q) { if (c === '"') { if (t[k + 1] === '"') { f += '"'; k++; } else q = false; } else f += c; }
+        else if (c === '"') q = true;
+        else if (c === ',') { row.push(f); f = ''; }
+        else if (c === '\n' || c === '\r') { if (c === '\r' && t[k + 1] === '\n') k++; row.push(f); rows.push(row); row = []; f = ''; }
+        else f += c;
+      }
+      if (f !== '' || row.length) { row.push(f); rows.push(row); }
+      return rows;
+    }
+    fetch('https://docs.google.com/spreadsheets/d/' + SHEET + '/gviz/tq?tqx=out:csv&sheet=LiveAuctions')
+      .then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(parse).then(function (rows) {
+        // Columns: Title, Price, Img 1-3, Ends At, Link
+        var items = rows.slice(1).filter(function (r) { return r[0] && r[0].trim(); });
+        if (!items.length) return;
+        var bar = document.createElement('div');
+        bar.setAttribute('role', 'status');
+        bar.style.cssText = 'background:#0a0a0a;border-bottom:1px solid #00ff88;color:#fff;font:600 .9rem/1.4 Inter,sans-serif;padding:.5rem 2.6rem;text-align:center;position:relative;display:flex;align-items:center;justify-content:center;gap:.7rem';
+        var tag = document.createElement('span');
+        tag.textContent = 'Live auction';
+        tag.style.cssText = 'color:#00ff88;font-weight:800;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap';
+        var link = document.createElement('a');
+        link.href = '/auction.html';
+        link.style.cssText = 'color:#fff;text-decoration:none;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:opacity .3s';
+        function btn(label, text, side) {
+          var b = document.createElement('button');
+          b.type = 'button'; b.setAttribute('aria-label', label); b.textContent = text;
+          b.style.cssText = 'position:absolute;' + side + ':.6rem;top:50%;transform:translateY(-50%);background:none;border:0;color:#fff;font-size:1.3rem;line-height:1;cursor:pointer;padding:.2rem .5rem';
+          return b;
+        }
+        var n = 0, timer = null;
+        function show(i) {
+          n = (i + items.length) % items.length;
+          var r = items[n], text = r[0].trim();
+          if (r[1] && r[1].trim()) text += ' \u2014 ' + r[1].trim();
+          if (r[5] && r[5].trim()) text += ' \u00b7 ends ' + r[5].trim();
+          link.style.opacity = '0';
+          setTimeout(function () { link.textContent = text; link.style.opacity = '1'; }, 250);
+        }
+        function run() { clearInterval(timer); if (items.length > 1) timer = setInterval(function () { show(n + 1); }, 5000); }
+        link.textContent = ''; show(0);
+        bar.appendChild(tag); bar.appendChild(link);
+        if (items.length > 1) {
+          var prev = btn('Previous auction', '\u2039', 'right'), next = btn('Next auction', '\u203a', 'right');
+          prev.style.right = '2.6rem'; next.style.right = '1.4rem';
+          prev.onclick = function () { show(n - 1); run(); }; next.onclick = function () { show(n + 1); run(); };
+          bar.appendChild(prev); bar.appendChild(next);
+        }
+        var x = btn('Dismiss', '\u00d7', 'left');
+        x.onclick = function () { clearInterval(timer); bar.remove(); try { sessionStorage.setItem('ce-live-bar', '1'); } catch (e) {} };
+        bar.appendChild(x);
+        var after = nav.nextSibling && nav.nextSibling.getAttribute && nav.nextSibling.getAttribute('role') === 'status' ? nav.nextSibling : nav;
+        after.parentNode.insertBefore(bar, after.nextSibling);
+        run();
+      }).catch(function () {});
+  })();
 })();
