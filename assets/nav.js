@@ -11,7 +11,7 @@
       { label: 'Previously Sold', href: '/sold.html' },
       { label: 'Archive', href: '/archive.html' },
       { label: 'OpTic Scuf Archive', href: '/optic-scuf.html' },
-      { label: 'Vouches', href: '/vouches.html' }
+      { label: 'Reputation', href: '/reputation.html' }
     ] },
     { label: 'Events', href: '/events.html' },
     { label: 'Auctions', href: '/auction.html' },
