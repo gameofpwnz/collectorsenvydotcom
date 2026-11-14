@@ -55,6 +55,9 @@
         .v summary { cursor:pointer; color:var(--ce-text-dim); font-size:.85rem; }
         .v ul { list-style:none; margin-top:.5rem; display:grid; gap:.25rem; font-size:.9rem; }
         .v li small { color:var(--ce-text-dim); margin-left:.4rem; }
+        .acts { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.6rem; }
+        .acts button { background:#000; color:#fff; border:1px solid var(--ce-border); border-radius:8px; padding:.3rem .8rem; font:inherit; font-size:.8rem; font-weight:600; cursor:pointer; }
+        .acts button:hover { border-color:var(--ce-accent); color:var(--ce-accent); }
         #more { margin-top:1rem; background:#fff; color:#000; border:0; border-radius:8px; padding:.75rem 1.25rem; font:inherit; font-weight:700; cursor:pointer; display:none; }
         .msg { color:var(--ce-text-dim); font-size:.9rem; margin-top:1rem; }
     </style>
@@ -95,7 +98,9 @@
         if (f !== '' || row.length) { row.push(f); rows.push(row); }
         return rows;
     }
-    var members = [], shown = [], limit = PAGE, type = 'All';
+    // Optional: base of the share-preview Worker (see reputation-worker). Empty = plain reputation page links.
+    var SHARE_BASE = '';
+    var members = [], shown = [], limit = PAGE, type = 'All', rank = {};
     var $ = function (id) { return document.getElementById(id); };
     function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
     function render() {
@@ -113,6 +118,11 @@
             top.appendChild(el('span', 'tot', m.total + ' vouch' + (m.total === 1 ? '' : 'es')));
             TYPES.forEach(function (n) { if (m.c[n]) bd.appendChild(el('span', '', n + ' ' + m.c[n])); });
             top.appendChild(bd); d.appendChild(top);
+            var acts = el('div', 'acts'), sb = el('button', '', 'Share card'), cb = el('button', '', 'Copy link');
+            sb.type = 'button'; cb.type = 'button';
+            sb.onclick = function () { shareCard(m, sb); };
+            cb.onclick = function () { copyLink(m, cb); };
+            acts.appendChild(sb); acts.appendChild(cb); d.appendChild(acts);
             var det = el('details'); det.appendChild(el('summary', '', 'Vouched by'));
             var ul = el('ul');
             m.by.slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (v) {
@@ -123,6 +133,62 @@
         $('count').textContent = shown.length + ' member' + (shown.length === 1 ? '' : 's');
         $('more').style.display = shown.length > limit ? 'inline-block' : 'none';
         $('msg').textContent = shown.length ? '' : (members.length ? 'No matches.' : 'No vouches yet.');
+    }
+    function linkFor(m) {
+        return SHARE_BASE ? SHARE_BASE + encodeURIComponent(m.name) : location.origin + '/reputation.html?u=' + encodeURIComponent(m.name);
+    }
+    function flash(b, text) { var old = b.textContent; b.textContent = text; setTimeout(function () { b.textContent = old; }, 1500); }
+    function copyLink(m, b) {
+        var u = linkFor(m);
+        (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(function () { flash(b, 'Copied'); }, function () { window.prompt('Copy this link', u); });
+    }
+    // Draws a 1200x630 card for a member in the browser and downloads it as a PNG.
+    function shareCard(m, b) {
+        var W = 1200, H = 630, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+        var g = cv.getContext('2d');
+        var logo = new Image();
+        function draw(withLogo) {
+            g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
+            g.fillStyle = '#0a0a0a'; g.fillRect(40, 40, W - 80, H - 80);
+            g.strokeStyle = '#222'; g.lineWidth = 2; g.strokeRect(40, 40, W - 80, H - 80);
+            g.fillStyle = '#00ff88'; g.fillRect(40, 40, 10, H - 80);
+            var x = 100;
+            if (withLogo) g.drawImage(logo, x, 80, 72, 72);
+            g.textBaseline = 'alphabetic';
+            g.fillStyle = '#00ff88'; g.font = '800 28px Inter, Arial, sans-serif';
+            g.fillText('COLLECTORS ENVY REPUTATION', withLogo ? x + 92 : x, 128);
+            var name = m.name, size = 84;
+            g.fillStyle = '#fff';
+            do { g.font = '800 ' + size + 'px Inter, Arial, sans-serif'; size -= 4; } while (g.measureText(name).width > W - 200 && size > 28);
+            g.fillText(name, x, 270);
+            g.fillStyle = '#00ff88'; g.font = '800 56px Inter, Arial, sans-serif';
+            g.fillText(m.total + ' vouch' + (m.total === 1 ? '' : 'es'), x, 360);
+            var yy = 440, xx = x;
+            TYPES.forEach(function (n) {
+                if (!m.c[n]) return;
+                var label = n + ' ' + m.c[n] + (rank[n] && rank[n][m.name] <= 10 ? '  #' + rank[n][m.name] : '');
+                g.font = '700 30px Inter, Arial, sans-serif';
+                var w = g.measureText(label).width + 40;
+                if (xx + w > W - 100) { xx = x; yy += 70; }
+                g.strokeStyle = '#444'; g.lineWidth = 2;
+                g.beginPath(); g.roundRect ? g.roundRect(xx, yy - 40, w, 56, 28) : g.rect(xx, yy - 40, w, 56); g.stroke();
+                g.fillStyle = '#fff'; g.fillText(label, xx + 20, yy);
+                xx += w + 16;
+            });
+            g.fillStyle = '#a1a1a1'; g.font = '600 26px Inter, Arial, sans-serif';
+            g.fillText('collectorsenvy.com/reputation.html', x, H - 80);
+            cv.toBlob(function (blob) {
+                if (!blob) { flash(b, 'Failed'); return; }
+                var a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'reputation-' + (m.name.replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '') || 'member') + '.png';
+                document.body.appendChild(a); a.click(); a.remove();
+                setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+                flash(b, 'Saved');
+            }, 'image/png');
+        }
+        var go = function () { logo.onload = function () { draw(true); }; logo.onerror = function () { draw(false); }; logo.src = '/assets/images/favicon-192.png'; };
+        (document.fonts && document.fonts.load ? Promise.all([document.fonts.load('800 60px Inter'), document.fonts.load('700 30px Inter')]).catch(function () {}) : Promise.resolve()).then(go);
     }
     function board() {
         var lb = $('lb'); lb.textContent = '';
@@ -163,7 +229,15 @@
                 types.forEach(function (n) { m.c[n] = (m.c[n] || 0) + 1; });
             });
             members = Object.keys(map).map(function (k) { return map[k]; });
+            TYPES.forEach(function (n) {
+                rank[n] = {};
+                members.filter(function (m) { return m.c[n]; }).sort(function (a, b) { return b.c[n] - a.c[n] || a.name.localeCompare(b.name); })
+                    .forEach(function (m, i) { rank[n][m.name] = i + 1; });
+            });
+            var u = new URLSearchParams(location.search).get('u');
+            if (u) $('q').value = u.slice(0, 80);
             board(); chips(); render();
+            if (u) $('q').scrollIntoView({ block: 'center' });
         }).catch(function () { $('msg').textContent = 'Could not load vouches right now.'; });
 })();
 </script>
