@@ -203,7 +203,7 @@
         TYPES.forEach(function (n) {
             var top = members.filter(function (m) { return m.c[n]; }).sort(function (a, b) { return b.c[n] - a.c[n] || a.name.localeCompare(b.name); }).slice(0, 10);
             if (!top.length) return;
-            var box = el('div', 'box'); box.appendChild(el('h2', '', 'Top ' + n + 's'));
+            var box = el('div', 'box'); box.appendChild(el('h2', '', 'Top ' + (n === 'Proxy' ? 'Proxies' : n + 's')));
             var ol = el('ol');
             top.forEach(function (m) {
                 var li = el('li'), b = el('button', '', m.name); b.type = 'button';
