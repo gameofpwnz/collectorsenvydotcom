@@ -44,12 +44,16 @@
         .lb li::before { content:counter(r); color:var(--ce-text-dim); font-size:.75rem; width:1.3rem; flex:none; }
         .lb li button { background:none; border:0; color:#fff; font:inherit; text-align:left; cursor:pointer; padding:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
         .lb li button:hover { color:var(--ce-accent); }
+        .lb li span { color:var(--ce-accent); font-size:.8rem; }
         .lb li b { margin-left:auto; color:var(--ce-text-dim); font-weight:700; }
         .v { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1rem 1.1rem; }
         .v .top { display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; }
         .v .who { font-weight:800; font-size:1.05rem; overflow-wrap:anywhere; }
         .v .tot { color:var(--ce-accent); font-weight:800; }
         .badges { display:flex; flex-wrap:wrap; gap:.4rem; margin-left:auto; }
+        .note { max-width:720px; background:var(--ce-card-bg); border:1px solid var(--ce-border); border-left:3px solid var(--ce-accent); border-radius:8px; padding:.8rem 1rem; color:var(--ce-text-dim); font-size:.85rem; margin-bottom:1.5rem; }
+        .note b { color:#fff; }
+        .badges span.ver { color:#000; background:var(--ce-accent); border-color:var(--ce-accent); }
         .badges span { border:1px solid var(--ce-border); border-radius:999px; padding:0 .6rem; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ce-text-dim); }
         .v details { margin-top:.5rem; }
         .v summary { cursor:pointer; color:var(--ce-text-dim); font-size:.85rem; }
@@ -71,6 +75,7 @@
 <main>
     <h1>Reputation</h1>
     <p class="sub">Search members to see their vouches as a seller, buyer, trader or proxy. Updated daily from the Discord server.</p>
+    <p class="note" id="note"></p>
     <div class="lb" id="lb"></div>
     <input type="text" id="q" placeholder="Search a member" aria-label="Search vouches">
     <div class="chips" id="chips"></div>
@@ -85,6 +90,8 @@
     // Vouched For, Vouched By, Seller, Buyer, Trader, Proxy (TRUE/FALSE).
     var SHEET = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
     var PAGE = 50, TYPES = ['Seller', 'Buyer', 'Trader', 'Proxy'];
+    // Vouches needed in a role to earn that Verified badge. Change the numbers here.
+    var VERIFY = { Seller: 5, Buyer: 5, Trader: 5, Proxy: 3 };
     function parse(t) {
         var rows = [], row = [], f = '', q = false;
         for (var k = 0; k < t.length; k++) {
@@ -116,6 +123,7 @@
             var d = el('div', 'v'), top = el('div', 'top'), bd = el('div', 'badges');
             top.appendChild(el('span', 'who', m.name));
             top.appendChild(el('span', 'tot', m.total + ' vouch' + (m.total === 1 ? '' : 'es')));
+            TYPES.forEach(function (n) { if (m.c[n] >= VERIFY[n]) bd.appendChild(el('span', 'ver', '\u2713 Verified ' + n)); });
             TYPES.forEach(function (n) { if (m.c[n]) bd.appendChild(el('span', '', n + ' ' + m.c[n])); });
             top.appendChild(bd); d.appendChild(top);
             var acts = el('div', 'acts'), sb = el('button', '', 'Share card'), cb = el('button', '', 'Copy link');
@@ -195,12 +203,12 @@
         TYPES.forEach(function (n) {
             var top = members.filter(function (m) { return m.c[n]; }).sort(function (a, b) { return b.c[n] - a.c[n] || a.name.localeCompare(b.name); }).slice(0, 10);
             if (!top.length) return;
-            var box = el('div', 'box'); box.appendChild(el('h2', '', 'Top ' + n + 's'));
+            var box = el('div', 'box'); box.appendChild(el('h2', '', 'Top ' + (n === 'Proxy' ? 'Proxies' : n + 's')));
             var ol = el('ol');
             top.forEach(function (m) {
                 var li = el('li'), b = el('button', '', m.name); b.type = 'button';
                 b.onclick = function () { $('q').value = m.name; type = 'All'; limit = PAGE; Array.prototype.forEach.call($('chips').children, function (x) { x.className = x.textContent === 'All' ? 'on' : ''; }); render(); $('q').scrollIntoView({ behavior: 'smooth', block: 'center' }); };
-                li.appendChild(b); li.appendChild(el('b', '', String(m.c[n]))); ol.appendChild(li);
+                li.appendChild(b); if (m.c[n] >= VERIFY[n]) li.appendChild(el('span', '', '\u2713')); li.appendChild(el('b', '', String(m.c[n]))); ol.appendChild(li);
             });
             box.appendChild(ol); lb.appendChild(box);
         });
@@ -213,6 +221,11 @@
             c.appendChild(b);
         });
     }
+    (function () {
+        var n = $('note'), b = el('b', '', 'About verified badges: ');
+        n.appendChild(b);
+        n.appendChild(document.createTextNode('A \u2713 Verified badge is earned automatically from community vouches (' + TYPES.map(function (t) { return VERIFY[t] + '+ as ' + t.toLowerCase(); }).join(', ') + '). Badges reflect what members have said, are not officially backed or endorsed by Collectors Envy, and are not a guarantee. Always do your own due diligence.'));
+    })();
     $('q').addEventListener('input', function () { limit = PAGE; render(); });
     $('more').onclick = function () { limit += PAGE; render(); };
     fetch('https://docs.google.com/spreadsheets/d/' + SHEET + '/gviz/tq?tqx=out:csv&sheet=Vouches')
