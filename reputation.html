@@ -44,7 +44,6 @@
         .lb li::before { content:counter(r); color:var(--ce-text-dim); font-size:.75rem; width:1.3rem; flex:none; }
         .lb li button { background:none; border:0; color:#fff; font:inherit; text-align:left; cursor:pointer; padding:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
         .lb li button:hover { color:var(--ce-accent); }
-        .lb li span { color:var(--ce-accent); font-size:.8rem; }
         .lb li b { margin-left:auto; color:var(--ce-text-dim); font-weight:700; }
         .v { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1rem 1.1rem; }
         .v .top { display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; }
@@ -208,7 +207,7 @@
             top.forEach(function (m) {
                 var li = el('li'), b = el('button', '', m.name); b.type = 'button';
                 b.onclick = function () { $('q').value = m.name; type = 'All'; limit = PAGE; Array.prototype.forEach.call($('chips').children, function (x) { x.className = x.textContent === 'All' ? 'on' : ''; }); render(); $('q').scrollIntoView({ behavior: 'smooth', block: 'center' }); };
-                li.appendChild(b); if (m.c[n] >= VERIFY[n]) li.appendChild(el('span', '', '\u2713')); li.appendChild(el('b', '', String(m.c[n]))); ol.appendChild(li);
+                li.appendChild(b); li.appendChild(el('b', '', String(m.c[n]))); ol.appendChild(li);
             });
             box.appendChild(ol); lb.appendChild(box);
         });
