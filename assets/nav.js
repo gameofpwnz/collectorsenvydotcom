@@ -23,10 +23,10 @@
     ] },
     { label: 'Merch', href: '/merch.html' },
     { label: 'Museum', href: '/museum.html' },
-    { label: 'Brand', href: '/brand.html' },
     { label: 'About', href: '/about.html', children: [
       { label: 'About Us', href: '/about.html' },
-      { label: 'Team', href: '/team.html' }
+      { label: 'Team', href: '/team.html' },
+      { label: 'Brand', href: '/brand.html' }
     ] },
     { label: 'Files', href: 'https://drive.google.com/drive/u/0/folders/1iInTxulTKqZtXiK5bDEzIN_nMcN5tRb9' }
   ];
