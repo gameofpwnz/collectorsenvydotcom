@@ -7,6 +7,7 @@
 
   var LINKS = [
     { label: 'Main Site', href: '/' },
+    { label: 'Team', href: '/team.html' },
     { label: 'Discord', href: 'https://discord.gg/DyHTs5GDkc' },
     { label: 'Twitter/X', href: 'https://x.com/Collectors_Envy' },
     { label: 'Instagram', href: 'https://instagram.com/collectorsenvy' },

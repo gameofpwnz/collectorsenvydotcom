@@ -214,4 +214,17 @@
         run();
       }).catch(function () {});
   })();
+  // Back-to-top button: appears after scrolling down on any page (not inside embedded frames).
+  (function () {
+    if (window.self !== window.top) return;
+    var b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('aria-label', 'Back to top'); b.textContent = '\u2191';
+    b.style.cssText = 'position:fixed;right:1rem;bottom:1rem;width:2.6rem;height:2.6rem;border-radius:50%;border:1px solid #00ff88;background:rgba(0,0,0,.85);color:#00ff88;font:700 1.2rem/1 Inter,sans-serif;cursor:pointer;z-index:90;display:none;align-items:center;justify-content:center;padding:0';
+    b.onclick = function () { window.scrollTo({ top: 0, behavior: 'smooth' }); };
+    document.body.appendChild(b);
+    var on = false;
+    function check() { var show = (window.pageYOffset || document.documentElement.scrollTop) > 900; if (show !== on) { on = show; b.style.display = show ? 'flex' : 'none'; } }
+    window.addEventListener('scroll', check, { passive: true });
+    check();
+  })();
 })();
