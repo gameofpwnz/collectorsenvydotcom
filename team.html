@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team | Collectors Envy</title>
+    <meta name="description" content="Meet the people who run Collectors Envy: auctions, proxies, estimates and the Discord community.">
+    <link rel="canonical" href="https://collectorsenvy.com/team.html">
+    <meta property="og:site_name" content="Collectors Envy">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Team | Collectors Envy">
+    <meta property="og:description" content="Meet the people who run Collectors Envy: auctions, proxies, estimates and the Discord community.">
+    <meta property="og:url" content="https://collectorsenvy.com/team.html">
+    <meta property="og:image" content="https://collectorsenvy.com/assets/images/share/index.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Team | Collectors Envy">
+    <meta name="twitter:description" content="Meet the people who run Collectors Envy: auctions, proxies, estimates and the Discord community.">
+    <meta name="twitter:image" content="https://collectorsenvy.com/assets/images/share/index.jpg">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://collectorsenvy.com/"}, {"@type": "ListItem", "position": 2, "name": "Team", "item": "https://collectorsenvy.com/team.html"}]}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --ce-bg:#000; --ce-card-bg:#0a0a0a; --ce-text-main:#fff; --ce-text-dim:#a1a1a1; --ce-border:#222; --ce-accent:#00ff88; --ce-font:'Inter',sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:var(--ce-font); background:var(--ce-bg); color:var(--ce-text-main); line-height:1.6; -webkit-font-smoothing:antialiased; }
+        main { max-width:960px; margin:0 auto; padding:3rem 1.25rem 5rem; }
+        h1 { font-size:2.5rem; font-weight:800; letter-spacing:-1px; text-transform:uppercase; }
+        .sub { color:var(--ce-text-dim); margin:.5rem 0 2rem; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1rem; }
+        .card { background:var(--ce-card-bg); border:1px solid var(--ce-border); border-radius:12px; padding:1.25rem; display:flex; flex-direction:column; align-items:center; text-align:center; gap:.75rem; }
+        .pic { width:112px; height:112px; border-radius:50%; background:#111; border:2px solid var(--ce-accent); overflow:hidden; display:flex; align-items:center; justify-content:center; color:var(--ce-accent); font-size:2.4rem; font-weight:800; flex-shrink:0; }
+        .pic img { width:100%; height:100%; object-fit:cover; display:block; }
+        .name { font-weight:800; font-size:1.1rem; overflow-wrap:anywhere; }
+        .blurb { color:var(--ce-text-dim); font-size:.9rem; white-space:pre-line; overflow-wrap:anywhere; }
+        .msg { color:var(--ce-text-dim); font-size:.9rem; margin-top:1rem; }
+    </style>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+</head>
+<body>
+<script src="/assets/nav.js?v=16"></script>
+<main>
+    <h1>Team</h1>
+    <p class="sub">The people behind Collectors Envy. Find us in the Discord.</p>
+    <div class="grid" id="grid"></div>
+    <p class="msg" id="msg">Loading…</p>
+</main>
+<script>
+(function () {
+    // Tab "Team" of the auctions spreadsheet (shared view-only). Columns: Discord Name, Blurb, Picture.
+    // Picture can be a Google Drive link (file shared "anyone with the link") or any https image URL; blank shows an initial.
+    var SHEET = '1PX87RLCtOdYoHj_pyu-npCKglbLHrKKSkrLcMki7vo4';
+    function parse(t) {
+        var rows = [], row = [], f = '', q = false;
+        for (var k = 0; k < t.length; k++) {
+            var c = t[k];
+            if (q) { if (c === '"') { if (t[k + 1] === '"') { f += '"'; k++; } else q = false; } else f += c; }
+            else if (c === '"') q = true;
+            else if (c === ',') { row.push(f); f = ''; }
+            else if (c === '\n' || c === '\r') { if (c === '\r' && t[k + 1] === '\n') k++; row.push(f); rows.push(row); row = []; f = ''; }
+            else f += c;
+        }
+        if (f !== '' || row.length) { row.push(f); rows.push(row); }
+        return rows;
+    }
+    function thumb(u) {
+        u = String(u || '').trim();
+        if (!/^https:\/\//.test(u)) return '';
+        var m = /^https:\/\/drive\.google\.com\/(?:uc\?(?:[^#]*&)?id=|file\/d\/|open\?id=)([\w-]+)/.exec(u);
+        return m ? 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w400' : u;
+    }
+    function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+    var msg = document.getElementById('msg'), grid = document.getElementById('grid');
+    fetch('https://docs.google.com/spreadsheets/d/' + SHEET + '/gviz/tq?tqx=out:csv&sheet=Team')
+        .then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(parse).then(function (rows) {
+            // A missing tab makes Google return the first tab, so insist on the header.
+            if (!rows.length || String(rows[0][0]).trim().toLowerCase() !== 'discord name') throw 0;
+            var people = rows.slice(1).filter(function (r) { return r[0] && r[0].trim(); });
+            if (!people.length) { msg.textContent = 'Team coming soon.'; return; }
+            people.forEach(function (r) {
+                var name = r[0].trim(), card = el('div', 'card'), pic = el('div', 'pic'), url = thumb(r[2]);
+                if (url) {
+                    var img = document.createElement('img');
+                    img.loading = 'lazy'; img.alt = ''; img.referrerPolicy = 'no-referrer'; img.src = url;
+                    img.onerror = function () { pic.textContent = name.charAt(0).toUpperCase(); };
+                    pic.appendChild(img);
+                } else pic.textContent = name.charAt(0).toUpperCase();
+                card.appendChild(pic); card.appendChild(el('div', 'name', name));
+                if (r[1] && r[1].trim()) card.appendChild(el('div', 'blurb', r[1].trim()));
+                grid.appendChild(card);
+            });
+            msg.textContent = '';
+        }).catch(function () { msg.textContent = 'Team coming soon.'; });
+})();
+</script>
+<script src="/assets/footer.js"></script>
+</body>
+</html>
